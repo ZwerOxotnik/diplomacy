@@ -11,11 +11,11 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 ## Contents
 
 * [Overview](#overview)
-    * [Auto-diplomacy][#auto-diplomacy]
-* [Mod settings][#mod-settings]
-    * [For maps][#for-maps]
-    * [Startup][#startup]
-* [Future plans][#future-plans]
+    * [Auto-diplomacy](#autodiplomacy)
+* [Mod settings](#mod-settings)
+    * [For maps](#for-maps)
+    * [Startup](#startup)
+* [Future plans](#future-plans)
 * [Issues](#issue)
 * [Features](#feature)
 * [Installing](#installing)
@@ -35,7 +35,7 @@ Is it difficult to find enemy players? Use [Dirty talk][Dirty talk];
 For balance evolution factor between teams [Soft evolution][Soft evolution];
 For a custom "PvP" scenario [Pack scenarios][Pack scenarios].
 
-## <a name="auto-diplomacy"></a> Auto-diplomacy
+## <a name="autodiplomacy"></a> Auto-diplomacy
 
 forbidden_entity = (any turret, any wagon, locomotive, car, roboport, radar, rocket-silo)
 
