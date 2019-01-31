@@ -1,0 +1,11 @@
+{
+    "name": "diplomacy",
+    "version": "2.0.0",
+    "factorio_version": "0.16",
+    "title": "Diplomacy",
+    "author": "ZwerOxotnik",
+    "contact": "zweroxotnik@gmail.com, http://steamcommunity.com/profiles/76561198071983288",
+    "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64630",
+    "description": "Adds modified version diplomacy, scenario from PvP and are added diplomatic request, commands needful, auto-diplomacy customizable protection from theft of electricity, customized settings balance. Compatible with custom PvP scenario (not default). UPS friendly.",
+    "dependencies": []
+}

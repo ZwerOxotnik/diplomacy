@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2019-01-31
+  Major Features:
+    - Compability with scenarios
+  Features:
+    - New settings
+  Changes:
+    - Improved localization
+    - Improved performance
+    - Added mod interface
+    - A lot of bugfixes
+    - PvP scenario is deleted (use "Pack scenarios")
+    - Changes in evolution factor from research and etc is deleted (use "Soft evolution")
+  Notes:
+    - Uploaded to GitLab
+    - Refactoring (not finished)
+    - Full changelog only on GitLab
