@@ -15,7 +15,7 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 * [Mod settings][#mod-settings]
     * [For maps][#for-maps]
     * [Startup][#startup]
-* [Future plans][future-plans]
+* [Future plans][#future-plans]
 * [Issues](#issue)
 * [Features](#feature)
 * [Installing](#installing)
@@ -35,7 +35,7 @@ Is it difficult to find enemy players? Use [Dirty talk][Dirty talk];
 For balance evolution factor between teams [Soft evolution][Soft evolution];
 For a custom "PvP" scenario [Pack scenarios][Pack scenarios].
 
-## Auto-diplomacy
+## <a name="auto-diplomacy"></a> Auto-diplomacy
 
 forbidden_entity = (any turret, any wagon, locomotive, car, roboport, radar, rocket-silo)
 
@@ -45,9 +45,9 @@ If you destroy entity.type = (forbidden_entity or player) **OR** entity.max_heal
 
 If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidden-entity-on-damage"].value another faction become enemy with low probability.
 
-## Mod settings
+## <a name="mod settings"></a> Mod settings
 
-### For maps
+### <a name="for-maps"></a> For maps
 
 | Description | Parameters | (Default) |
 | ----------- | ---------- | --------- |
@@ -60,7 +60,7 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 | Auto-diplomacy when dealing damage - checks damage and changes relationships between factions | boolean | true |
 | Diplomatic privilege - which players are able to change teams diplomatic stance towards other teams. All players: Every player on the team. Team leader: The connected player who has been on the team longest. | ["all players", "team leader"] | all players |
 
-### Startup
+### <a name="startup"></a> Startup
 
 | Description | Parameters | (Default) |
 | ----------- | ---------- | --------- |
@@ -70,7 +70,7 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 | Count science pack for the technology of power armor MK2 | 1-10000000000 | 1000 |
 | Count science pack for the technology of uranium ammo | 1-10000000000 | 1800 |
 
-## Future plans
+## <a name="future-plans"></a> Future plans
 
 * Diplomatic request queue
 * Short demonstration video
