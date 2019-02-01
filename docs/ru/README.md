@@ -84,7 +84,7 @@
 
 ### <a name="embedded"></a> Встроенные
 
-* Event listener: [mods.factorio.com](https://mods.factorio.com/mod/event-listener), [GitLab](https://gitlab.com/ZwerOxotnik/event-listener)
+* Event listener: [mods.factorio.com](https://mods.factorio.com/mod/event-listener), [GitLab](https://gitlab.com/ZwerOxotnik/event-listener), [homepage](https://forums.factorio.com/viewtopic.php?f=190&t=64621)
 
 ## <a name="special-thanks"></a> Особая благодарность
 
