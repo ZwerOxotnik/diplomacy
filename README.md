@@ -115,7 +115,7 @@ If you have downloaded the source archive (GitLab):
 
 ## License
 
-Please read [Terms of Service and information](/Terms of Service and information) and [LICENSE](/LICENSE)
+Please read [Terms of Service and information](/Terms-of-Service-and-information.txt) and [LICENSE](/LICENSE)
 
 [Tiny pole]: https://mods.factorio.com/mod/TinyPole
 [secondary chat]: https://mods.factorio.com/mods/ZwerOxotnik/secondary-chat
