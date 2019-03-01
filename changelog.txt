@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2019-03-01
+  Changes:
+    - Updated for Factorio 0.17
+    - Updated localization
+    - Bugfixes
+    - Added module «Event listener»
+  Notes:
+    - Code refactoring
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2019-01-31
   Major Features:
@@ -10,8 +20,8 @@ Date: 2019-01-31
     - Improved performance
     - Added mod interface
     - A lot of bugfixes
-    - PvP scenario is deleted (use "Pack scenarios")
-    - Changes in evolution factor from research and etc is deleted (use "Soft evolution")
+    - PvP scenario is deleted (use «Pack scenarios»)
+    - Changes in evolution factor from research and etc is deleted (use «Soft evolution»)
   Notes:
     - Uploaded to GitLab
     - Refactoring (not finished)

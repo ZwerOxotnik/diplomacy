@@ -26,8 +26,8 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 
 ## Overview
 
-Adds modified version diplomacy, scenario from PvP and are added diplomatic request, commands needful, auto-diplomacy customizable protection from theft of electricity, customized settings balance.
-Compatible with custom PvP scenario (not default). UPS friendly.
+Adds modified version diplomacy, diplomatic requests, commands needful, auto-diplomacy, customizable protection from theft of electricity and customized settings balance.
+Compatible with any PvP scenario. UPS friendly.
 
 I recommend using with mods: [secondary chat][secondary chat] as it is possible write to allies;
 [Tiny pole][Tiny pole] if the protection from theft of electricity disabled;
@@ -57,7 +57,7 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 | HP to change relationships when mined an object - to change the state relationships when mined an object> = HP | 1-100000000000 | 300 |
 | HP to change the relationship for damage to an object - to change the state relationship when damage to the object >= HP with low probability | 1-100000000000 | 300 |
 | Allow the player to mining an object from the allied faction | boolean | false |
-| Auto-diplomacy when dealing damage - checks damage and changes relationships between factions | boolean | true |
+| auto-diplomacy, when dealing damage - checks damage and changes relationships between factions | boolean | true |
 | Diplomatic privilege - which players are able to change teams diplomatic stance towards other teams. All players: Every player on the team. Team leader: The connected player who has been on the team longest. | ["all players", "team leader"] | all players |
 
 ### <a name="startup"></a> Startup
@@ -72,7 +72,7 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 
 ## <a name="future-plans"></a> Future plans
 
-* Diplomatic request queue
+* diplomatic request queue
 * Short demonstration video
 * Add in "diplomacy" blacklist for factions and scenarios, which will contain the factions/players
 * Add in "balanced evolution factor" blacklist for scenarios, which will contain the factions
@@ -108,21 +108,20 @@ If you have downloaded the source archive (GitLab):
 
 * Event listener: [mods.factorio.com](https://mods.factorio.com/mod/event-listener), [GitLab](https://gitlab.com/ZwerOxotnik/event-listener), [homepage](https://forums.factorio.com/viewtopic.php?f=190&t=64621)
 
-
 ## Special thanks
 
 * **Plov** - tester
 
 ## License
 
-Please read [Terms of Service and information](/Terms-of-Service-and-information.txt) and [LICENSE](/LICENSE)
+Please read files [/Terms-of-Service-and-information.txt](/Terms-of-Service-and-information.txt), [/3rd-Party.txt](/3rd-Party.txt) and [/LICENSE](/LICENSE).
 
 [Tiny pole]: https://mods.factorio.com/mod/TinyPole
 [secondary chat]: https://mods.factorio.com/mods/ZwerOxotnik/secondary-chat
 [Pack scenarios]: https://mods.factorio.com/mod/pack-scenarios
 [Soft evolution]: https://mods.factorio.com/mod/soft-evolution
 [Dirty talk]: https://mods.factorio.com/mod/dirty-talk
-[issues]: https://gitlab.com/ZwerOxotnik/soft-evolution/issues
-[mod portal]: https://mods.factorio.com/mod/soft-evolution/discussion
-[homepage]: https://forums.factorio.com/viewtopic.php?f=190
+[issues]: https://gitlab.com/ZwerOxotnik/diplomacy/issues
+[mod portal]: https://mods.factorio.com/mod/diplomacy/discussion
+[homepage]: https://forums.factorio.com/viewtopic.php?f=190&t=64630
 [Factorio]: https://factorio.com/

@@ -6,16 +6,11 @@ IFS=$'\n'
 REPOSITORY=`pwd`
 cd "$REPOSITORY/"
 
-### Get gitlab from info.json
+### Get source from info.json
 ### https://stedolan.github.io/jq/
-mod_name=`cat info.json|jq -r .name`
-author=`cat info.json|jq -r .author`
-gitlab="https://gitlab.com/$author/$mod_name.git"
-
-
-### If gitlab is not found, set constant
-[[ -z "${gitlab}" || -z "${mod_name}" || -z "${author}" ]] && gitlab="https://gitlab.com/ZwerOxotnik/soft-evolution.git"
-echo url=$gitlab
+source=`cat info.json|jq -r .source`
+source+=".git"
+echo url=$source
 
 ### Pause function until enter key is pressed
 function pause(){
@@ -23,6 +18,6 @@ function pause(){
 }
 
 ### https://git-scm.com/
-git clone $gitlab ./clone_from_gitlab
+git clone $source ./clone_from_source
 
 pause 'Press [Enter] key to continue...'

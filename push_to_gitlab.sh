@@ -6,16 +6,12 @@ IFS=$'\n'
 REPOSITORY=`pwd`
 cd "$REPOSITORY/"
 
-### Get gamever and gitlab from info.json
+### Get gamever and source from info.json
 ### https://stedolan.github.io/jq/
-mod_name=`cat info.json|jq -r .name`
 gamever=`cat info.json|jq -r .factorio_version`
-author=`cat info.json|jq -r .author`
-gitlab="https://gitlab.com/$author/$mod_name.git"
-
-### If gitlab is not found, set constant
-[[ -z "${gitlab}" || -z "${mod_name}" || -z "${author}" ]] && gitlab="https://gitlab.com/ZwerOxotnik/soft-evolution.git"
-echo url=$gitlab
+source=`cat info.json|jq -r .source`
+source+=".git"
+echo url=$source
 echo
 
 ### Pause function until enter key is pressed
@@ -24,7 +20,7 @@ function pause(){
 }
 
 ### https://git-scm.com/
-### Find .git and update gitlab
+### Find .git and update source
 echo "update for $REPOSITORY/.git at `date`"
 if [ -d "$REPOSITORY/.git" ]
 then
@@ -36,8 +32,8 @@ then
   echo
   #git status --branch $gamever
   echo "pushing:"
-  ### Update remote $gitlab refs along with associated objects $gamever
-  git push $gitlab $gamever
+  ### Update remote $source refs along with associated objects $gamever
+  git push $source $gamever
   echo "Done at `date`"
 else
   echo "Skipping because it doesn't look like it has a .git folder. `date`"

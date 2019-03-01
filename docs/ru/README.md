@@ -24,6 +24,8 @@
 
 ## <a name="overview"></a> Введение
 
+Добавляет модифицированную дипломатию, дипломатические запросы, необходимые команды, авто-дипломатию, настраиваемая защита от кражи электричества и настраиваемые настройки баланса.
+Совместим с любым сценарием PvP. Дружелюбный UPS.
 
 Рекомендую использовать с модами: [secondary chat][secondary chat], так как позволит писать союзникам;
 [Tiny pole][Tiny pole] если защита от кражи от электричества выключена;
@@ -67,7 +69,7 @@
 
 Вы можете *запросить* новую функцию [submitting an issue][issues] на нашем GitLab репозитории или сообщите на [mods.factorio.com][mod portal] или на [forums.factorio.com][homepage].
 
-## Установка
+## <a name="installing"></a> Установка
 
 Если вы скачали zip архив:
 
@@ -92,14 +94,14 @@
 
 ## <a name="license"></a> Лицензия
 
-Пожалуйста, прочитайте [Terms of Service and information](/Terms-of-Service-and-information.txt) и [LICENSE](/LICENSE)
+Пожалуйста, прочитайте файлы [/Terms-of-Service-and-information.txt](/Terms-of-Service-and-information.txt), [/3rd-Party.txt](/3rd-Party.txt) и [/LICENSE](/LICENSE).
 
 [Tiny pole]: https://mods.factorio.com/mod/TinyPole
 [secondary chat]: https://mods.factorio.com/mods/ZwerOxotnik/secondary-chat
 [Pack scenarios]: https://mods.factorio.com/mod/pack-scenarios
 [Soft evolution]: https://mods.factorio.com/mod/soft-evolution
 [Dirty talk]: https://mods.factorio.com/mod/dirty-talk
-[issues]: https://gitlab.com/ZwerOxotnik/soft-evolution/issues
-[mod portal]: https://mods.factorio.com/mod/soft-evolution/discussion
-[homepage]: https://forums.factorio.com/viewtopic.php?f=190
+[issues]: https://gitlab.com/ZwerOxotnik/diplomacy/issues
+[mod portal]: https://mods.factorio.com/mod/diplomacy/discussion
+[homepage]: https://forums.factorio.com/viewtopic.php?f=190&t=64630
 [Factorio]: https://factorio.com/

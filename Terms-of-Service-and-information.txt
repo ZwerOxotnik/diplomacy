@@ -1,2 +1,2 @@
-Part of the scripts are taken from the game "Factorio" version from 0.16.51 scenario "PvP" and modified by ZwerOxotnik <zweroxotnik@gmail.com>
+Part of the scripts are taken from the game "Factorio" versions 0.15.40-0.16.51 from scenario "PvP" and modified by ZwerOxotnik <zweroxotnik@gmail.com>
 Read terms of service: https://www.factorio.com/terms-of-service

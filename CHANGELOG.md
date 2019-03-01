@@ -1,5 +1,15 @@
 # Changelog
 
+## 2019-03-01
+
+### [v2.1.0][v2.1.0]
+
+* Updated for Factorio 0.17
+* Added module «[Event listener][Event listener]»
+* Updated localization
+* Bugfixes
+* Code refactoring
+
 ## 2019-01-31
 
 ### [v2.0.0][v2.0.0]
@@ -241,7 +251,7 @@ p.s. I have **many surprises** for the scenario ;)
 * Changed: description of the commands
 * Changed: message for all when changing stance diplomacy
 * Changed: description mod
-* Changed: auto-diplomacy forbidden_entity = (any turret, any wagon, locomotive, car, roboport, radar, rocket-silo)
+* Changed: auto-diplomacy, forbidden_entity = (any turret, any wagon, locomotive, car, roboport, radar, rocket-silo)
 If you mined entity.type = (forbidden_entity) another factions become enemy.
 If you destroy entity.type = (forbidden_entity or player) another factions become enemy, else neutral (if you are not already enemies).
 
@@ -251,8 +261,10 @@ If you destroy entity.type = (forbidden_entity or player) another factions becom
 
 * First release for 0.16
 
+[Event listener]: https://gitlab.com/ZwerOxotnik/event-listener
 [Pack scenarios]: https://forums.factorio.com/viewtopic.php?f=190&t=64631
 [Soft evolution]: https://forums.factorio.com/viewtopic.php?f=190&t=64653
+[v2.1.0]: https://mods.factorio.com/mod/diplomacy/downloads
 [v2.0.0]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.0.0.zip
 [v1.3.18]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_1.3.18.zip
 [v1.3.17]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_1.3.17.zip
