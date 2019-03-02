@@ -3,7 +3,7 @@ Diplomacy
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 License: The MIT License (MIT)
 Author: ZwerOxotnik
-Version: 2.1.0 (2019.03.01)
+Version: 2.1.1 (2019.03.02)
 Source: https://gitlab.com/ZwerOxotnik/diplomacy
 Mod portal: https://mods.factorio.com/mod/diplomacy
 Homepage: https://forums.factorio.com/viewtopic.php?f=190&t=64630
@@ -26,7 +26,7 @@ local mod_gui = require("mod-gui")
 
 local module = {}
 module.self_events = require("diplomacy/self_events")
-module.version = "2.1.0"
+module.version = "2.1.1"
 
 local function destroy_button(player)
 	local button_flow = mod_gui.get_button_flow(player)

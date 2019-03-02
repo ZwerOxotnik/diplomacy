@@ -10,13 +10,15 @@ We optimize for readability:
 
 * We indent using tabs, however spaces are also acceptable
 * Read [a note about Git commit messages](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
-* Each branch is divided into versions of the game Factorio x.x (e.g., 0.16)
+* Each branch is divided into versions of the game Factorio x.x (e.g., 0.17)
 
 ## Found an Issue?
+
 Please report any issues or a mistake in the documentation, you can help us by
 [submitting an issue](https://gitlab.com/ZwerOxotnik/diplomacy/issues) to our GitLab Repository or on [mods.factorio.com](https://mods.factorio.com/mod/diplomacy/discussion).
 
 ## Want a Feature?
+
 You can *request* a new feature by [submitting an issue](https://gitlab.com/ZwerOxotnik/diplomacy/issues) to our GitLab
 Repository or on [mods.factorio.com](https://mods.factorio.com/mod/diplomacy/discussion).
 
