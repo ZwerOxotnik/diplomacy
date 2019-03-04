@@ -1,3 +1,6 @@
+-- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+-- Licensed under the MIT licence;
+
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
 
 local util = {}

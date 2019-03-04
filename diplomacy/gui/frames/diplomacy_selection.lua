@@ -1,3 +1,6 @@
+-- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+-- Licensed under the MIT licence;
+
 local diplomacy_selection_frame = {}
 
 diplomacy_selection_frame.destroy = function(player)

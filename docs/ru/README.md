@@ -18,7 +18,7 @@
 * [Запросить функцию](#feature)
 * [Установка](#installing)
 * [Зависимости](#dependencies)
-    * [Встроенные](#embedded)
+    * [Необходимые](#required)
 * [Особая благодарность](special-thanks)
 * [Лицензия](#license)
 
@@ -80,13 +80,13 @@
 Если вы скачали исходный архив (GitLab):
 
 * скопируйте данный мод в директорию модов Factorio
-* переименуйте данный мод в event-listener_*версия*, где *версия* это версия мода, которую вы скачали (например, 2.1.1)
+* переименуйте данный мод в event-listener_*версия*, где *версия* это версия мода, которую вы скачали (например, 2.1.2)
 
 ## <a name="dependencies"></a> Зависимости
 
-### <a name="embedded"></a> Встроенные
+### <a name="required"></a> Необходимые
 
-* Event listener: [mods.factorio.com](https://mods.factorio.com/mod/event-listener), [GitLab](https://gitlab.com/ZwerOxotnik/event-listener), [homepage](https://forums.factorio.com/viewtopic.php?f=190&t=64621)
+* [Event listener](https://mods.factorio.com/mod/event-listener)
 
 ## <a name="special-thanks"></a> Особая благодарность
 
@@ -94,7 +94,7 @@
 
 ## <a name="license"></a> Лицензия
 
-Пожалуйста, прочитайте файлы [/Terms-of-Service-and-information.txt](/Terms-of-Service-and-information.txt), [/3rd-Party.txt](/3rd-Party.txt) и [/LICENSE](/LICENSE).
+Пожалуйста, прочитайте файлы [/Terms-of-Service-and-information.txt](/Terms-of-Service-and-information.txt) и [/LICENSE](/LICENSE).
 
 [Tiny pole]: https://mods.factorio.com/mod/TinyPole
 [secondary chat]: https://mods.factorio.com/mods/ZwerOxotnik/secondary-chat

@@ -1,3 +1,6 @@
+-- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+-- Licensed under the MIT licence;
+
 local set_politice = require("diplomacy/util").set_politice
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
 local cancel_request_diplomacy_force = require("diplomacy/util").cancel_request_diplomacy_force

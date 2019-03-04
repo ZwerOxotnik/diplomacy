@@ -1,17 +1,20 @@
 --[[
-Diplomacy
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
-License: The MIT License (MIT)
+Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.1.1 (2019.03.02)
-Source: https://gitlab.com/ZwerOxotnik/diplomacy
-Mod portal: https://mods.factorio.com/mod/diplomacy
-Homepage: https://forums.factorio.com/viewtopic.php?f=190&t=64630
+Version: 2.1.2 (2019.03.04)
+
 Description: Adds modified version diplomacy, diplomatic requests,
              commands needful, auto-diplomacy,
 			 customizable protection from theft of electricity
 			 and customized settings balance.
              Compatible with any PvP scenario. UPS friendly.
+
+You can write and receive any information on the links below.
+Source: https://gitlab.com/ZwerOxotnik/diplomacy
+Mod portal: https://mods.factorio.com/mod/diplomacy
+Homepage: https://forums.factorio.com/viewtopic.php?f=190&t=64630
+
 ]]--
 
 local color_map = require("diplomacy/color_map")
@@ -26,7 +29,7 @@ local mod_gui = require("mod-gui")
 
 local module = {}
 module.self_events = require("diplomacy/self_events")
-module.version = "2.1.1"
+module.version = "2.1.2"
 
 local function destroy_button(player)
 	local button_flow = mod_gui.get_button_flow(player)

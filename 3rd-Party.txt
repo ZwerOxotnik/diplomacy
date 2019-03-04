@@ -1,6 +1,0 @@
-Diplomacy uses code from the following 3rd party projects.
-
-Event listener
-Path:           /event_listener/
-License:        The MIT License (MIT)
-License File:   /event_listener/LICENSE

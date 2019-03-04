@@ -20,7 +20,7 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 * [Features](#feature)
 * [Installing](#installing)
 * [Dependencies](#dependencies)
-    * [Embedded](#embedded)
+    * [Required](#required)
 * [Special thanks](#special-thanks)
 * [License](#license)
 
@@ -100,13 +100,13 @@ For more information, see [Installing Mods on the Factorio wiki](https://wiki.fa
 If you have downloaded the source archive (GitLab):
 
 * copy the mod directory into your factorio mods directory
-* rename the mod directory to soft-evolution_*versionnumber*, where *versionnumber* is the version of the mod that you've downloaded (e.g., 2.1.1)
+* rename the mod directory to soft-evolution_*versionnumber*, where *versionnumber* is the version of the mod that you've downloaded (e.g., 2.1.2)
 
 ## Dependencies
 
-### Embedded
+### Required
 
-* Event listener: [mods.factorio.com](https://mods.factorio.com/mod/event-listener), [GitLab](https://gitlab.com/ZwerOxotnik/event-listener), [homepage](https://forums.factorio.com/viewtopic.php?f=190&t=64621)
+* [Event listener](https://mods.factorio.com/mod/event-listener)
 
 ## Special thanks
 
@@ -114,7 +114,7 @@ If you have downloaded the source archive (GitLab):
 
 ## License
 
-Please read files [/Terms-of-Service-and-information.txt](/Terms-of-Service-and-information.txt), [/3rd-Party.txt](/3rd-Party.txt) and [/LICENSE](/LICENSE).
+Please read files [/Terms-of-Service-and-information.txt](/Terms-of-Service-and-information.txt) and [/LICENSE](/LICENSE).
 
 [Tiny pole]: https://mods.factorio.com/mod/TinyPole
 [secondary chat]: https://mods.factorio.com/mods/ZwerOxotnik/secondary-chat

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2019-03-04
+
+### [v2.1.2][v2.1.2]
+
+* Changed: another dependencies
+
 ## 2019-03-02
 
 ### [v2.1.1][v2.1.1]
@@ -270,6 +276,7 @@ If you destroy entity.type = (forbidden_entity or player) another factions becom
 [Event listener]: https://gitlab.com/ZwerOxotnik/event-listener
 [Pack scenarios]: https://forums.factorio.com/viewtopic.php?f=190&t=64631
 [Soft evolution]: https://forums.factorio.com/viewtopic.php?f=190&t=64653
+[v2.1.2]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.2.zip
 [v2.1.1]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.1.zip
 [v2.1.0]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.0.zip
 [v2.0.0]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.0.0.zip

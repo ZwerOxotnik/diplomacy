@@ -1,3 +1,6 @@
+-- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+-- Licensed under the MIT licence;
+
 local get_stance_diplomacy = require("diplomacy/util").get_stance_diplomacy
 local diplomacy_frame = {}
 

@@ -1,3 +1,6 @@
+-- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+-- Licensed under the MIT licence;
+
 local function check_not_on_map(flags)
 	for _, flag in pairs(flags) do
 		if flag == "not-on-map" then

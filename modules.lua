@@ -1,3 +1,6 @@
+-- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+-- Licensed under the MIT licence;
+
 local modules = {}
 modules.diplomacy = require("diplomacy/control")
 modules.custom_events = {
