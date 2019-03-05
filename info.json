@@ -1,10 +1,10 @@
 {
     "name": "diplomacy",
-    "version": "2.1.3",
+    "version": "2.1.4",
     "factorio_version": "0.17",
-    "title": "[color=blue]Diplomacy[/color] [item=programmable-speaker]",
+    "title": "[color=0.4,1,0.2]Diplomacy[/color] [item=programmable-speaker]",
     "author": "ZwerOxotnik",
-    "contact": "zweroxotnik@gmail.com, http://steamcommunity.com/profiles/76561198071983288",
+    "contact": "zweroxotnik@gmail.com, https://steamcommunity.com/id/ZwerOxotnik",
     "source": "https://gitlab.com/ZwerOxotnik/diplomacy",
     "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64630",
     "description": "Adds modified version diplomacy, diplomatic requests, commands needful, auto-diplomacy, customizable protection from theft of electricity and customized settings balance. Compatible with any PvP scenario. UPS friendly.",
