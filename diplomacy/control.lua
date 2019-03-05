@@ -385,8 +385,8 @@ local function on_runtime_mod_setting_changed(event)
 			event_listener.update_event("on_built_entity")
 			event_listener.update_event("on_robot_built_entity")
 		else
-			events.on_built_entity = nil
-			events.on_robot_built_entity = nil
+			events.on_built_entity = function() end
+			events.on_robot_built_entity = function() end
 			event_listener.update_event("on_built_entity")
 			event_listener.update_event("on_robot_built_entity")
 		end
@@ -395,17 +395,17 @@ local function on_runtime_mod_setting_changed(event)
 			events.on_entity_damaged = on_entity_damaged
 			event_listener.update_event("on_entity_damaged")
 		else
-			events.on_entity_damaged = nil
+			events.on_entity_damaged = function() end
 			event_listener.update_event("on_entity_damaged")
 		end
 	elseif event.setting == "diplomacy_allow_mine_entity" then
 		if settings.global[event.setting].value then
-			events.on_selected_entity_changed = nil
+			events.on_selected_entity_changed = function() end
 			events.on_player_mined_entity = forbidden_entity_mined
 			event_listener.update_event("on_selected_entity_changed")
 			event_listener.update_event("on_player_mined_entity")
 		else
-			events.on_player_mined_entity = nil
+			events.on_player_mined_entity = function() end
 			events.on_selected_entity_changed = forbidden_entity_mine
 			event_listener.update_event("on_selected_entity_changed")
 			event_listener.update_event("on_player_mined_entity")
@@ -502,11 +502,7 @@ module.events = {
 	on_init = init,
 	on_load = on_load,
 	on_entity_damaged = on_entity_damaged,
-	on_built_entity = protect_from_theft_of_electricity,
-	on_robot_built_entity = protect_from_theft_of_electricity,
 	on_entity_died = on_entity_died,
-	on_selected_entity_changed = forbidden_entity_mine,
-	on_player_mined_entity = forbidden_entity_mined,
 	on_forces_merging = on_forces_merging,
 	on_player_changed_force = on_player_changed_force,
 	on_player_created = on_player_created,
@@ -518,17 +514,27 @@ module.events = {
 	on_runtime_mod_setting_changed = on_runtime_mod_setting_changed
 }
 if not settings.global["diplomacy_protection_from_theft_of_electricity"].value then
-	module.events.on_built_entity = nil
-	module.events.on_robot_built_entity = nil
+	module.events.on_built_entity = function() end
+	module.events.on_robot_built_entity = function() end
+else
+	module.events.on_built_entity = protect_from_theft_of_electricity
+	module.events.on_robot_built_entity = protect_from_theft_of_electricity
 end
-if not settings.global["diplomacy_on_entity_damaged_state"].value then
-	module.events.on_entity_damaged = nil
+
+if settings.global["diplomacy_on_entity_damaged_state"].value then
+	module.events.on_entity_damaged = on_entity_damaged
+else
+	module.events.on_entity_damaged = function() end
 end
 if settings.global["diplomacy_allow_mine_entity"].value then
-	module.events.on_selected_entity_changed = nil
+	module.events.on_selected_entity_changed = function() end
+else
+	module.events.on_selected_entity_changed = forbidden_entity_mine
 end
 if not settings.global["diplomacy_allow_mine_entity"].value then
-	module.events.on_player_mined_entity = nil
+	module.events.on_player_mined_entity = function() end
+else
+	module.events.on_player_mined_entity = forbidden_entity_mined
 end
 
 return module
