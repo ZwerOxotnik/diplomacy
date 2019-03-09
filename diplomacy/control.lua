@@ -2,12 +2,12 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.1.4 (2019.03.05)
+Version: 2.1.5 (2019.03.09)
 
 Description: Adds modified version diplomacy, diplomatic requests,
              commands needful, auto-diplomacy,
-			 customizable protection from theft of electricity
-			 and customized settings balance.
+             customizable protection from theft of electricity
+             and customized settings balance.
              Compatible with any PvP scenario. UPS friendly.
 
 You can write and receive any information on the links below.
@@ -29,12 +29,12 @@ local mod_gui = require("mod-gui")
 
 local module = {}
 module.self_events = require("diplomacy/self_events")
-module.version = "2.1.4"
+module.version = "2.1.5"
 
 local function destroy_button(player)
-	local button_flow = mod_gui.get_button_flow(player)
-	if button_flow.diplomacy_button then
-		button_flow.diplomacy_button.destroy()
+	local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
+	if diplomacy_button then
+		diplomacy_button.destroy()
 	end
 end
 
@@ -45,9 +45,9 @@ module.create_button = function(player)
 end
 
 local function destroy_diplomacy_gui(player)
-	local center_gui = player.gui.center
-	if center_gui.diplomacy_frame then
-		center_gui.diplomacy_frame.destroy()
+	local diplomacy_frame = player.gui.center.diplomacy_frame
+	if diplomacy_frame then
+		diplomacy_frame.destroy()
 	end
 end
 
@@ -300,6 +300,7 @@ end
 
 local function check_stance_on_entity_damaged(event)
 	-- Validation of data
+	if event.final_damage_amount < 1 then return end
 	local entity = event.entity
 	if not (entity and entity.valid) then return end
 	local force = entity.force
@@ -307,7 +308,6 @@ local function check_stance_on_entity_damaged(event)
 	local killing_force = event.force
 	if not (killing_force and killing_force.valid) then return end
 	if killing_force == force then return end
-	if event.final_damage_amount < 1 then return end
 
 	-- Find in list the teams
 	local teams = global.diplomacy.teams
@@ -419,9 +419,8 @@ end
 
 local function on_player_left_game(event)
 	-- Validation of data
-	local gui = event.element
 	local player = game.players[event.player_index]
-	if not (player and player.valid and gui and gui.valid) then return end
+	if not (player and player.valid) then return end
 
 	select_diplomacy.on_player_left_game(player)
 end
@@ -441,6 +440,22 @@ local function on_load()
 			init()
 		end
 	end
+end
+
+local function on_player_joined_game(event)
+	-- Validation of data
+	local player = game.players[event.player_index]
+	if not (player and player.valid) then return end
+
+	update_diplomacy_frame()
+end
+
+-- local function on_forces_merged(event)
+
+-- end
+
+local function on_player_removed(event)
+	update_diplomacy_frame()
 end
 
 remote.remove_interface("diplomacy")
@@ -507,11 +522,12 @@ module.events = {
 	on_player_changed_force = on_player_changed_force,
 	on_player_created = on_player_created,
 	on_player_left_game = on_player_left_game,
-	on_player_removed = update_diplomacy_frame,
-	on_player_joined_game = update_diplomacy_frame,
+	on_player_removed = on_player_removed,
+	on_player_joined_game =  on_player_joined_game,
 	on_gui_click = on_gui_click,
 	on_gui_checked_state_changed = on_gui_checked_state_changed,
-	on_runtime_mod_setting_changed = on_runtime_mod_setting_changed
+	on_runtime_mod_setting_changed = on_runtime_mod_setting_changed,
+	-- on_forces_merged = on_forces_merged
 }
 if not settings.global["diplomacy_protection_from_theft_of_electricity"].value then
 	module.events.on_built_entity = function() end
