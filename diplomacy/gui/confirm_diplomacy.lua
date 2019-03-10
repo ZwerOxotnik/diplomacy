@@ -20,16 +20,13 @@ end
 
 local confirm_diplomacy = {}
 
-confirm_diplomacy.on_gui_click = function(event)
-	local gui = event.element
-	local player = game.players[event.player_index]
-
-	if gui.name == "cancel_button_dipl" then
+confirm_diplomacy.on_gui_click = function(player, gui_name)
+	if gui_name == "cancel_button_dipl" then
 		local force = player.force
 		for _, target in pairs(force.connected_players) do
 			destroy_diplomacy_selection_frame(target)
 		end
-	elseif gui.name == "accept_button_dipl" then
+	elseif gui_name == "accept_button_dipl" then
 		local force = player.force
 		diplomacy_selected_frame(player)
 		for _, target in pairs(force.connected_players) do

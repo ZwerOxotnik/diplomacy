@@ -2,7 +2,7 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.1.5 (2019.03.09)
+Version: 2.1.6 (2019.03.10)
 
 Description: Adds modified version diplomacy, diplomatic requests,
              commands needful, auto-diplomacy,
@@ -29,7 +29,7 @@ local mod_gui = require("mod-gui")
 
 local module = {}
 module.self_events = require("diplomacy/self_events")
-module.version = "2.1.5"
+module.version = "2.1.6"
 
 local function destroy_button(player)
 	local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
@@ -94,7 +94,7 @@ local function forbidden_entity_mine(event)
 	if not (entity and entity.valid) then return end
 	local force = player.force
 	local mining_force = entity.force
-	if force == mining_force or not force.get_friend(mining_force) then return end
+	if not force.get_friend(mining_force) or force == mining_force then return end
 
 	local max_health = game.entity_prototypes[entity.name].max_health
 	if max_health >= settings.global["diplomacy_HP_forbidden_entity_on_mined"].value or is_forbidden_entity_diplomacy(entity) then
@@ -124,7 +124,7 @@ local function check_stance_when_killed(event)
 	local entity = event.entity
 	local force = entity.force
 	local killing_force = event.force
-	if killing_force == force then return end
+	if not force.get_cease_fire(killing_force) or killing_force == force then return end
 
 	-- Find in list the teams
 	local teams = global.diplomacy.teams
@@ -274,10 +274,11 @@ local function on_gui_click(event)
 	local parent = gui.parent
 	if not parent then return end
 
-	if parent.name == 'mod_gui_button_flow' or parent.name == 'diplomacy_frame' then
+	local parent_name = parent.name
+	if parent_name == 'mod_gui_button_flow' or parent_name == 'diplomacy_frame' then
 		select_diplomacy.on_gui_click(event)
-	elseif parent.name == 'diplomacy_selection_frame' or parent.name == "holding_table_buttons" then
-		confirm_diplomacy.on_gui_click(event)
+	elseif parent_name == 'diplomacy_selection_frame' or parent_name == "holding_table_buttons" then
+		confirm_diplomacy.on_gui_click(player, gui.name)
 	end
 end
 
@@ -285,6 +286,9 @@ local function on_player_changed_force(event)
 	-- Validation of data
 	local player = game.players[event.player_index]
 	if not (player and player.valid) then return end
+
+	-- TODO: tests for checking special opimization
+	--       between "on_player_changed_force" and "on_forces_merging" and "on_forces_merged"
 
 	destroy_diplomacy_selection_frame(player)
 	update_diplomacy_frame()
@@ -300,14 +304,14 @@ end
 
 local function check_stance_on_entity_damaged(event)
 	-- Validation of data
-	if event.final_damage_amount < 1 then return end
 	local entity = event.entity
 	if not (entity and entity.valid) then return end
 	local force = entity.force
 	if not (force and force.valid) then return end
 	local killing_force = event.force
 	if not (killing_force and killing_force.valid) then return end
-	if killing_force == force then return end
+	if not force.get_cease_fire(killing_force) or killing_force == force then return end
+	if event.final_damage_amount < 1 then return end
 
 	-- Find in list the teams
 	local teams = global.diplomacy.teams

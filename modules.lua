@@ -8,7 +8,7 @@ modules.custom_events = {
 		-- Searching events "on_round_start" and "on_round_end"
 		for interface_name, _ in pairs( remote.interfaces ) do
 			local function_name = "get_event_name"
-			-- Is the interface event existing?
+			-- Is the event of interface existing?
 			if remote.interfaces[interface_name][function_name] then
 				local ID_1 = remote.call(interface_name, function_name, "on_round_start")
 				local ID_2 = remote.call(interface_name, function_name, "on_round_end")
