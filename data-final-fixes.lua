@@ -23,7 +23,15 @@ if settings.startup["diplomacy_entity_not_on_map"].value then
 	end
 end
 
-data.raw["technology"]["tanks"].unit.count = settings.startup["diplomacy_tech_tanks_count"].value
-data.raw["technology"]["power-armor-2"].unit.count = settings.startup["diplomacy_tech_power_armor_2_count"].value
-data.raw["technology"]["uranium-ammo"].unit.count = settings.startup["diplomacy_tech_uranium_ammo_count"].value
-data.raw["rocket-silo"]["rocket-silo"].max_health = settings.startup["diplomacy_hp_rocket_silo"].value
+if data.raw["technology"]["tanks"] then
+	data.raw["technology"]["tanks"].unit.count = settings.startup["diplomacy_tech_tanks_count"].value
+end
+if data.raw["technology"]["power-armor-2"] then
+	data.raw["technology"]["power-armor-2"].unit.count = settings.startup["diplomacy_tech_power_armor_2_count"].value
+end
+if data.raw["technology"]["uranium-ammo"] then
+	data.raw["technology"]["uranium-ammo"].unit.count = settings.startup["diplomacy_tech_uranium_ammo_count"].value
+end
+if data.raw["rocket-silo"]["rocket-silo"] then
+	data.raw["rocket-silo"]["rocket-silo"].max_health = settings.startup["diplomacy_hp_rocket_silo"].value
+end

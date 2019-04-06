@@ -2,7 +2,7 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.1.6 (2019.03.10)
+Version: 2.1.7 (2019.04.06)
 
 Description: Adds modified version diplomacy, diplomatic requests,
              commands needful, auto-diplomacy,
@@ -29,7 +29,7 @@ local mod_gui = require("mod-gui")
 
 local module = {}
 module.self_events = require("diplomacy/self_events")
-module.version = "2.1.6"
+module.version = "2.1.7"
 
 local function destroy_button(player)
 	local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button

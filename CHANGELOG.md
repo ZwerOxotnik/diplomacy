@@ -1,5 +1,11 @@
 # Changelog
 
+## 2019-04-06
+
+### [v2.1.7][v2.1.7]
+
+* Improved compatibility with other mods
+
 ## 2019-03-10
 
 ### [v2.1.6][v2.1.6]
@@ -50,7 +56,7 @@
 
 * Deleted: PvP scenario (use "[Pack scenarios][Pack scenarios]")
 * Deleted: changes in evolution factor from research and etc (use "[Soft evolution][Soft evolution]")
-* Added: compability with scenarios
+* Added: compatibility with scenarios
 * Added: New settings
 * Added: mod interface
 * Improved localization
@@ -298,6 +304,7 @@ If you destroy entity.type = (forbidden_entity or player) another factions becom
 [Event listener]: https://gitlab.com/ZwerOxotnik/event-listener
 [Pack scenarios]: https://forums.factorio.com/viewtopic.php?f=190&t=64631
 [Soft evolution]: https://forums.factorio.com/viewtopic.php?f=190&t=64653
+[v2.1.7]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.7.zip
 [v2.1.6]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.6.zip
 [v2.1.5]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.5.zip
 [v2.1.4]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.4.zip

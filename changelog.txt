@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.7
+Date: 2019-04-06
+  Changes:
+    - Improved compatibility with other mods
+---------------------------------------------------------------------------------------------------
 Version: 2.1.6
 Date: 2019-03-10
   Changes:
@@ -42,7 +47,7 @@ Date: 2019-03-01
 Version: 2.0.0
 Date: 2019-01-31
   Major Features:
-    - Compability with scenarios
+    - compatibility with scenarios
   Features:
     - New settings
   Changes:
