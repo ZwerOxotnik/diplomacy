@@ -2,7 +2,7 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.1.7 (2019.04.06)
+Version: 2.1.8 (2019.04.07)
 
 Description: Adds modified version diplomacy, diplomatic requests,
              commands needful, auto-diplomacy,
@@ -28,8 +28,31 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
+module.version = "2.1.8"
+module.events = {}
 module.self_events = require("diplomacy/self_events")
-module.version = "2.1.7"
+
+local get_event
+if event_listener then
+	get_event = function(name)
+		return defines.events[name] or name
+	end
+else
+	get_event = function(name)
+		return defines.events[name]
+	end
+end
+
+-- This function for compatibility with "Event listener" module and into other modules
+local function put_event(event, func)
+	event = get_event(event)
+	if event then
+		module.events[event] = func
+	else
+		log("That event is nil")
+		-- error("That event is nil")
+	end
+end
 
 local function destroy_button(player)
 	local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
@@ -429,7 +452,7 @@ local function on_player_left_game(event)
 	select_diplomacy.on_player_left_game(player)
 end
 
-local function init()
+module.on_init = function()
 	global.diplomacy = global.diplomacy or {}
 	local diplomacy = global.diplomacy
 	diplomacy.teams = diplomacy.teams or nil
@@ -438,10 +461,10 @@ local function init()
 	diplomacy.color_map = diplomacy.color_map or color_map.get()
 end
 
-local function on_load()
+module.on_load = function()
 	if not game then
 		if global.soft_evolution == nil then
-			init()
+			module.on_init()
 		end
 	end
 end
@@ -517,44 +540,42 @@ remote.add_interface("diplomacy",
 	end
 })
 
-module.events = {
-	on_init = init,
-	on_load = on_load,
-	on_entity_damaged = on_entity_damaged,
-	on_entity_died = on_entity_died,
-	on_forces_merging = on_forces_merging,
-	on_player_changed_force = on_player_changed_force,
-	on_player_created = on_player_created,
-	on_player_left_game = on_player_left_game,
-	on_player_removed = on_player_removed,
-	on_player_joined_game =  on_player_joined_game,
-	on_gui_click = on_gui_click,
-	on_gui_checked_state_changed = on_gui_checked_state_changed,
-	on_runtime_mod_setting_changed = on_runtime_mod_setting_changed,
-	-- on_forces_merged = on_forces_merged
-}
+
+-- For attaching events
+put_event("on_entity_damaged", on_entity_damaged)
+put_event("on_entity_died", on_entity_died)
+put_event("on_player_changed_force", on_player_changed_force)
+put_event("on_player_created", on_player_created)
+put_event("on_player_left_game", on_player_left_game)
+put_event("on_player_removed", on_player_removed)
+put_event("on_player_joined_game", on_player_joined_game)
+put_event("on_gui_click", on_gui_click)
+put_event("on_gui_checked_state_changed", on_gui_checked_state_changed)
+put_event("on_runtime_mod_setting_changed", on_runtime_mod_setting_changed)
+-- put_event("on_forces_merged", on_forces_merged)
+
 if not settings.global["diplomacy_protection_from_theft_of_electricity"].value then
-	module.events.on_built_entity = function() end
-	module.events.on_robot_built_entity = function() end
+	put_event("on_built_entity", function() end)
+	put_event("on_robot_built_entity", function() end)
 else
-	module.events.on_built_entity = protect_from_theft_of_electricity
-	module.events.on_robot_built_entity = protect_from_theft_of_electricity
+	put_event("on_built_entity", protect_from_theft_of_electricity)
+	put_event("on_robot_built_entity", protect_from_theft_of_electricity)
 end
 
 if settings.global["diplomacy_on_entity_damaged_state"].value then
-	module.events.on_entity_damaged = on_entity_damaged
+	put_event("on_entity_damaged", on_entity_damaged)
 else
-	module.events.on_entity_damaged = function() end
+	put_event("on_entity_damaged", function() end)
 end
 if settings.global["diplomacy_allow_mine_entity"].value then
-	module.events.on_selected_entity_changed = function() end
+	put_event("on_selected_entity_changed", function() end)
 else
-	module.events.on_selected_entity_changed = forbidden_entity_mine
+	put_event("on_selected_entity_changed", forbidden_entity_mine)
 end
 if not settings.global["diplomacy_allow_mine_entity"].value then
-	module.events.on_player_mined_entity = function() end
+	put_event("on_player_mined_entity", function() end)
 else
-	module.events.on_player_mined_entity = forbidden_entity_mined
+	put_event("on_player_mined_entity", forbidden_entity_mined)
 end
 
 return module

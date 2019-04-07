@@ -1,6 +1,6 @@
 {
     "name": "diplomacy",
-    "version": "2.1.7",
+    "version": "2.1.8",
     "factorio_version": "0.17",
     "title": "Diplomacy",
     "author": "ZwerOxotnik",
@@ -9,6 +9,6 @@
     "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64630",
     "description": "Adds modified version diplomacy, diplomatic requests, commands needful, auto-diplomacy, customizable protection from theft of electricity and customized settings balance. Compatible with any PvP scenario. UPS friendly.",
     "dependencies": [
-        "event-listener >= 0.4.3"
+        "event-listener >= 0.5.0"
     ]
 }
