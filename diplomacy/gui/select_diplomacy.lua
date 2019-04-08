@@ -61,6 +61,8 @@ local function confirm_diplomacy(event)
 						cancel_request_diplomacy_force(player_force, force)
 					else
 						create_diplomacy_selection_frame(force, player_force.name, "neutral")
+						force.print({"player-changed-diplomacy", player.name, player_force.name})
+						player_force.print({"player-changed-diplomacy", player.name, force.name})
 					end
 					some_change = true
 				end

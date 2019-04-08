@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2019-04-08
+  Features:
+    - Support the "secondary chat" mod and support change diplomacy through the chat interface of the mod
+  Changes:
+    - Bugfixes
+    - Improved compatibility
+---------------------------------------------------------------------------------------------------
 Version: 2.1.8
 Date: 2019-04-07
   Changes:

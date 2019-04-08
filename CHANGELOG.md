@@ -1,5 +1,13 @@
 # Changelog
 
+## 2019-04-08
+
+### [v2.2.0][v2.2.0]
+
+- Support the "secondary chat" mod and support change diplomacy through the chat interface of the mod
+- Bugfixes
+- Improved compatibility
+
 ## 2019-04-07
 
 ### [v2.1.8][v2.1.8]
@@ -310,6 +318,7 @@ If you destroy entity.type = (forbidden_entity or player) another factions becom
 [Event listener]: https://gitlab.com/ZwerOxotnik/event-listener
 [Pack scenarios]: https://forums.factorio.com/viewtopic.php?f=190&t=64631
 [Soft evolution]: https://forums.factorio.com/viewtopic.php?f=190&t=64653
+[v2.2.0]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.2.0.zip
 [v2.1.8]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.8.zip
 [v2.1.7]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.7.zip
 [v2.1.6]: https://mods.factorio.com/api/downloads/data/mods/2416/diplomacy_2.1.6.zip

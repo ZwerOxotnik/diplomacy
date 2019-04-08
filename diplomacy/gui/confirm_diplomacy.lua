@@ -16,6 +16,13 @@ local function diplomacy_selected_frame(player)
 	game.print({"team-changed-diplomacy", force.name, other_force.name, {stance}})
 	other_force.print({"player-changed-diplomacy", player.name, force.name})
 	force.print({"player-changed-diplomacy", player.name, other_force.name})
+
+	interface_name = "secondary-chat"
+	function_name = "update_chat_for_force"
+	if remote.interfaces[interface_name] and remote.interfaces[interface_name][function_name] then
+		remote.call(interface_name, function_name, force)
+		remote.call(interface_name, function_name, other_force)
+	end
 end
 
 local confirm_diplomacy = {}

@@ -2,7 +2,7 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.1.8 (2019.04.07)
+Version: 2.2.0 (2019.04.08)
 
 Description: Adds modified version diplomacy, diplomatic requests,
              commands needful, auto-diplomacy,
@@ -28,18 +28,22 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.1.8"
+module.version = "2.2.0"
 module.events = {}
 module.self_events = require("diplomacy/self_events")
 
 local get_event
 if event_listener then
-	get_event = function(name)
-		return defines.events[name] or name
+	get_event = function(event)
+		return defines.events[event] or event
 	end
 else
-	get_event = function(name)
-		return defines.events[name]
+	get_event = function(event)
+		if type(event) == "number" then
+			return event
+		else
+			return defines.events[event]
+		end
 	end
 end
 
@@ -48,10 +52,12 @@ local function put_event(event, func)
 	event = get_event(event)
 	if event then
 		module.events[event] = func
+		return true
 	else
 		log("That event is nil")
 		-- error("That event is nil")
 	end
+	return false
 end
 
 local function destroy_button(player)
@@ -300,8 +306,10 @@ local function on_gui_click(event)
 	local parent_name = parent.name
 	if parent_name == 'mod_gui_button_flow' or parent_name == 'diplomacy_frame' then
 		select_diplomacy.on_gui_click(event)
+		return true
 	elseif parent_name == 'diplomacy_selection_frame' or parent_name == "holding_table_buttons" then
 		confirm_diplomacy.on_gui_click(player, gui.name)
+		return true
 	end
 end
 
