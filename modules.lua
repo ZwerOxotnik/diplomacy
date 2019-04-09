@@ -109,14 +109,14 @@ modules.for_secondary_chat.handle_events = function()
 
 				local type = "sprite-button"
 				if stance == "ally" then
-					diplomacy.add{type = type, name = "scd_set_war", sprite = "virtual-signal/signal-red"}
-					diplomacy.add{type = type, name = "scd_set_neutral", sprite = "virtual-signal/signal-white"}
+					diplomacy.add{type = type, name = "scd_set_war", sprite = "virtual-signal/enemy"}
+					diplomacy.add{type = type, name = "scd_set_neutral", sprite = "virtual-signal/neutral"}
 				elseif stance == "enemy" then
-					diplomacy.add{type = type, name = "scd_set_neutral", sprite = "virtual-signal/signal-white"}
-					diplomacy.add{type = type, name = "scd_set_ally", sprite = "virtual-signal/signal-green"}
+					diplomacy.add{type = type, name = "scd_set_neutral", sprite = "virtual-signal/neutral"}
+					diplomacy.add{type = type, name = "scd_set_ally", sprite = "virtual-signal/ally"}
 				else -- if stance == "neutral" then
-					diplomacy.add{type = type, name = "scd_set_war", sprite = "virtual-signal/signal-red"}
-					diplomacy.add{type = type, name = "scd_set_ally", sprite = "virtual-signal/signal-green"}
+					diplomacy.add{type = type, name = "scd_set_war", sprite = "virtual-signal/enemy"}
+					diplomacy.add{type = type, name = "scd_set_ally", sprite = "virtual-signal/ally"}
 				end
 			end
 
@@ -152,7 +152,7 @@ modules.for_secondary_chat.handle_events = function()
 					local player = game.players[event.player_index]
 					if not (player and player.valid) then return end
 					local parent = gui.parent
-					if not parent then return end
+					if not parent or parent.name ~= "diplomacy" then return end
 
 					if gui.name == "scd_set_war" then
 						local player_force = player.force

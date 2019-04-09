@@ -4,7 +4,7 @@
 
 ### [v2.2.0][v2.2.0]
 
-- Support the "secondary chat" mod and support change diplomacy through the chat interface of the mod
+- Added support for the "secondary chat" mod and support for change diplomacy through the chat interface of the mod
 - Bugfixes
 - Improved compatibility
 

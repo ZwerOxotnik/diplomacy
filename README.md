@@ -21,6 +21,7 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 * [Installing](#installing)
 * [Dependencies](#dependencies)
     * [Required](#required)
+    * [Optional](#optional)
 * [Special thanks](#special-thanks)
 * [License](#license)
 
@@ -100,13 +101,17 @@ For more information, see [Installing Mods on the Factorio wiki](https://wiki.fa
 If you have downloaded the source archive (GitLab):
 
 * copy the mod directory into your factorio mods directory
-* rename the mod directory to soft-evolution_*versionnumber*, where *versionnumber* is the version of the mod that you've downloaded (e.g., 2.2.0)
+* rename the mod directory to soft-evolution_*versionnumber*, where *versionnumber* is the version of the mod that you've downloaded (e.g., 2.2.1)
 
 ## Dependencies
 
 ### Required
 
 * [Event listener](https://mods.factorio.com/mod/event-listener)
+
+### Optional
+
+* [Chat of extended interaction](https://mods.factorio.com/mod/secondary-chat)
 
 ## Special thanks
 

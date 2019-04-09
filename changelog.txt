@@ -1,8 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2019-04-09
+  Changes:
+    - Changed icons of the diplomacy
+    - Optimization
+---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 2019-04-08
   Features:
-    - Support the "secondary chat" mod and support change diplomacy through the chat interface of the mod
+    - Added support for the "secondary chat" mod and support for change diplomacy through the chat interface of the mod
   Changes:
     - Bugfixes
     - Improved compatibility

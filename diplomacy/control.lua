@@ -2,7 +2,7 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.2.0 (2019.04.08)
+Version: 2.2.1 (2019.04.09)
 
 Description: Adds modified version diplomacy, diplomatic requests,
              commands needful, auto-diplomacy,
@@ -28,7 +28,7 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.2.0"
+module.version = "2.2.1"
 module.events = {}
 module.self_events = require("diplomacy/self_events")
 

@@ -19,6 +19,7 @@
 * [Установка](#installing)
 * [Зависимости](#dependencies)
     * [Необходимые](#required)
+    * [Необязательные](#optional)
 * [Особая благодарность](special-thanks)
 * [Лицензия](#license)
 
@@ -80,13 +81,17 @@
 Если вы скачали исходный архив (GitLab):
 
 * скопируйте данный мод в директорию модов Factorio
-* переименуйте данный мод в event-listener_*версия*, где *версия* это версия мода, которую вы скачали (например, 2.2.0)
+* переименуйте данный мод в event-listener_*версия*, где *версия* это версия мода, которую вы скачали (например, 2.2.1)
 
 ## <a name="dependencies"></a> Зависимости
 
 ### <a name="required"></a> Необходимые
 
 * [Event listener](https://mods.factorio.com/mod/event-listener)
+
+### <a name="optional"></a> Необязательные
+
+* [Чат расширенного взаимодействия](https://mods.factorio.com/mod/secondary-chat)
 
 ## <a name="special-thanks"></a> Особая благодарность
 
