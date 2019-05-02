@@ -113,6 +113,8 @@ diplomacy_frame.create = function(player)
 		label.style.font = "default-bold"
 	end
 
+	local diplomacy = global.diplomacy
+
 	-- Find teams
 	local teams
 	local is_show_all_teams = false
@@ -120,14 +122,14 @@ diplomacy_frame.create = function(player)
 		teams = game.forces
 		is_show_all_teams = true
 	else
-		teams = global.diplomacy.teams or game.forces
+		teams = diplomacy.teams or game.forces
 	end
 
 	-- Create table
 	for _, team in pairs(teams) do
 		local force = game.forces[team.name]
 		if force then
-			if is_show_all_teams or global.diplomacy.teams ~= nil or #force.players ~= 0 then
+			if is_show_all_teams or diplomacy.teams ~= nil or #force.players ~= 0 then
 				local label = diplomacy_table.add{type = "label", name = team.name .. "_name", caption = team.name}
 				label.style.single_line = false
 				label.style.maximal_width = 150
