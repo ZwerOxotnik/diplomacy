@@ -21,7 +21,6 @@ local function diplomacy_button_press(event)
 
 	frame = flow.add{type = "frame", name = "diplomacy_frame", caption = {"mod-name.diplomacy"}, direction = "vertical"}
 	frame.visible = true
-	frame.style.title_bottom_padding = 8
 	local inner_frame = frame.add{type = "frame", style = "image_frame", name = "diplomacy_inner_frame", direction = "vertical"}
 	inner_frame.style.left_padding = 8
 	inner_frame.style.top_padding = 8
