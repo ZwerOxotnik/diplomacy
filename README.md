@@ -52,20 +52,20 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 
 | Description | Parameters | (Default) |
 | ----------- | ---------- | --------- |
-| Protection from theft of electricity - does not allow enemy to connect to someone else's electricity | boolean | true |
-| Show all factions - hides in diplomacy the factions without players | boolean | false |
-| HP to change relationships when killed an object - to change the state relationships when killing an object> = HP | 1-100000000000 | 300 |
-| HP to change relationships when mined an object - to change the state relationships when mined an object> = HP | 1-100000000000 | 300 |
-| HP to change the relationship for damage to an object - to change the state relationship when damage to the object >= HP with low probability | 1-100000000000 | 300 |
-| Allow the player to mining an object from the allied faction | boolean | false |
-| auto-diplomacy, when dealing damage - checks damage and changes relationships between factions | boolean | true |
+| Protection from theft of electricity - does not allow enemies to connect to someone else's electricity | boolean | true |
+| Show all factions - Hides in diplomacy factions without playersHides in diplomacy factions without players | boolean | false |
+| Required HP for changing relationships for a killed object - changes state relationships when killed an entity HP >= this parameter value | 1-100000000000 | 300 |
+| Required HP for changing relationships for a mined object - changes state relationships when mined an object HP >= this parameter value | 1-100000000000 | 300 |
+| Required HP for changing relationships for damage to an object - changes state relationships when damage to the object HP >= this parameter value (happens with low probability) | 1-100000000000 | 300 |
+| Allow players mine objects from allied factions | boolean | false |
+| Auto-diplomacy when dealing damage - checks damage and changes relationships between factions | boolean | true |
 | Diplomatic privilege - which players are able to change teams diplomatic stance towards other teams. All players: Every player on the team. Team leader: The connected player who has been on the team longest. | ["all players", "team leader"] | all players |
 
 ### <a name="startup"></a> Startup
 
 | Description | Parameters | (Default) |
 | ----------- | ---------- | --------- |
-| Hide markers of each objects on map | boolean | false |
+| Hide all object markers on map | boolean | false |
 | HP of rocket silo - to change HP of rocket silo | 1-10000000000 | 50000 |
 | Count science pack for the technology of tanks | 1-10000000000 | 1000 |
 | Count science pack for the technology of power armor MK2 | 1-10000000000 | 1000 |
@@ -101,7 +101,7 @@ For more information, see [Installing Mods on the Factorio wiki](https://wiki.fa
 If you have downloaded the source archive (GitLab):
 
 * copy the mod directory into your factorio mods directory
-* rename the mod directory to soft-evolution_*versionnumber*, where *versionnumber* is the version of the mod that you've downloaded (e.g., 2.2.1)
+* rename the mod directory to soft-evolution_*versionnumber*, where *versionnumber* is the version of the mod that you've downloaded (e.g., 2.3.0)
 
 ## Dependencies
 

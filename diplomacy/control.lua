@@ -2,13 +2,7 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.2.1 (2019.04.09)
-
-Description: Adds modified version diplomacy, diplomatic requests,
-             commands needful, auto-diplomacy,
-             customizable protection from theft of electricity
-             and customized settings balance.
-             Compatible with any PvP scenario. UPS friendly.
+Version: 2.3.0 (2019.05.02)
 
 You can write and receive any information on the links below.
 Source: https://gitlab.com/ZwerOxotnik/diplomacy
@@ -28,22 +22,15 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.2.1"
+module.version = "2.3.0"
 module.events = {}
 module.self_events = require("diplomacy/self_events")
 
-local get_event
-if event_listener then
-	get_event = function(event)
-		return defines.events[event] or event
-	end
-else
-	get_event = function(event)
-		if type(event) == "number" then
-			return event
-		else
-			return defines.events[event]
-		end
+local function get_event(event)
+	if type(event) == "number" then
+		return event
+	else
+		return defines.events[event] --or event
 	end
 end
 
@@ -52,10 +39,13 @@ local function put_event(event, func)
 	event = get_event(event)
 	if event then
 		module.events[event] = func
+		if Event then
+			Event.register(event, func)
+		end
 		return true
 	else
-		log("That event is nil")
-		-- error("That event is nil")
+		log("The event is nil")
+		-- error("The event is nil")
 	end
 	return false
 end
@@ -175,10 +165,10 @@ local function check_stance_when_killed(event)
 	if cause and cause.valid then
 		if force.get_friend(killing_force) then
 			if game.entity_prototypes[entity.name].max_health >= settings.global["diplomacy_HP_forbidden_entity_on_killed"].value or is_forbidden_entity_diplomacy(entity) or
-					entity.type == "player" then
+					entity.type == "character" then
 				set_politice["enemy"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
-				if cause.type == "player" then
+				if cause.type == "character" then
 					killing_force.print({"player-changed-diplomacy", cause.player.name, force.name})
 					force.print({"player-changed-diplomacy", cause.player.name, killing_force.name})
 				elseif cause.type == "car" then
@@ -206,7 +196,7 @@ local function check_stance_when_killed(event)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"neutral"}})
 				killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
 				force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
-				if cause.type == "player" then
+				if cause.type == "character" then
 					killing_force.print({"player-changed-diplomacy", cause.player.name, force.name})
 					force.print({"player-changed-diplomacy", cause.player.name, killing_force.name})
 				elseif cause.type == "car" then
@@ -239,7 +229,7 @@ local function check_stance_when_killed(event)
 	else
 		if force.get_friend(killing_force) then
 			if game.entity_prototypes[entity.name].max_health >= settings.global["diplomacy_HP_forbidden_entity_on_killed"].value or is_forbidden_entity_diplomacy(entity) or
-					entity.type == "player" then
+					entity.type == "character" then
 				set_politice["enemy"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
 				killing_force.print({"player-changed-diplomacy", "ANY", force.name})
@@ -341,8 +331,8 @@ local function check_stance_on_entity_damaged(event)
 	if not (force and force.valid) then return end
 	local killing_force = event.force
 	if not (killing_force and killing_force.valid) then return end
-	if not force.get_cease_fire(killing_force) or killing_force == force then return end
 	if event.final_damage_amount < 1 then return end
+	if not force.get_cease_fire(killing_force) or killing_force == force then return end
 
 	-- Find in list the teams
 	local teams = global.diplomacy.teams
@@ -366,7 +356,7 @@ local function check_stance_on_entity_damaged(event)
 			if force.get_cease_fire(killing_force) then
 				set_politice["enemy"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
-				if cause.type == "player" then
+				if cause.type == "character" then
 					killing_force.print({"player-changed-diplomacy", cause.player.name, force.name})
 					force.print({"player-changed-diplomacy", cause.player.name, killing_force.name})
 				elseif cause.type == "car" then
@@ -471,7 +461,7 @@ end
 
 module.on_load = function()
 	if not game then
-		if global.soft_evolution == nil then
+		if global.diplomacy == nil then
 			module.on_init()
 		end
 	end
