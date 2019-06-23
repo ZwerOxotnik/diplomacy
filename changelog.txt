@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2019-06-23
+  Changes:
+    - Removed rich text in the mod name
+    - Changed en, ru locales
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.3.2
 Date: 2019-05-02
   Notes:
@@ -99,5 +107,5 @@ Date: 2019-01-31
     - Changes in evolution factor from research and etc is deleted (use «Soft evolution»)
   Notes:
     - Uploaded to GitLab
-    - Refactoring (not finished)
+    - Refactoring (not finished!)
     - Full changelog only on GitLab

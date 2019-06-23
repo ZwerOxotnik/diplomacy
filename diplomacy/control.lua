@@ -2,7 +2,7 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.3.0 (2019.05.02)
+Version: 2.3.3 (2019.06.23)
 
 You can write and receive any information on the links below.
 Source: https://gitlab.com/ZwerOxotnik/diplomacy
@@ -22,7 +22,7 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.3.0"
+module.version = "2.3.3"
 module.events = {}
 module.self_events = require("diplomacy/self_events")
 

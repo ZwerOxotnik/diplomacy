@@ -1,10 +1,10 @@
 {
     "name": "diplomacy",
-    "version": "2.3.0",
+    "version": "2.3.3",
     "factorio_version": "0.17",
     "title": "Diplomacy",
     "author": "ZwerOxotnik",
-    "contact": "zweroxotnik@gmail.com, https://steamcommunity.com/id/ZwerOxotnik, Discord:ZwerOxotnik#7117",
+    "contact": "zweroxotnik@gmail.com, Discord:ZwerOxotnik#7117",
     "source": "https://gitlab.com/ZwerOxotnik/diplomacy",
     "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=64630",
     "description": "Adds modified version of diplomacy, diplomatic requests, commands needful, auto-diplomacy, customizable protection from theft of electricity and customized settings balance, integration with chat mod. Compatible with any PvP scenario. UPS friendly.",
