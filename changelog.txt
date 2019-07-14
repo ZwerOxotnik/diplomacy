@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2019-07-14
+  Features:
+    - Added turn switches for startup settings
+  Changes:
+    - Improved localisations
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.3.3
 Date: 2019-06-23
   Changes:
@@ -86,7 +95,7 @@ Version: 2.1.0
 Date: 2019-03-01
   Changes:
     - Updated for Factorio 0.17
-    - Updated localization
+    - Updated localisation
     - Bugfixes
     - Added module «Event listener»
   Notes:
@@ -99,7 +108,7 @@ Date: 2019-01-31
   Features:
     - New settings
   Changes:
-    - Improved localization
+    - Improved localisation
     - Improved performance
     - Added mod interface
     - A lot of bugfixes
