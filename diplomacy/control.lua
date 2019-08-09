@@ -1,15 +1,23 @@
 --[[
-Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
-Licensed under the MIT licence;
-Author: ZwerOxotnik
-Version: 2.4.1 (2019.08.09)
+Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 
-You can write and receive any information on the links below.
-Source: https://gitlab.com/ZwerOxotnik/diplomacy
-Mod portal: https://mods.factorio.com/mod/diplomacy
-Homepage: https://forums.factorio.com/viewtopic.php?f=190&t=64630
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
+		http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ]]--
+
+-- You can write and receive any information on the links below.
+-- Source: https://gitlab.com/ZwerOxotnik/diplomacy
+-- Mod portal: https://mods.factorio.com/mod/diplomacy
+-- Homepage: https://forums.factorio.com/viewtopic.php?f=190&t=64630
 
 local color_map = require("diplomacy/color_map")
 local set_politice = require("diplomacy/util").set_politice
