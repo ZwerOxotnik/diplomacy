@@ -67,7 +67,7 @@ modules.for_secondary_chat.handle_events = function()
 						end
 					end, modules.for_secondary_chat)
 
-					-- Attach "on_round_end" event for destroyng gui
+					-- Attach "on_round_end" event for destroying gui
 					put_event(ID_2, function()
 						local diplomacy = global.diplomacy
 						if remote.interfaces[interface_name] then
