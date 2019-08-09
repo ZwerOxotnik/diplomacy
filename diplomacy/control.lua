@@ -2,7 +2,7 @@
 Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 Licensed under the MIT licence;
 Author: ZwerOxotnik
-Version: 2.3.3 (2019.06.23)
+Version: 2.4.1 (2019.08.09)
 
 You can write and receive any information on the links below.
 Source: https://gitlab.com/ZwerOxotnik/diplomacy
@@ -22,7 +22,7 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.3.3"
+module.version = "2.4.1"
 module.events = {}
 module.self_events = require("diplomacy/self_events")
 
@@ -267,7 +267,6 @@ local function on_player_created(event)
 	if not (player and player.valid) then return end
 
 	create_diplomacy_frame(player)
-	module.create_button(player)
 end
 
 local function on_gui_checked_state_changed(event)
@@ -472,6 +471,9 @@ local function on_player_joined_game(event)
 	local player = game.players[event.player_index]
 	if not (player and player.valid) then return end
 
+	if not player.spectator then
+		module.create_button(player)
+	end
 	update_diplomacy_frame()
 end
 
