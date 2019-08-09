@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.1
+Date: 2019-08-09
+  Bugfixes:
+    - Creating button for saves
+  Notes:
+    - Changed MIT license to Apache license 2.0
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.4.0
 Date: 2019-07-14
   Features:
