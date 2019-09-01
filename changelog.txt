@@ -2,7 +2,7 @@
 Version: 2.4.2
 Date: 2019-09-01
   Bugfixes:
-    - There is diplomacy button into already started PVP world now
+    - There is diplomacy button into already started PVP world now (https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9)
   Notes:
     - This update for Factorio 0.17
 ---------------------------------------------------------------------------------------------------
