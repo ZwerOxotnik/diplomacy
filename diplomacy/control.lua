@@ -30,7 +30,7 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.4.1"
+module.version = "2.4.2"
 module.events = {}
 module.self_events = require("diplomacy/self_events")
 
@@ -474,14 +474,19 @@ module.on_load = function()
 	end
 end
 
+module.on_configuration_changed = function(data)
+	if data.mod_changes["diplomacy"].old_version ~= nil then return end
+
+	for _, player in pairs(game.players) do
+		module.create_button(player) -- still there is a bug
+	end
+end
+
 local function on_player_joined_game(event)
 	-- Validation of data
 	local player = game.players[event.player_index]
 	if not (player and player.valid) then return end
 
-	if not player.spectator then
-		module.create_button(player)
-	end
 	update_diplomacy_frame()
 end
 

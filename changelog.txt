@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.4.2
+Date: 2019-09-01
+  Bugfixes:
+    - There is diplomacy button into already started PVP world now
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.4.1
 Date: 2019-08-09
   Bugfixes:
