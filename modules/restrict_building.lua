@@ -47,6 +47,7 @@ local function restrict_building_on_built_entity(event)
         target = created_entity.position,
         forces = {created_entity.force},
         visible = true,
+        alignment = "center",
         time_to_live = 60 * 3,
         color = {r = 1, g = 0, b = 0, a = 0.5}
     }
@@ -65,8 +66,8 @@ local function on_runtime_mod_setting_changed(event)
         events[defines.events.on_robot_built_entity] = function() end
     end
 
-    module_listener.update_event("on_built_entity")
-    module_listener.update_event("on_robot_built_entity")
+    event_listener.update_event("on_built_entity")
+    event_listener.update_event("on_robot_built_entity")
 end
 
 if settings.global["diplomacy_restrict_building_radius"].value == 0 then

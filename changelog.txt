@@ -1,3 +1,12 @@
+
+---------------------------------------------------------------------------------------------------
+Version: 2.5.1
+Date: 2019-11-07
+  Bugfixes:
+    - Fixed bug during on_runtime_mod_setting_changed event
+    - Proper hiding of entities
+  Notes:
+    - This update for Factorio 0.17
 ---------------------------------------------------------------------------------------------------
 Version: 2.5.0
 Date: 2019-11-07
