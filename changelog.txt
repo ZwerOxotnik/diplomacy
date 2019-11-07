@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.0
+Date: 2019-11-07
+  Features:
+    - Added restrict building radius for enemies
+  Bugfixes:
+    - Returned lost button of diplomacy
+    - Fixed flags during data stage (https://mods.factorio.com/mod/diplomacy/discussion/5dc33045778503000bfdea59)
+  Changes:
+    - Changed command "change-stance" (recreated diplomacy button if you call the command without parameters)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.4.3
 Date: 2019-09-02
   Bugfixes:

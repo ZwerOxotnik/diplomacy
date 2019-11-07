@@ -50,6 +50,7 @@ end
 
 local modules = {}
 modules.diplomacy = require("diplomacy/control")
+modules.restrict_building = require("modules/restrict_building")
 
 modules.for_secondary_chat = {}
 modules.for_secondary_chat.events = {}

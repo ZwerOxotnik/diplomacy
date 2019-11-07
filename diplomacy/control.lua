@@ -30,7 +30,7 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.4.3"
+module.version = "2.5.0"
 module.events = {}
 module.self_events = require("diplomacy/self_events")
 
@@ -67,8 +67,13 @@ end
 
 module.create_button = function(player)
 	destroy_button(player)
-	if player.force.name == "spectator" then return end
-	mod_gui.get_button_flow(player).add{type = "button", caption = {"mod-name.diplomacy"}, name = "diplomacy_button", style = mod_gui.button_style}
+	if player.spectator then return end
+	mod_gui.get_button_flow(player).add{
+		type = "button",
+		caption = {"mod-name.diplomacy"},
+		name = "diplomacy_button",
+		style = mod_gui.button_style
+	}
 end
 
 local function destroy_diplomacy_gui(player)
@@ -275,6 +280,7 @@ local function on_player_created(event)
 	if not (player and player.valid) then return end
 
 	create_diplomacy_frame(player)
+	module.create_button(player)
 end
 
 local function on_gui_checked_state_changed(event)
@@ -476,10 +482,8 @@ end
 
 -- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
 module.on_configuration_changed = function(data)
-	if (data.mod_changes["diplomacy"] == nil or data.mod_changes["diplomacy"].old_version ~= nil) then return end
-
 	for _, player in pairs(game.players) do
-		module.create_button(player) -- still there are bugs
+		module.create_button(player) -- still there are some bugs
 	end
 end
 

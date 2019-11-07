@@ -117,6 +117,18 @@ local function change_stance(cmd)
 			end
 		end
 	else
+		local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
+		if diplomacy_button then
+			diplomacy_button.destroy()
+		end
+		if player.spectator then return end
+		mod_gui.get_button_flow(player).add{
+			type = "button",
+			caption = {"mod-name.diplomacy"},
+			name = "diplomacy_button",
+			style = mod_gui.button_style
+		}
+
 		local flow = player.gui.center
 		local frame = flow.diplomacy_frame
 		if frame then

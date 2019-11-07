@@ -12,7 +12,7 @@ if settings.startup["diplomacy_entity_not_on_map"].value then
 	for _, prototypes in pairs(data.raw) do
 		for _, prototype in pairs(prototypes) do
 			if prototype.max_health then
-				if check_not_on_map(prototype.flags) then
+				if prototype.flags and check_not_on_map(prototype.flags) then
 					table.insert(prototype.flags, "not-on-map")
 				end
 			end

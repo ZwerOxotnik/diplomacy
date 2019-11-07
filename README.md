@@ -5,7 +5,7 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 
 ## Quick Links
 
-[Changelog](CHANGELOG.md) | [Contributing](CONTRIBUTING.md)
+[Changelog](CHANGELOG.md)
 |---|---|
 
 ## Contents
@@ -60,6 +60,7 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 | Allow players mine objects from allied factions | boolean | false |
 | Auto-diplomacy when dealing damage - checks damage and changes relationships between factions | boolean | true |
 | Diplomatic privilege - which players are able to change teams diplomatic stance towards other teams. All players: Every player on the team. Team leader: The connected player who has been on the team longest. | ["all players", "team leader"] | all players |
+| Building Prohibition Radius - you can't build near enemies within this radius | 0-25 | 3 |
 
 ### <a name="startup"></a> Startup
 
