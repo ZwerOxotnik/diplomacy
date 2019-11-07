@@ -6,7 +6,7 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 ## Quick Links
 
 [Changelog](CHANGELOG.md)
-|---|---|
+|---|
 
 ## Contents
 
