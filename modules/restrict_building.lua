@@ -55,7 +55,7 @@ local function restrict_building_on_built_entity(event)
 end
 
 local function on_runtime_mod_setting_changed(event)
-    if event.setting == "diplomacy_restrict_building_radius" then return end
+    if event.setting ~= "diplomacy_restrict_building_radius" then return end
 
     local events = module.events
     if settings.global[event.setting].value ~= 0 then
