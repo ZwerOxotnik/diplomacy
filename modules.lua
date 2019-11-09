@@ -54,12 +54,31 @@ modules.restrict_building = require("modules/restrict_building")
 
 modules.for_secondary_chat = {}
 modules.for_secondary_chat.events = {}
+modules.for_secondary_chat.check_events = function()
+	global.diplomacy.registredPvPs = {}
+	local function_name = "get_event_name"
+	for interface_name, _ in pairs( remote.interfaces ) do
+		if remote.interfaces[interface_name][function_name] then
+			global.diplomacy.registredPvPs[interface_name] = true
+		end
+	end
+
+	global.diplomacy.registredChat = nil
+	local function_name = "get_event_name"
+	local interface_name = "secondary-chat"
+	local remote_interface = remote.interfaces[interface_name]
+	if remote_interface and remote_interface[function_name]
+		and remote_interface["get_interactions_table_gui"]
+		and remote_interface["update_chat_and_drop_down"]
+	then
+		global.diplomacy.registredChat = true
+	end
+end
 modules.for_secondary_chat.handle_events = function()
 	-- Searching events "on_round_start" and "on_round_end"
 	for interface_name, _ in pairs( remote.interfaces ) do
-		local function_name = "get_event_name"
-		-- Is the event of interface exist?
-		if remote.interfaces[interface_name][function_name] then
+		if global.diplomacy.registredPvPs[interface_name] then
+			local function_name = "get_event_name"
 			local ID_1 = remote.call(interface_name, function_name, "on_round_start")
 			local ID_2 = remote.call(interface_name, function_name, "on_round_end")
 			if (type(ID_1) == "number") and (type(ID_2) == "number") then
@@ -102,10 +121,7 @@ modules.for_secondary_chat.handle_events = function()
 	-- TODO: refactor this
 	local function_name = "get_event_name"
 	local interface_name = "secondary-chat"
-	if remote.interfaces[interface_name] and remote.interfaces[interface_name][function_name]
-	   and remote.interfaces[interface_name]["get_interactions_table_gui"]
-	   and remote.interfaces[interface_name]["update_chat_and_drop_down"] then
-
+	if global.diplomacy.registredChat then
 		local ID_1 = remote.call(interface_name, function_name, "on_update_chat_and_drop_down")
 		if type(ID_1) == "number" then
 			-- TODO: refactor this
@@ -238,6 +254,10 @@ modules.for_secondary_chat.handle_events = function()
 	end
 end
 modules.for_secondary_chat.on_load = modules.for_secondary_chat.handle_events
-modules.for_secondary_chat.on_init = modules.for_secondary_chat.handle_events
+modules.for_secondary_chat.on_init = modules.for_secondary_chat.check_events
+modules.for_secondary_chat.on_configuration_changed = function()
+	modules.for_secondary_chat.check_events()
+	modules.for_secondary_chat.handle_events()
+end
 
 return modules

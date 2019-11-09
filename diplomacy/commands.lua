@@ -121,7 +121,6 @@ local function change_stance(cmd)
 		if diplomacy_button then
 			diplomacy_button.destroy()
 		end
-		if player.spectator then return end
 		mod_gui.get_button_flow(player).add{
 			type = "button",
 			caption = {"mod-name.diplomacy"},

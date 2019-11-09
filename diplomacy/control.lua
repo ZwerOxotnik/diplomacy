@@ -30,7 +30,7 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.5.2"
+module.version = "2.6.0"
 module.events = {}
 module.self_events = require("diplomacy/self_events")
 
@@ -67,7 +67,6 @@ end
 
 module.create_button = function(player)
 	destroy_button(player)
-	if player.spectator then return end
 	mod_gui.get_button_flow(player).add{
 		type = "button",
 		caption = {"mod-name.diplomacy"},

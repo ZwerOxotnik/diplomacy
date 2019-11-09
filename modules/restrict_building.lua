@@ -55,28 +55,28 @@ local function restrict_building_on_built_entity(event)
 end
 
 local function on_runtime_mod_setting_changed(event)
-    if event.setting ~= "diplomacy_restrict_building_radius" then return end
+    if event.setting_type ~= "runtime-global" then return end
 
-    local events = module.events
-    if settings.global[event.setting].value ~= 0 then
-        events[defines.events.on_built_entity] = restrict_building_on_built_entity
-        events[defines.events.on_robot_built_entity] = restrict_building_on_built_entity
-    else
-        events[defines.events.on_built_entity] = function() end
-        events[defines.events.on_robot_built_entity] = function() end
+    if event.setting == "diplomacy_restrict_building_radius" then
+        if settings.global[event.setting].value > 0 then
+            module.events[defines.events.on_built_entity] = restrict_building_on_built_entity
+            module.events[defines.events.on_robot_built_entity] = restrict_building_on_built_entity
+        else
+            module.events[defines.events.on_built_entity] = function() end
+            module.events[defines.events.on_robot_built_entity] = function() end
+        end
+        event_listener.update_event("on_built_entity")
+        event_listener.update_event("on_robot_built_entity")
     end
-
-    event_listener.update_event("on_built_entity")
-    event_listener.update_event("on_robot_built_entity")
 end
 
-if settings.global["diplomacy_restrict_building_radius"].value == 0 then
+if settings.global["diplomacy_restrict_building_radius"].value > 0 then
+    module.events[defines.events.on_built_entity] = restrict_building_on_built_entity
+    module.events[defines.events.on_robot_built_entity] = restrict_building_on_built_entity
+else
 	module.events[defines.events.on_built_entity] = function() end
 	module.events[defines.events.on_robot_built_entity] = function() end
-else
-	module.events[defines.events.on_built_entity] = restrict_building_on_built_entity
-    module.events[defines.events.on_robot_built_entity] = restrict_building_on_built_entity
 end
-module.events.on_runtime_mod_setting_changed = on_runtime_mod_setting_changed
+module.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
 
 return module

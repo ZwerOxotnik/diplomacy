@@ -1,6 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.5.3
+Date: 2019-11-09
+  Bugfixes:
+    - Fixed setting of Building Prohibition Radius
+    - Fixed working and events of the chat mod!
+    - Definitely fixed diplomacy button visibility
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.5.2
-Date: 2019-11-07
+Date: 2019-11-08
   Bugfixes:
     - Fixed setting of Building Prohibition Radius
   Notes:
