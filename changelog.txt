@@ -2,7 +2,7 @@
 Version: 2.6.1
 Date: 2019-11-11
   Bugfixes:
-    - Fixed loading for PvP scenarios/mods
+    - Fixed loading for PvP scenarios/mods (https://mods.factorio.com/mod/diplomacy/discussion/5dc8a7be7f56f0000d961e6d)
   Notes:
     - This update for Factorio 0.17
 ---------------------------------------------------------------------------------------------------
