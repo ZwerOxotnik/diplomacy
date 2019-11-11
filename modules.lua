@@ -52,6 +52,7 @@ local modules = {}
 modules.diplomacy = require("diplomacy/control")
 modules.restrict_building = require("modules/restrict_building")
 
+-- TODO: refactor this module
 modules.for_secondary_chat = {}
 modules.for_secondary_chat.events = {}
 modules.for_secondary_chat.check_events = function()
@@ -75,44 +76,47 @@ modules.for_secondary_chat.check_events = function()
 	end
 end
 modules.for_secondary_chat.handle_events = function()
-	-- Searching events "on_round_start" and "on_round_end"
-	for interface_name, _ in pairs( remote.interfaces ) do
-		if global.diplomacy.registredPvPs[interface_name] then
-			local function_name = "get_event_name"
-			local ID_1 = remote.call(interface_name, function_name, "on_round_start")
-			local ID_2 = remote.call(interface_name, function_name, "on_round_end")
-			if (type(ID_1) == "number") and (type(ID_2) == "number") then
-				if (script.get_event_handler(ID_1) == nil) and (script.get_event_handler(ID_2) == nil) then
-					local interface_function = "get_teams"
+	-- TODO: refactor this
+	if global.diplomacy.registredPvPs then
+		-- Handling events "on_round_start" and "on_round_end"
+		for interface_name, _ in pairs( remote.interfaces ) do
+			if global.diplomacy.registredPvPs[interface_name] then
+				local function_name = "get_event_name"
+				local ID_1 = remote.call(interface_name, function_name, "on_round_start")
+				local ID_2 = remote.call(interface_name, function_name, "on_round_end")
+				if (type(ID_1) == "number") and (type(ID_2) == "number") then
+					if (script.get_event_handler(ID_1) == nil) and (script.get_event_handler(ID_2) == nil) then
+						local interface_function = "get_teams"
 
-					-- Attach "on_round_start" event for creating gui
-					put_event(ID_1, function()
-						local diplomacy = global.diplomacy
-						if remote.interfaces[interface_name] then
-							if remote.interfaces[interface_name][interface_function] then
-								diplomacy.teams = remote.call(interface_name, interface_function)
-								for _, player in pairs(game.players) do
-									modules.diplomacy.create_button(player)
-									global.diplomacy.locked_teams = false
-									return
+						-- Attach "on_round_start" event for creating gui
+						put_event(ID_1, function()
+							local diplomacy = global.diplomacy
+							if remote.interfaces[interface_name] then
+								if remote.interfaces[interface_name][interface_function] then
+									diplomacy.teams = remote.call(interface_name, interface_function)
+									for _, player in pairs(game.players) do
+										modules.diplomacy.create_button(player)
+										global.diplomacy.locked_teams = false
+										return
+									end
 								end
 							end
-						end
-					end, modules.for_secondary_chat)
+						end, modules.for_secondary_chat)
 
-					-- Attach "on_round_end" event for destroying gui
-					put_event(ID_2, function()
-						local diplomacy = global.diplomacy
-						if remote.interfaces[interface_name] then
-							if remote.interfaces[interface_name][interface_function] then
-								diplomacy.teams = {}
-								for _, player in pairs(game.players) do
-									modules.diplomacy.destroy_gui(player)
-									global.diplomacy.locked_teams = true
+						-- Attach "on_round_end" event for destroying gui
+						put_event(ID_2, function()
+							local diplomacy = global.diplomacy
+							if remote.interfaces[interface_name] then
+								if remote.interfaces[interface_name][interface_function] then
+									diplomacy.teams = {}
+									for _, player in pairs(game.players) do
+										modules.diplomacy.destroy_gui(player)
+										global.diplomacy.locked_teams = true
+									end
 								end
 							end
-						end
-					end, modules.for_secondary_chat)
+						end, modules.for_secondary_chat)
+					end
 				end
 			end
 		end
