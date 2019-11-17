@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.2
+Date: 2019-11-17
+  Bugfixes:
+    - Disabled handling of PvP scenario/mod events (https://mods.factorio.com/mod/diplomacy/discussion/5dd0603d34bde6000c15d8ae)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.6.1
 Date: 2019-11-11
   Bugfixes:
