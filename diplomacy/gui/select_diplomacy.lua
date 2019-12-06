@@ -24,21 +24,6 @@ local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy
 
 local function diplomacy_button_press(event)
 	local player = game.players[event.player_index]
-	local flow = player.gui.center
-
-	local frame = flow.diplomacy_frame
-	if frame then
-		frame.destroy()
-		return
-	end
-
-	frame = flow.add{type = "frame", name = "diplomacy_frame", caption = {"mod-name.diplomacy"}, direction = "vertical"}
-	frame.visible = true
-	local inner_frame = frame.add{type = "frame", style = "image_frame", name = "diplomacy_inner_frame", direction = "vertical"}
-	inner_frame.style.left_padding = 8
-	inner_frame.style.top_padding = 8
-	inner_frame.style.right_padding = 8
-	inner_frame.style.bottom_padding = 8
 	create_diplomacy_frame(player)
 end
 

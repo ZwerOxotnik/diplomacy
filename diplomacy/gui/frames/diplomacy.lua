@@ -91,11 +91,30 @@ local function get_color_team(team, lighten)
 	end
 end
 
-diplomacy_frame.create = function(player)
+local function create_diplomacy_table(gui, player_settings)
+	if gui.diplomacy_table then
+		gui.diplomacy_table.destroy()
+	end
+
+	local column_count = 6
+	if player_settings.show_players_state == false then
+		column_count = column_count - 1
+	end
+	diplomacy_table = gui.add{type = "table", name = "diplomacy_table", column_count = column_count}
+	diplomacy_table.style.horizontal_spacing = 16
+	diplomacy_table.style.vertical_spacing = 8
+	diplomacy_table.draw_horizontal_lines = true
+	diplomacy_table.draw_vertical_lines = true
+	return diplomacy_table
+end
+
+diplomacy_frame.fill = function(player)
 	local flow = player.gui.center.diplomacy_frame
 	if not flow then return end
 	local gui = flow.diplomacy_inner_frame
 	if not gui then return end
+
+	local player_settings = global.diplomacy.players[player.index]
 
 	-- Remember diplomacy table
 	local diplomacy_scrollpane = gui.diplomacy_scrollpane
@@ -105,11 +124,7 @@ diplomacy_frame.create = function(player)
 	if not diplomacy_scrollpane then
 		local scroll = gui.add{name = "diplomacy_scrollpane", type = "scroll-pane"}
 		scroll.style.maximal_height = 320
-		diplomacy_table = scroll.add{type = "table", name = "diplomacy_table", column_count = 6}
-		diplomacy_table.style.horizontal_spacing = 16
-		diplomacy_table.style.vertical_spacing = 8
-		diplomacy_table.draw_horizontal_lines = true
-		diplomacy_table.draw_vertical_lines = true
+		diplomacy_table = create_diplomacy_table(scroll, player_settings)
 	else
 		diplomacy_table = gui.diplomacy_scrollpane.diplomacy_table
 		is_changed = true
@@ -118,10 +133,16 @@ diplomacy_frame.create = function(player)
 				temp_diplomacy_table[child.name] = {state = child.state}
 			end
 		end
-		diplomacy_table.clear()
+		diplomacy_table = create_diplomacy_table(diplomacy_scrollpane, player_settings)
 	end
 
-	for _, name in pairs({"team-name", "gui-browse-games.players", "stance", "enemy", "neutral", "ally"}) do
+	local table_list = {}
+	if player_settings.show_players_state then
+		table_list = {"team-name", "gui-browse-games.players", "stance", "enemy", "neutral", "ally"}
+	else
+		table_list = {"team-name", "stance", "enemy", "neutral", "ally"}
+	end
+	for _, name in pairs(table_list) do
 		local label = diplomacy_table.add{type = "label", name = name, caption = {name}}
 		label.style.font = "default-bold"
 	end
@@ -138,7 +159,7 @@ diplomacy_frame.create = function(player)
 		teams = diplomacy.teams or game.forces
 	end
 
-	-- Create table
+	-- Fill the table
 	for _, team in pairs(teams) do
 		local force = game.forces[team.name]
 		if force then
@@ -148,7 +169,9 @@ diplomacy_frame.create = function(player)
 				label.style.maximal_width = 150
 				label.style.font = "default-semibold"
 				label.style.font_color = get_color_team(team, true)
-				add_player_list_gui(force, diplomacy_table)
+				if player_settings.show_players_state then
+					add_player_list_gui(force, diplomacy_table)
+				end
 				if force.name == player.force.name then
 					diplomacy_table.add{type = "label"}
 					diplomacy_table.add{type = "label"}
@@ -198,10 +221,42 @@ diplomacy_frame.create = function(player)
 	end
 end
 
-diplomacy_frame.update = function()
-	for _, player in pairs(game.connected_players) do
-		diplomacy_frame.create(player)
+diplomacy_frame.update = function(player)
+	if player then
+		diplomacy_frame.fill(player)
+	else
+		for _, player in pairs(game.connected_players) do
+			diplomacy_frame.fill(player)
+		end
 	end
+end
+
+diplomacy_frame.create = function(player)
+	local flow = player.gui.center
+	local frame = flow.diplomacy_frame
+	if frame then
+		frame.destroy()
+		return
+	end
+
+	frame = flow.add{type = "frame", name = "diplomacy_frame", caption = {"mod-name.diplomacy"}, direction = "vertical"}
+	frame.visible = true
+
+	local player_settings = global.diplomacy.players[player.index]
+	local table_settings = frame.add{type = "table", name = 'settings', column_count = 4}
+	table_settings.add{type = "label", caption = {"", {"diplomacy.gui.show_players_state"}, {"colon"}}}
+	if player_settings.show_players_state == nil then
+		player_settings.show_players_state = true
+	end
+	local show_players_state = player_settings.show_players_state
+	table_settings.add{type = "checkbox", name = "d_show_players_state", state = show_players_state}
+
+	local inner_frame = frame.add{type = "frame", style = "image_frame", name = "diplomacy_inner_frame", direction = "vertical"}
+	inner_frame.style.left_padding = 8
+	inner_frame.style.top_padding = 8
+	inner_frame.style.right_padding = 8
+	inner_frame.style.bottom_padding = 8
+	diplomacy_frame.fill(player)
 end
 
 return diplomacy_frame
