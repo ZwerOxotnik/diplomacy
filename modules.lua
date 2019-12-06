@@ -76,7 +76,7 @@ modules.for_secondary_chat.check_events = function()
 	end
 end
 modules.for_secondary_chat.handle_events = function()
-    -- 	-- TODO: refactor this
+	---- https://mods.factorio.com/mod/diplomacy/discussion/5dd0603d34bde6000c15d8ae
     -- 	if global.diplomacy.registredPvPs then
     -- 		-- Handling events "on_round_start" and "on_round_end"
     -- 		for interface_name, _ in pairs( remote.interfaces ) do
@@ -125,7 +125,8 @@ modules.for_secondary_chat.handle_events = function()
 	-- TODO: refactor this
 	local function_name = "get_event_name"
 	local interface_name = "secondary-chat"
-	if global.diplomacy.registredChat then
+	local remote_interface = remote.interfaces[interface_name]
+	if remote_interface and remote_interface[function_name] and global.diplomacy.registredChat then
 		local ID_1 = remote.call(interface_name, function_name, "on_update_chat_and_drop_down")
 		if type(ID_1) == "number" then
 			-- TODO: refactor this

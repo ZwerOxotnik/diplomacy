@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.6.3
+Date: 2019-12-06
+  Bugfixes:
+    - Fixed interactions with the disabled chat mod (https://mods.factorio.com/mod/diplomacy/discussion/5dd1b8514979ff000c13d4a6)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.6.2
 Date: 2019-11-17
   Bugfixes:
