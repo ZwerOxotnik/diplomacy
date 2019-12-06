@@ -17,7 +17,7 @@ limitations under the License.
 local set_politice = require("diplomacy/util").set_politice
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
 local cancel_request_diplomacy_force = require("diplomacy/util").cancel_request_diplomacy_force
-local get_stance_diplomacy = require("diplomacy/util").get_stance_diplomacy
+local get_stance_diplomacy_type = require("diplomacy/util").get_stance_diplomacy_type
 local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
 local create_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").create
 local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").create
@@ -38,8 +38,8 @@ local function confirm_diplomacy(event)
 			if child.name:find("_ally") then
 				local name = child.name:gsub("_ally", "")
 				local force = game.forces[name]
-				local stance = get_stance_diplomacy(player_force, force)
-				if stance ~= "ally" then
+				local stance_type = get_stance_diplomacy_type(player_force, force)
+				if stance_type ~= FILTER_DIPLOMACY_TYPE_ALLY then
 					create_diplomacy_selection_frame(force, player_force.name, "ally")
 					force.print({"player-changed-diplomacy", player.name, player_force.name})
 					player_force.print({"player-changed-diplomacy", player.name, force.name})
@@ -48,9 +48,9 @@ local function confirm_diplomacy(event)
 			elseif child.name:find("_neutral") then
 				local name = child.name:gsub("_neutral", "")
 				local force = game.forces[name]
-				local stance = get_stance_diplomacy(player_force, force)
-				if stance ~= "neutral" then
-					if stance == "ally" then
+				local stance_type = get_stance_diplomacy_type(player_force, force)
+				if stance_type ~= FILTER_DIPLOMACY_TYPE_NEUTRAL then
+					if stance_type == FILTER_DIPLOMACY_TYPE_ALLY then
 						set_politice["neutral"](force, player_force, player.index)
 						game.print({"team-changed-diplomacy", player_force.name, force.name, {"neutral"}})
 						force.print({"player-changed-diplomacy", player.name, player_force.name})
@@ -66,8 +66,8 @@ local function confirm_diplomacy(event)
 			elseif child.name:find("_enemy") then
 				local name = child.name:gsub("_enemy", "")
 				local force = game.forces[name]
-				local stance = get_stance_diplomacy(player_force, force)
-				if stance ~= "enemy" then
+				local stance_type = get_stance_diplomacy_type(player_force, force)
+				if stance_type ~= FILTER_DIPLOMACY_TYPE_ENEMY then
 					set_politice["enemy"](force, player_force, player.index)
 					game.print({"team-changed-diplomacy", player_force.name, force.name, {"enemy"}})
 					force.print({"player-changed-diplomacy", player.name, player_force.name})

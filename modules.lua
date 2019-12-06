@@ -16,7 +16,7 @@ limitations under the License.
 
 local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").create
 local cancel_request_diplomacy_force = require("diplomacy/util").cancel_request_diplomacy_force
-local get_stance_diplomacy = require("diplomacy/util").get_stance_diplomacy
+local get_stance_diplomacy_type = require("diplomacy/util").get_stance_diplomacy_type
 local set_politice = require("diplomacy/util").set_politice
 
 local get_event
@@ -138,18 +138,18 @@ modules.for_secondary_chat.handle_events = function()
 			end
 
 			-- TODO: refactor this
-			local function create_selecting_diplomacy_gui(gui, stance)
+			local function create_selecting_diplomacy_gui(gui, stance_type)
 				destroy_selecting_diplomacy_gui(gui)
 				local diplomacy = gui.add{type = "table", name = "diplomacy", column_count = 8}
 
 				local type = "sprite-button"
-				if stance == "ally" then
+				if stance_type == FILTER_DIPLOMACY_TYPE_ALLY then
 					diplomacy.add{type = type, name = "scd_set_war", sprite = "virtual-signal/enemy"}
 					diplomacy.add{type = type, name = "scd_set_neutral", sprite = "virtual-signal/neutral"}
-				elseif stance == "enemy" then
+				elseif stance_type == FILTER_DIPLOMACY_TYPE_ENEMY then
 					diplomacy.add{type = type, name = "scd_set_neutral", sprite = "virtual-signal/neutral"}
 					diplomacy.add{type = type, name = "scd_set_ally", sprite = "virtual-signal/ally"}
-				else -- if stance == "neutral" then
+				else -- if stance_type == FILTER_DIPLOMACY_TYPE_NEUTRAL then
 					diplomacy.add{type = type, name = "scd_set_war", sprite = "virtual-signal/enemy"}
 					diplomacy.add{type = type, name = "scd_set_ally", sprite = "virtual-signal/ally"}
 				end
@@ -173,8 +173,8 @@ modules.for_secondary_chat.handle_events = function()
 				local selected_faction = game.forces[event.target]
 				if not selected_faction or selected_faction == player.force then destroy_selecting_diplomacy_gui(interaction_gui) return end
 
-				local stance = get_stance_diplomacy(player.force, selected_faction)
-				create_selecting_diplomacy_gui(interaction_gui, stance)
+				local stance_type = get_stance_diplomacy_type(player.force, selected_faction)
+				create_selecting_diplomacy_gui(interaction_gui, stance_type)
 			end, modules.for_secondary_chat)
 
 			if not is_added then
@@ -194,8 +194,8 @@ modules.for_secondary_chat.handle_events = function()
 						local drop_down = parent.parent.targets_drop_down
 						local other_force = game.forces[drop_down.items[drop_down.selected_index]]
 						if other_force and other_force.valid then
-							local stance = get_stance_diplomacy(player_force, other_force)
-							if stance ~= "enemy" then
+							local stance_type = get_stance_diplomacy_type(player_force, other_force)
+							if stance_type ~= FILTER_DIPLOMACY_TYPE_ENEMY then
 								set_politice["enemy"](other_force, player_force, player.index)
 								game.print({"team-changed-diplomacy", player_force.name, other_force.name, {"enemy"}})
 								other_force.print({"player-changed-diplomacy", player.name, player_force.name})
@@ -211,8 +211,8 @@ modules.for_secondary_chat.handle_events = function()
 						local drop_down = parent.parent.targets_drop_down
 						local other_force = game.forces[drop_down.items[drop_down.selected_index]]
 						if other_force and other_force.valid then
-							local stance = get_stance_diplomacy(player_force, other_force)
-							if stance == "ally" then
+							local stance_type = get_stance_diplomacy_type(player_force, other_force)
+							if stance_type == FILTER_DIPLOMACY_TYPE_ALLY then
 								local interaction_gui = remote.call(interface_name, "get_interactions_table_gui", player)
 								remote.call(interface_name, "update_chat_and_drop_down", interaction_gui.chat_drop_down, player)
 							else
@@ -230,8 +230,8 @@ modules.for_secondary_chat.handle_events = function()
 						local drop_down = parent.parent.targets_drop_down
 						local other_force = game.forces[drop_down.items[drop_down.selected_index]]
 						if other_force and other_force.valid then
-							local stance = get_stance_diplomacy(player_force, other_force)
-							if stance == "ally" then
+							local stance_type = get_stance_diplomacy_type(player_force, other_force)
+							if stance_type == FILTER_DIPLOMACY_TYPE_ALLY then
 								set_politice["neutral"](other_force, player_force, player.index)
 								game.print({"team-changed-diplomacy", player_force.name, other_force.name, {"neutral"}})
 								other_force.print({"player-changed-diplomacy", player.name, player_force.name})
@@ -239,11 +239,11 @@ modules.for_secondary_chat.handle_events = function()
 								cancel_request_diplomacy_force(player_force, other_force)
 								local interaction_gui = remote.call(interface_name, "get_interactions_table_gui", player)
 								remote.call(interface_name, "update_chat_and_drop_down", interaction_gui.chat_drop_down, player)
-							elseif stance == "enemy" then
+							elseif stance_type == FILTER_DIPLOMACY_TYPE_ENEMY then
 								create_diplomacy_selection_frame(other_force, player_force.name, "neutral")
 								other_force.print({"player-changed-diplomacy", player.name, player_force.name})
 								player_force.print({"player-changed-diplomacy", player.name, other_force.name})
-							else --if stance == "neutral" then
+							else --if stance_type == FILTER_DIPLOMACY_TYPE_NEUTRAL then
 								local interaction_gui = remote.call(interface_name, "get_interactions_table_gui", player)
 								remote.call(interface_name, "update_chat_and_drop_down", interaction_gui.chat_drop_down, player)
 							end

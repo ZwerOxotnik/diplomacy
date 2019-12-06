@@ -63,4 +63,24 @@ util.get_stance_diplomacy = function(force, other_force)
 	end
 end
 
+util.get_stance_diplomacy_type = function(force, other_force)
+	if force.get_friend(other_force) then
+		return FILTER_DIPLOMACY_TYPE_ALLY
+	elseif force.get_cease_fire(other_force) then
+		return FILTER_DIPLOMACY_TYPE_NEUTRAL
+	else
+		return FILTER_DIPLOMACY_TYPE_ENEMY
+	end
+end
+
+util.get_stance_name_diplomacy_by_type = function(type)
+	if type == FILTER_DIPLOMACY_TYPE_ALLY then
+		return "ally"
+	elseif type == FILTER_DIPLOMACY_TYPE_NEUTRAL then
+		return "neutral"
+	else
+		return "enemy"
+	end
+end
+
 return util

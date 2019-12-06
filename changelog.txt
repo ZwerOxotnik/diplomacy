@@ -1,10 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.2
+Date: 2019-12-06
+  Bugfixes:
+    - Disabled handling of some events because of bugs and interrupting of UI
+  Features:
+    - Added filter by stances in the diplomacy UI
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.7.1
 Date: 2019-12-06
   Bugfixes:
     - More updates of diplomacy UI because of events related to forces
   Features:
-    - Filter of players in diplomacy UI
+    - Added filter of players in the diplomacy UI
   Notes:
     - TODO: new optimization because of new global data for players :P
     - This update for Factorio 0.17

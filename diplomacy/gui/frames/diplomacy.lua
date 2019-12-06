@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ]]--
 
-local get_stance_diplomacy = require("diplomacy/util").get_stance_diplomacy
+local get_stance_diplomacy_type = require("diplomacy/util").get_stance_diplomacy_type
+local get_stance_name_diplomacy_by_type = require("diplomacy/util").get_stance_name_diplomacy_by_type
 local diplomacy_frame = {}
 
 local function add_player_list_gui(force, gui)
@@ -162,48 +163,50 @@ diplomacy_frame.fill = function(player)
 	-- Fill the table
 	for _, team in pairs(teams) do
 		local force = game.forces[team.name]
-		if force then
+		if force and force.valid then
+			local stance_type = get_stance_diplomacy_type(player.force, force)
 			if is_show_all_teams or diplomacy.teams ~= nil or #force.players ~= 0 then
-				local label = diplomacy_table.add{type = "label", name = team.name .. "_name", caption = team.name}
-				label.style.single_line = false
-				label.style.maximal_width = 150
-				label.style.font = "default-semibold"
-				label.style.font_color = get_color_team(team, true)
-				if player_settings.show_players_state then
-					add_player_list_gui(force, diplomacy_table)
-				end
-				if force.name == player.force.name then
-					diplomacy_table.add{type = "label"}
-					diplomacy_table.add{type = "label"}
-					diplomacy_table.add{type = "label"}
-					diplomacy_table.add{type = "label"}
-				else
-					local stance = get_stance_diplomacy(player.force, force)
-					local stance_label = diplomacy_table.add{type = "label", name = team.name .. "_stance", caption = {stance}}
-					if stance == "ally" then
-						stance_label.style.font_color = {r = 0.5, g = 1, b = 0.5}
-					elseif stance == "enemy" then
-						stance_label.style.font_color = {r = 1, g = 0.5, b = 0.5}
+				if player_settings.filter_of_diplomacy_stance == FILTER_DIPLOMACY_TYPE_ALL or stance_type == player_settings.filter_of_diplomacy_stance then
+					local label = diplomacy_table.add{type = "label", name = team.name .. "_name", caption = team.name}
+					label.style.single_line = false
+					label.style.maximal_width = 150
+					label.style.font = "default-semibold"
+					label.style.font_color = get_color_team(team, true)
+					if player_settings.show_players_state then
+						add_player_list_gui(force, diplomacy_table)
 					end
-
-					if is_changed then
-						if temp_diplomacy_table[team.name .. "_enemy"] ~= nil then
-							local state
-							state = temp_diplomacy_table[team.name .. "_enemy"].state
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = state}
-							state = temp_diplomacy_table[team.name .. "_neutral"].state
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = state}
-							state = temp_diplomacy_table[team.name .. "_ally"].state
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = state}
-						else
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = (stance == "enemy")}
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = (stance == "neutral")}
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = (stance == "ally")}
-						end
+					if force.name == player.force.name then
+						diplomacy_table.add{type = "label"}
+						diplomacy_table.add{type = "label"}
+						diplomacy_table.add{type = "label"}
+						diplomacy_table.add{type = "label"}
 					else
-						diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = (stance == "enemy"), enabled = not global.diplomacy.locked_teams}
-						diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = (stance == "neutral"), enabled = not global.diplomacy.locked_teams}
-						diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = (stance == "ally"), enabled = not global.diplomacy.locked_teams}
+						local stance_label = diplomacy_table.add{type = "label", name = team.name .. "_stance", caption = {get_stance_name_diplomacy_by_type(stance_type)}}
+						if stance_type == FILTER_DIPLOMACY_TYPE_ALLY then
+							stance_label.style.font_color = {r = 0.5, g = 1, b = 0.5}
+						elseif stance_type == FILTER_DIPLOMACY_TYPE_ENEMY then
+							stance_label.style.font_color = {r = 1, g = 0.5, b = 0.5}
+						end
+
+						if is_changed then
+							if temp_diplomacy_table[team.name .. "_enemy"] ~= nil then
+								local state
+								state = temp_diplomacy_table[team.name .. "_enemy"].state
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = state}
+								state = temp_diplomacy_table[team.name .. "_neutral"].state
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = state}
+								state = temp_diplomacy_table[team.name .. "_ally"].state
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = state}
+							else
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = (stance_type == FILTER_DIPLOMACY_TYPE_ENEMY)}
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = (stance_type == FILTER_DIPLOMACY_TYPE_NEUTRAL)}
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = (stance_type == FILTER_DIPLOMACY_TYPE_ALLY)}
+							end
+						else
+							diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = (stance_type == FILTER_DIPLOMACY_TYPE_ENEMY), enabled = not global.diplomacy.locked_teams}
+							diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = (stance_type == FILTER_DIPLOMACY_TYPE_NEUTRAL), enabled = not global.diplomacy.locked_teams}
+							diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = (stance_type == FILTER_DIPLOMACY_TYPE_ALLY), enabled = not global.diplomacy.locked_teams}
+						end
 					end
 				end
 			end
@@ -222,7 +225,7 @@ diplomacy_frame.fill = function(player)
 end
 
 diplomacy_frame.update = function(player)
-	if player then
+	if player and player.valid and player.connected then
 		diplomacy_frame.fill(player)
 	else
 		for _, player in pairs(game.connected_players) do
@@ -250,6 +253,11 @@ diplomacy_frame.create = function(player)
 	end
 	local show_players_state = player_settings.show_players_state
 	table_settings.add{type = "checkbox", name = "d_show_players_state", state = show_players_state}
+	table_settings.add{type = "label", caption = {"", {"diplomacy.gui.filter_of_diplomacy_stance"}, {"colon"}}}
+	if player_settings.filter_of_diplomacy_stance == nil then
+		player_settings.filter_of_diplomacy_stance = FILTER_DIPLOMACY_TYPE_ALL
+	end
+	table_settings.add{type = "drop-down", name = "d_filter_of_diplomacy_stance", items = FILTER_DIPLOMACY_TYPE_ITEMS, selected_index = player_settings.filter_of_diplomacy_stance}
 
 	local inner_frame = frame.add{type = "frame", style = "image_frame", name = "diplomacy_inner_frame", direction = "vertical"}
 	inner_frame.style.left_padding = 8

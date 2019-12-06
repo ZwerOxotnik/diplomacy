@@ -29,7 +29,7 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.7.1"
+module.version = "2.7.2"
 module.events = {}
 
 local function get_event(event)
@@ -302,6 +302,21 @@ local function on_gui_checked_state_changed(event)
 		select_diplomacy.diplomacy_check_press(event)
 	elseif gui.name == "d_show_players_state" then
 		global.diplomacy.players[event.player_index].show_players_state = gui.state
+		update_diplomacy_frame(player)
+	end
+end
+
+local function on_gui_selection_state_changed(event)
+	-- Validation of data
+	local gui = event.element
+	if not (gui and gui.valid) then return end
+	local player = game.players[event.player_index]
+	if not (player and player.valid) then return end
+	local parent = gui.parent
+	if not parent then return end
+
+	if gui.name == "d_filter_of_diplomacy_stance" then
+		global.diplomacy.players[event.player_index].filter_of_diplomacy_stance = gui.selected_index
 		update_diplomacy_frame(player)
 	end
 end
@@ -602,8 +617,9 @@ put_event("on_gui_click", on_gui_click)
 put_event("on_gui_checked_state_changed", on_gui_checked_state_changed)
 put_event("on_runtime_mod_setting_changed", on_runtime_mod_setting_changed)
 put_event("on_force_created", on_force_created)
-put_event("on_force_friends_changed", update_diplomacy_frame)
-put_event("on_force_cease_fire_changed", update_diplomacy_frame)
+-- put_event("on_force_friends_changed", update_diplomacy_frame) -- TODO: test it thoroughly
+-- put_event("on_force_cease_fire_changed", update_diplomacy_frame) -- TODO: test it thoroughly
+put_event("on_gui_selection_state_changed", on_gui_selection_state_changed)
 -- put_event("on_forces_merged", on_forces_merged)
 
 if not settings.global["diplomacy_protection_from_theft_of_electricity"].value then
