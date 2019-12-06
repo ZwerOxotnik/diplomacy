@@ -23,7 +23,7 @@ local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy
 
 local function check_stance(cmd)
 	-- Validation of data
-	local player = game.player
+	local player = game.players[cmd.player_index]
 	if not (player and player.valid) then return end
 	if not cmd.parameter then player.print({"command-help.check_stance"}) return end
 
@@ -47,7 +47,7 @@ commands.add_command("check-stance", {"command-help.check_stance"}, check_stance
 
 local function player_force(cmd)
 	-- Validation of data
-	local player = game.player
+	local player = game.players[cmd.player_index]
 	if not (player and player.valid) then return end
 	if not cmd.parameter ~= nil then player.print({"command-help.player_force"}) return end
 
@@ -59,7 +59,7 @@ commands.add_command("player-force", {"command-help.player_force"}, player_force
 
 local function change_stance(cmd)
 	-- Validation of data
-	local player = game.player
+	local player = game.players[cmd.player_index]
 	if not (player and player.valid) then return end
 	if player.force.name == "spectator" then player.print({"command-attempted-not-allowed", player.name, "change-stance"}) return end
 
@@ -90,7 +90,7 @@ local function change_stance(cmd)
 		if params[2] == stance then player.print({"command-output.identical_stance"}) return end
 
 		if params[2] == "enemy" then
-			set_politice[params[2]](force, other_force)
+			set_politice[params[2]](force, other_force, cmd.player_index)
 			game.print({"team-changed-diplomacy", force.name, other_force.name, {params[2]}})
 			force.print({"player-changed-diplomacy", player.name, force.name})
 			other_force.print({"player-changed-diplomacy", player.name, force.name})
@@ -103,7 +103,7 @@ local function change_stance(cmd)
 			other_force.print({"player-changed-diplomacy", player.name, force.name})
 		else
 			if stance == "ally" then
-				set_politice[params[2]](force, other_force)
+				set_politice[params[2]](force, other_force, cmd.player_index)
 				game.print({"team-changed-diplomacy", force.name, other_force.name, {params[2]}})
 				force.print({"player-changed-diplomacy", player.name, force.name})
 				other_force.print({"player-changed-diplomacy", player.name, force.name})
@@ -149,7 +149,7 @@ commands.add_command("change-stance", {"command-help.change_stance"}, change_sta
 
 local function cancel_stance(cmd)
 	-- Validation of data
-	local player = game.player
+	local player = game.players[cmd.player_index]
 	if not (player and player.valid) then return end
 	if player.force.name == "spectator" then player.print({"command-attempted-not-allowed", player.name, "cancel-stance"}) return end
 

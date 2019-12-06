@@ -66,7 +66,7 @@ local function confirm_diplomacy(event)
 				local stance = get_stance_diplomacy(player_force, force)
 				if stance ~= "neutral" then
 					if stance == "ally" then
-						set_politice["neutral"](force, player_force)
+						set_politice["neutral"](force, player_force, player.index)
 						game.print({"team-changed-diplomacy", player_force.name, force.name, {"neutral"}})
 						force.print({"player-changed-diplomacy", player.name, player_force.name})
 						player_force.print({"player-changed-diplomacy", player.name, force.name})
@@ -83,7 +83,7 @@ local function confirm_diplomacy(event)
 				local force = game.forces[name]
 				local stance = get_stance_diplomacy(player_force, force)
 				if stance ~= "enemy" then
-					set_politice["enemy"](force, player_force)
+					set_politice["enemy"](force, player_force, player.index)
 					game.print({"team-changed-diplomacy", player_force.name, force.name, {"enemy"}})
 					force.print({"player-changed-diplomacy", player.name, player_force.name})
 					player_force.print({"player-changed-diplomacy", player.name, force.name})

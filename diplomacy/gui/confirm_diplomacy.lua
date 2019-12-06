@@ -25,7 +25,7 @@ local function diplomacy_selected_frame(player)
 	if not other_force then return end
 	local stance = frame.holding_table_chat_label.diplomacy_stance_label.caption
 
-	set_politice[stance](force, other_force)
+	set_politice[stance](force, other_force, player.index)
 	game.print({"team-changed-diplomacy", force.name, other_force.name, {stance}})
 	other_force.print({"player-changed-diplomacy", player.name, force.name})
 	force.print({"player-changed-diplomacy", player.name, other_force.name})

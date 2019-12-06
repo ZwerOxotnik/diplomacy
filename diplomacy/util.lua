@@ -19,23 +19,26 @@ local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomac
 local util = {}
 
 util.set_politice = {
-	ally = function(force, other_force)
+	ally = function(force, other_force, player_index)
 		force.set_friend(other_force, true)
 		force.set_cease_fire(other_force, true)
 		other_force.set_friend(force, true)
 		other_force.set_cease_fire(force, true)
+		script.raise_event(diplomacy_events.on_enemy, {source = force, destination = other_force, player_index = player_index})
 	end,
-	neutral = function(force, other_force)
+	neutral = function(force, other_force, player_index)
 		force.set_friend(other_force, false)
 		force.set_cease_fire(other_force, true)
 		other_force.set_friend(force, false)
 		other_force.set_cease_fire(force, true)
+		script.raise_event(diplomacy_events.on_enemy, {source = force, destination = other_force, player_index = player_index})
 	end,
-	enemy = function(force, other_force)
+	enemy = function(force, other_force, player_index)
 		force.set_friend(other_force, false)
 		force.set_cease_fire(other_force, false)
 		other_force.set_friend(force, false)
 		other_force.set_cease_fire(force, false)
+		script.raise_event(diplomacy_events.on_enemy, {source = force, destination = other_force, player_index = player_index})
 	end
 }
 

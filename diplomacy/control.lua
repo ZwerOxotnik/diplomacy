@@ -32,7 +32,6 @@ local mod_gui = require("mod-gui")
 local module = {}
 module.version = "2.6.3"
 module.events = {}
-module.self_events = require("diplomacy/self_events")
 
 local function get_event(event)
 	if type(event) == "number" then
@@ -144,7 +143,7 @@ local function forbidden_entity_mined(event)
 
 	local max_health = game.entity_prototypes[entity.name].max_health
 	if max_health >= settings.global["diplomacy_HP_forbidden_entity_on_mined"].value or is_forbidden_entity_diplomacy(entity) then
-		set_politice["neutral"](force, mining_force)
+		set_politice["neutral"](force, mining_force, cmd.player_index)
 		game.print({"team-changed-diplomacy", mining_force.name, force.name, {"neutral"}})
 		mining_force.print({"player-changed-diplomacy", player.name, force.name})
 		force.print({"player-changed-diplomacy", player.name, mining_force.name})
@@ -175,24 +174,28 @@ local function check_stance_when_killed(event)
 	-- Change policy between teams and print information
 	local cause = event.cause
 	if cause and cause.valid then
+		local causer_index = nil
 		if force.get_friend(killing_force) then
 			if game.entity_prototypes[entity.name].max_health >= settings.global["diplomacy_HP_forbidden_entity_on_killed"].value or is_forbidden_entity_diplomacy(entity) or
 					entity.type == "character" then
-				set_politice["enemy"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
 				if cause.type == "character" then
+					causer_index = cause.player.index
 					killing_force.print({"player-changed-diplomacy", cause.player.name, force.name})
 					force.print({"player-changed-diplomacy", cause.player.name, killing_force.name})
 				elseif cause.type == "car" then
 					local passenger = cause.get_passenger()
 					local driver = cause.get_driver()
 					if passenger and driver then
+						causer_index = driver.player.index
 						killing_force.print({"player-changed-diplomacy", driver.player.name.." & "..passenger.player.name, force.name})
 						force.print({"player-changed-diplomacy", driver.player.name.." & "..passenger.player.name, killing_force.name})
 					elseif passenger then
+						causer_index = passenger.player.index
 						killing_force.print({"player-changed-diplomacy", passenger.player.name, force.name})
 						force.print({"player-changed-diplomacy", passenger.player.name, killing_force.name})
 					elseif driver then
+						causer_index = driver.player.index
 						killing_force.print({"player-changed-diplomacy", driver.player.name, force.name})
 						force.print({"player-changed-diplomacy", driver.player.name, killing_force.name})
 					else
@@ -203,24 +206,28 @@ local function check_stance_when_killed(event)
 					killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
 					force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
 				end
+				set_politice["enemy"](force, killing_force, causer_index)
 			else
-				set_politice["neutral"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"neutral"}})
 				killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
 				force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
 				if cause.type == "character" then
+					causer_index = cause.player.index
 					killing_force.print({"player-changed-diplomacy", cause.player.name, force.name})
 					force.print({"player-changed-diplomacy", cause.player.name, killing_force.name})
 				elseif cause.type == "car" then
 					local passenger = cause.get_passenger()
 					local driver = cause.get_driver()
 					if passenger and driver then
+						causer_index = driver.player.index
 						killing_force.print({"player-changed-diplomacy", driver.player.name .. " & " .. passenger.player.name, force.name})
 						force.print({"player-changed-diplomacy", driver.player.name .. " & " .. passenger.player.name, killing_force.name})
 					elseif passenger then
+						causer_index = passenger.player.index
 						killing_force.print({"player-changed-diplomacy", passenger.player.name, force.name})
 						force.print({"player-changed-diplomacy", passenger.player.name, killing_force.name})
 					elseif driver then
+						causer_index = driver.player.index
 						killing_force.print({"player-changed-diplomacy", driver.player.name, force.name})
 						force.print({"player-changed-diplomacy", driver.player.name, killing_force.name})
 					else
@@ -231,6 +238,7 @@ local function check_stance_when_killed(event)
 					killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
 					force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
 				end
+				set_politice["neutral"](force, killing_force, causer_index)
 			end
 		elseif force.get_cease_fire(killing_force) then
 			set_politice["enemy"](force, killing_force)
@@ -506,7 +514,7 @@ remote.remove_interface("diplomacy")
 remote.add_interface("diplomacy",
 {
 	get_event_name = function(name)
-		return module.self_events[name]
+		return diplomacy_events[name]
 	end,
 	get_data = function()
 		return global.diplomacy

@@ -196,7 +196,7 @@ modules.for_secondary_chat.handle_events = function()
 						if other_force and other_force.valid then
 							local stance = get_stance_diplomacy(player_force, other_force)
 							if stance ~= "enemy" then
-								set_politice["enemy"](other_force, player_force)
+								set_politice["enemy"](other_force, player_force, player.index)
 								game.print({"team-changed-diplomacy", player_force.name, other_force.name, {"enemy"}})
 								other_force.print({"player-changed-diplomacy", player.name, player_force.name})
 								player_force.print({"player-changed-diplomacy", player.name, other_force.name})
@@ -232,7 +232,7 @@ modules.for_secondary_chat.handle_events = function()
 						if other_force and other_force.valid then
 							local stance = get_stance_diplomacy(player_force, other_force)
 							if stance == "ally" then
-								set_politice["neutral"](other_force, player_force)
+								set_politice["neutral"](other_force, player_force, player.index)
 								game.print({"team-changed-diplomacy", player_force.name, other_force.name, {"neutral"}})
 								other_force.print({"player-changed-diplomacy", player.name, player_force.name})
 								player_force.print({"player-changed-diplomacy", player.name, other_force.name})
