@@ -18,30 +18,6 @@ local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomac
 
 local util = {}
 
-util.set_politice = {
-	ally = function(force, other_force, player_index)
-		force.set_friend(other_force, true)
-		force.set_cease_fire(other_force, true)
-		other_force.set_friend(force, true)
-		other_force.set_cease_fire(force, true)
-		script.raise_event(diplomacy_events.on_enemy, {source = force, destination = other_force, player_index = player_index})
-	end,
-	neutral = function(force, other_force, player_index)
-		force.set_friend(other_force, false)
-		force.set_cease_fire(other_force, true)
-		other_force.set_friend(force, false)
-		other_force.set_cease_fire(force, true)
-		script.raise_event(diplomacy_events.on_enemy, {source = force, destination = other_force, player_index = player_index})
-	end,
-	enemy = function(force, other_force, player_index)
-		force.set_friend(other_force, false)
-		force.set_cease_fire(other_force, false)
-		other_force.set_friend(force, false)
-		other_force.set_cease_fire(force, false)
-		script.raise_event(diplomacy_events.on_enemy, {source = force, destination = other_force, player_index = player_index})
-	end
-}
-
 util.cancel_request_diplomacy_force = function(player_force, force)
 	for _, other_player in pairs(force.connected_players) do
 		local frame = other_player.gui.left.diplomacy_selection_frame
@@ -82,5 +58,32 @@ util.get_stance_name_diplomacy_by_type = function(type)
 		return "enemy"
 	end
 end
+
+util.set_politice = {
+	ally = function(force, other_force, player_index)
+		local prev_relationship = util.get_stance_diplomacy(force, other_force)
+		force.set_friend(other_force, true)
+		force.set_cease_fire(other_force, true)
+		other_force.set_friend(force, true)
+		other_force.set_cease_fire(force, true)
+		script.raise_event(diplomacy_events.on_ally, {source = force, destination = other_force, player_index = player_index, prev_relationship = prev_relationship})
+	end,
+	neutral = function(force, other_force, player_index)
+		local prev_relationship = util.get_stance_diplomacy(force, other_force)
+		force.set_friend(other_force, false)
+		force.set_cease_fire(other_force, true)
+		other_force.set_friend(force, false)
+		other_force.set_cease_fire(force, true)
+		script.raise_event(diplomacy_events.on_neutral, {source = force, destination = other_force, player_index = player_index, prev_relationship = prev_relationship})
+	end,
+	enemy = function(force, other_force, player_index)
+		local prev_relationship = util.get_stance_diplomacy(force, other_force)
+		force.set_friend(other_force, false)
+		force.set_cease_fire(other_force, false)
+		other_force.set_friend(force, false)
+		other_force.set_cease_fire(force, false)
+		script.raise_event(diplomacy_events.on_enemy, {source = force, destination = other_force, player_index = player_index, prev_relationship = prev_relationship})
+	end
+}
 
 return util

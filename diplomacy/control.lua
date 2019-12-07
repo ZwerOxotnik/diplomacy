@@ -29,7 +29,7 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.7.2"
+module.version = "2.7.3"
 module.events = {}
 
 local function get_event(event)

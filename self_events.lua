@@ -6,19 +6,22 @@ return {
 	--		source :: LuaForce: The force that changed current diplomacy relationship.
 	--		destination :: LuaForce: The force which have to accept new diplomacy relationship.
 	--		player_index :: uint (optional): The player who cause the changing.
+	--		prev_relationship :: string: Previous relationship between forces.
 	on_ally = script.generate_event_name(),
-
-	-- Called when someone/something changed a diplomacy relationship to enemy.
-	--	Contains:
-	--		source :: LuaForce: The force that changed current diplomacy relationship.
-	--		destination :: LuaForce: The force which have to accept new diplomacy relationship.
-	--		player_index :: uint (optional): The player who cause the changing.
-	on_enemy = script.generate_event_name(),
 
 	-- Called when someone/something changed a diplomacy relationship to neutral.
 	--	Contains:
 	--		source :: LuaForce: The force that changed current diplomacy relationship.
 	--		destination :: LuaForce: The force which have to accept new diplomacy relationship.
 	--		player_index :: uint (optional): The player who cause the changing.
-	on_neutral = script.generate_event_name()
+	--		prev_relationship :: string: Previous relationship between forces.
+	on_neutral = script.generate_event_name(),
+
+	-- Called when someone/something changed a diplomacy relationship to enemy.
+	--	Contains:
+	--		source :: LuaForce: The force that changed current diplomacy relationship.
+	--		destination :: LuaForce: The force which have to accept new diplomacy relationship.
+	--		player_index :: uint (optional): The player who cause the changing.
+	--		prev_relationship :: string: Previous relationship between forces.
+	on_enemy = script.generate_event_name()
 }
