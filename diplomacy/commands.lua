@@ -21,45 +21,54 @@ local create_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").create
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
 local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").create
 
+local function print_to_sender(message, player)
+	if player then
+		if player.valid then
+			player.print(message)
+		end
+	else
+		print(message) -- this message to host
+	end
+end
+
 local function check_stance(cmd)
 	-- Validation of data
-	local player = game.players[cmd.player_index]
-	if not (player and player.valid) then return end
-	if not cmd.parameter then player.print({"command-help.check_stance"}) return end
+	local player = cmd.player_index and game.players[cmd.player_index]
+	if not cmd.parameter then print_to_sender({"command-help.check_stance"}, player) return end
 
 	local params = {}
 	for param in string.gmatch(cmd.parameter, "%g+") do table.insert(params, param) end
-	if params[1] == nil then player.print({"command-help.check_stance"}) return end
-	if game.forces[params[1]] == nil then player.print({"command-help.unknown-command", params[1]}) return end
+	if params[1] == nil then print_to_sender({"command-help.check_stance"}, player) return end
+	if game.forces[params[1]] == nil then print_to_sender({"command-help.unknown-command", params[1]}, player) return end
 	if #params ~= 1 then
-		if params[2] == nil then player.print({"command-help.check_stance"}) return end
-		if game.forces[params[2]] == nil then player.print({"command-help.unknown-command", params[2]}) return end
+		if params[2] == nil then print_to_sender({"command-help.check_stance"}, player) return end
+		if game.forces[params[2]] == nil then print_to_sender({"command-help.unknown-command", params[2]}, player) return end
 		local force = game.forces[params[1]]
 		local other_force = game.forces[params[2]]
-		player.print(params[1] .. " >" .. get_stance_diplomacy(force, other_force) .. "< " .. params[2])
-	else
+		print_to_sender(params[1] .. " >" .. get_stance_diplomacy(force, other_force) .. "< " .. params[2], player)
+	elseif player and player.valid then
 		local force = player.force
 		local other_force = game.forces[params[1]]
-		player.print(force.name .. " >" .. get_stance_diplomacy(force, other_force) .. "< " .. params[1])
+		print_to_sender(force.name .. " >" .. get_stance_diplomacy(force, other_force) .. "< " .. params[1], player)
 	end
 end
 commands.add_command("check-stance", {"command-help.check_stance"}, check_stance)
 
 local function player_force(cmd)
 	-- Validation of data
-	local player = game.players[cmd.player_index]
-	if not (player and player.valid) then return end
-	if not cmd.parameter ~= nil then player.print({"command-help.player_force"}) return end
+	local player = cmd.player_index and game.players[cmd.player_index]
+	if not cmd.parameter ~= nil then print_to_sender({"command-help.player_force"}) return end
 
 	local player_name = cmd.parameter
 	if player_name == nil or game.players[player_name] == nil then player.print({"multiplayer.unknown-username", player_name}) return end
-	player.print(player_name .. " - " .. game.players[player_name].force.name)
+	print_to_sender(player_name .. " - " .. game.players[player_name].force.name, player)
 end
 commands.add_command("player-force", {"command-help.player_force"}, player_force)
 
 local function change_stance(cmd)
 	-- Validation of data
-	local player = game.players[cmd.player_index]
+	if not cmd.player_index then return end
+	local player = cmd.player_index and game.players[cmd.player_index]
 	if not (player and player.valid) then return end
 	if player.force.name == "spectator" then player.print({"command-attempted-not-allowed", player.name, "change-stance"}) return end
 
@@ -134,7 +143,8 @@ commands.add_command("change-stance", {"command-help.change_stance"}, change_sta
 
 local function cancel_stance(cmd)
 	-- Validation of data
-	local player = game.players[cmd.player_index]
+	if not cmd.player_index then return end
+	local player = cmd.player_index and game.players[cmd.player_index]
 	if not (player and player.valid) then return end
 	if player.force.name == "spectator" then player.print({"command-attempted-not-allowed", player.name, "cancel-stance"}) return end
 
