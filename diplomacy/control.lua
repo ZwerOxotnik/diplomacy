@@ -1,30 +1,36 @@
 --[[
-Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
-Licensed under the MIT licence;
-Author: ZwerOxotnik
-Version: 2.3.0 (2019.05.02)
+Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 
-You can write and receive any information on the links below.
-Source: https://gitlab.com/ZwerOxotnik/diplomacy
-Mod portal: https://mods.factorio.com/mod/diplomacy
-Homepage: https://forums.factorio.com/viewtopic.php?f=190&t=64630
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
+		http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ]]--
+
+-- You can write and receive any information on the links below.
+-- Source: https://gitlab.com/ZwerOxotnik/diplomacy
+-- Mod portal: https://mods.factorio.com/mod/diplomacy
+-- Homepage: https://forums.factorio.com/viewtopic.php?f=190&t=64630
 
 local color_map = require("diplomacy/color_map")
 local set_politice = require("diplomacy/util").set_politice
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
 require("diplomacy/commands")
 local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
-local create_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").create
 local select_diplomacy = require("diplomacy/gui/select_diplomacy")
 local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
 local module = {}
-module.version = "2.3.0"
+module.version = "2.7.3"
 module.events = {}
-module.self_events = require("diplomacy/self_events")
 
 local function get_event(event)
 	if type(event) == "number" then
@@ -59,8 +65,12 @@ end
 
 module.create_button = function(player)
 	destroy_button(player)
-	if player.force.name == "spectator" then return end
-	mod_gui.get_button_flow(player).add{type = "button", caption = {"mod-name.diplomacy"}, name = "diplomacy_button", style = mod_gui.button_style}
+	mod_gui.get_button_flow(player).add{
+		type = "button",
+		caption = {"mod-name.diplomacy"},
+		name = "diplomacy_button",
+		style = mod_gui.button_style
+	}
 end
 
 local function destroy_diplomacy_gui(player)
@@ -132,7 +142,7 @@ local function forbidden_entity_mined(event)
 
 	local max_health = game.entity_prototypes[entity.name].max_health
 	if max_health >= settings.global["diplomacy_HP_forbidden_entity_on_mined"].value or is_forbidden_entity_diplomacy(entity) then
-		set_politice["neutral"](force, mining_force)
+		set_politice["neutral"](force, mining_force, cmd.player_index)
 		game.print({"team-changed-diplomacy", mining_force.name, force.name, {"neutral"}})
 		mining_force.print({"player-changed-diplomacy", player.name, force.name})
 		force.print({"player-changed-diplomacy", player.name, mining_force.name})
@@ -163,24 +173,28 @@ local function check_stance_when_killed(event)
 	-- Change policy between teams and print information
 	local cause = event.cause
 	if cause and cause.valid then
+		local causer_index = nil
 		if force.get_friend(killing_force) then
 			if game.entity_prototypes[entity.name].max_health >= settings.global["diplomacy_HP_forbidden_entity_on_killed"].value or is_forbidden_entity_diplomacy(entity) or
 					entity.type == "character" then
-				set_politice["enemy"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
 				if cause.type == "character" then
+					causer_index = cause.player.index
 					killing_force.print({"player-changed-diplomacy", cause.player.name, force.name})
 					force.print({"player-changed-diplomacy", cause.player.name, killing_force.name})
 				elseif cause.type == "car" then
 					local passenger = cause.get_passenger()
 					local driver = cause.get_driver()
 					if passenger and driver then
+						causer_index = driver.player.index
 						killing_force.print({"player-changed-diplomacy", driver.player.name.." & "..passenger.player.name, force.name})
 						force.print({"player-changed-diplomacy", driver.player.name.." & "..passenger.player.name, killing_force.name})
 					elseif passenger then
+						causer_index = passenger.player.index
 						killing_force.print({"player-changed-diplomacy", passenger.player.name, force.name})
 						force.print({"player-changed-diplomacy", passenger.player.name, killing_force.name})
 					elseif driver then
+						causer_index = driver.player.index
 						killing_force.print({"player-changed-diplomacy", driver.player.name, force.name})
 						force.print({"player-changed-diplomacy", driver.player.name, killing_force.name})
 					else
@@ -191,24 +205,28 @@ local function check_stance_when_killed(event)
 					killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
 					force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
 				end
+				set_politice["enemy"](force, killing_force, causer_index)
 			else
-				set_politice["neutral"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"neutral"}})
 				killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
 				force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
 				if cause.type == "character" then
+					causer_index = cause.player.index
 					killing_force.print({"player-changed-diplomacy", cause.player.name, force.name})
 					force.print({"player-changed-diplomacy", cause.player.name, killing_force.name})
 				elseif cause.type == "car" then
 					local passenger = cause.get_passenger()
 					local driver = cause.get_driver()
 					if passenger and driver then
+						causer_index = driver.player.index
 						killing_force.print({"player-changed-diplomacy", driver.player.name .. " & " .. passenger.player.name, force.name})
 						force.print({"player-changed-diplomacy", driver.player.name .. " & " .. passenger.player.name, killing_force.name})
 					elseif passenger then
+						causer_index = passenger.player.index
 						killing_force.print({"player-changed-diplomacy", passenger.player.name, force.name})
 						force.print({"player-changed-diplomacy", passenger.player.name, killing_force.name})
 					elseif driver then
+						causer_index = driver.player.index
 						killing_force.print({"player-changed-diplomacy", driver.player.name, force.name})
 						force.print({"player-changed-diplomacy", driver.player.name, killing_force.name})
 					else
@@ -219,6 +237,7 @@ local function check_stance_when_killed(event)
 					killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
 					force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
 				end
+				set_politice["neutral"](force, killing_force, causer_index)
 			end
 		elseif force.get_cease_fire(killing_force) then
 			set_politice["enemy"](force, killing_force)
@@ -266,7 +285,7 @@ local function on_player_created(event)
 	local player = game.players[event.player_index]
 	if not (player and player.valid) then return end
 
-	create_diplomacy_frame(player)
+	global.diplomacy.players[event.player_index] = {}
 	module.create_button(player)
 end
 
@@ -281,6 +300,24 @@ local function on_gui_checked_state_changed(event)
 
 	if parent.name == "diplomacy_table" then
 		select_diplomacy.diplomacy_check_press(event)
+	elseif gui.name == "d_show_players_state" then
+		global.diplomacy.players[event.player_index].show_players_state = gui.state
+		update_diplomacy_frame(player)
+	end
+end
+
+local function on_gui_selection_state_changed(event)
+	-- Validation of data
+	local gui = event.element
+	if not (gui and gui.valid) then return end
+	local player = game.players[event.player_index]
+	if not (player and player.valid) then return end
+	local parent = gui.parent
+	if not parent then return end
+
+	if gui.name == "d_filter_of_diplomacy_stance" then
+		global.diplomacy.players[event.player_index].filter_of_diplomacy_stance = gui.selected_index
+		update_diplomacy_frame(player)
 	end
 end
 
@@ -450,20 +487,48 @@ local function on_player_left_game(event)
 	select_diplomacy.on_player_left_game(player)
 end
 
-module.on_init = function()
+local function on_force_created(event)
+	-- Validation of data
+	local force = event.force
+	if not (force and force.valid) then return end
+
+	update_diplomacy_frame()
+end
+
+local function update_global_data()
 	global.diplomacy = global.diplomacy or {}
 	local diplomacy = global.diplomacy
 	diplomacy.teams = diplomacy.teams or nil
 	diplomacy.locked_teams = diplomacy.locked_teams or false
 	diplomacy.who_decides_diplomacy = diplomacy.who_decides_diplomacy or settings.global["who_decides_diplomacy"].value
 	diplomacy.color_map = diplomacy.color_map or color_map.get()
+	diplomacy.players = diplomacy.players or {}
+
+	if not game then return end
+
+	for i, _ in pairs(game.players) do
+		if diplomacy.players[i] == nil then
+			diplomacy.players[i] = {}
+		end
+	end
 end
+
+module.on_init = update_global_data
 
 module.on_load = function()
 	if not game then
 		if global.diplomacy == nil then
 			module.on_init()
 		end
+	end
+end
+
+module.on_configuration_changed = function(data)
+	update_global_data()
+
+	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
+	for _, player in pairs(game.players) do
+		module.create_button(player) -- still there are some bugs
 	end
 end
 
@@ -481,13 +546,14 @@ end
 
 local function on_player_removed(event)
 	update_diplomacy_frame()
+	diplomacy.players[event.player_index] = nil
 end
 
 remote.remove_interface("diplomacy")
 remote.add_interface("diplomacy",
 {
 	get_event_name = function(name)
-		return module.self_events[name]
+		return diplomacy_events[name]
 	end,
 	get_data = function()
 		return global.diplomacy
@@ -550,6 +616,10 @@ put_event("on_player_joined_game", on_player_joined_game)
 put_event("on_gui_click", on_gui_click)
 put_event("on_gui_checked_state_changed", on_gui_checked_state_changed)
 put_event("on_runtime_mod_setting_changed", on_runtime_mod_setting_changed)
+put_event("on_force_created", on_force_created)
+-- put_event("on_force_friends_changed", update_diplomacy_frame) -- TODO: test it thoroughly
+-- put_event("on_force_cease_fire_changed", update_diplomacy_frame) -- TODO: test it thoroughly
+put_event("on_gui_selection_state_changed", on_gui_selection_state_changed)
 -- put_event("on_forces_merged", on_forces_merged)
 
 if not settings.global["diplomacy_protection_from_theft_of_electricity"].value then

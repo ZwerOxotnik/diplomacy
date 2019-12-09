@@ -1,6 +1,3 @@
--- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
--- Licensed under the MIT licence;
-
 data:extend({
 	{
 		type = "bool-setting",
@@ -33,12 +30,24 @@ data:extend({
 		default_value = true
 	},
 	{
+		type = "bool-setting",
+		name = "diplomacy_hp_rocket_silo_switcher",
+		setting_type = "startup",
+		default_value = true
+	},
+	{
 		type = "int-setting",
 		name = "diplomacy_hp_rocket_silo",
 		setting_type = "startup",
 		default_value = 50000,
 		minimum_value = 1,
 		maximum_value = 10000000000,
+	},
+	{
+		type = "bool-setting",
+		name = "diplomacy_tech_tanks_count_switcher",
+		setting_type = "startup",
+		default_value = true
 	},
 	{
 		type = "int-setting",
@@ -49,12 +58,24 @@ data:extend({
 		maximum_value = 10000000000,
 	},
 	{
+		type = "bool-setting",
+		name = "diplomacy_tech_power_armor_2_count_switcher",
+		setting_type = "startup",
+		default_value = true
+	},
+	{
 		type = "int-setting",
 		name = "diplomacy_tech_power_armor_2_count",
 		setting_type = "startup",
 		default_value = 1000,
 		minimum_value = 1,
 		maximum_value = 10000000000,
+	},
+	{
+		type = "bool-setting",
+		name = "diplomacy_tech_uranium_ammo_count_switcher",
+		setting_type = "startup",
+		default_value = true
 	},
 	{
 		type = "int-setting",
@@ -87,6 +108,14 @@ data:extend({
 		default_value = 300,
 		minimum_value = 1,
 		maximum_value = 100000000000,
+	},
+	{
+		type = "int-setting",
+		name = "diplomacy_restrict_building_radius",
+		setting_type = "runtime-global",
+		default_value = 3,
+		minimum_value = 0,
+		maximum_value = 25,
 	},
 	{
 		type = "string-setting",
