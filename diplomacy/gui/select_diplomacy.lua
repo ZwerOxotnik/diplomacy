@@ -1,31 +1,29 @@
--- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
--- Licensed under the MIT licence;
+--[[
+Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+]]--
 
 local set_politice = require("diplomacy/util").set_politice
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
 local cancel_request_diplomacy_force = require("diplomacy/util").cancel_request_diplomacy_force
-local get_stance_diplomacy = require("diplomacy/util").get_stance_diplomacy
+local get_stance_diplomacy_type = require("diplomacy/util").get_stance_diplomacy_type
 local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
 local create_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").create
 local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").create
 
 local function diplomacy_button_press(event)
 	local player = game.players[event.player_index]
-	local flow = player.gui.center
-
-	local frame = flow.diplomacy_frame
-	if frame then
-		frame.destroy()
-		return
-	end
-
-	frame = flow.add{type = "frame", name = "diplomacy_frame", caption = {"mod-name.diplomacy"}, direction = "vertical"}
-	frame.visible = true
-	local inner_frame = frame.add{type = "frame", style = "image_frame", name = "diplomacy_inner_frame", direction = "vertical"}
-	inner_frame.style.left_padding = 8
-	inner_frame.style.top_padding = 8
-	inner_frame.style.right_padding = 8
-	inner_frame.style.bottom_padding = 8
 	create_diplomacy_frame(player)
 end
 
@@ -40,8 +38,8 @@ local function confirm_diplomacy(event)
 			if child.name:find("_ally") then
 				local name = child.name:gsub("_ally", "")
 				local force = game.forces[name]
-				local stance = get_stance_diplomacy(player_force, force)
-				if stance ~= "ally" then
+				local stance_type = get_stance_diplomacy_type(player_force, force)
+				if stance_type ~= FILTER_DIPLOMACY_TYPE_ALLY then
 					create_diplomacy_selection_frame(force, player_force.name, "ally")
 					force.print({"player-changed-diplomacy", player.name, player_force.name})
 					player_force.print({"player-changed-diplomacy", player.name, force.name})
@@ -50,10 +48,10 @@ local function confirm_diplomacy(event)
 			elseif child.name:find("_neutral") then
 				local name = child.name:gsub("_neutral", "")
 				local force = game.forces[name]
-				local stance = get_stance_diplomacy(player_force, force)
-				if stance ~= "neutral" then
-					if stance == "ally" then
-						set_politice["neutral"](force, player_force)
+				local stance_type = get_stance_diplomacy_type(player_force, force)
+				if stance_type ~= FILTER_DIPLOMACY_TYPE_NEUTRAL then
+					if stance_type == FILTER_DIPLOMACY_TYPE_ALLY then
+						set_politice["neutral"](force, player_force, player.index)
 						game.print({"team-changed-diplomacy", player_force.name, force.name, {"neutral"}})
 						force.print({"player-changed-diplomacy", player.name, player_force.name})
 						player_force.print({"player-changed-diplomacy", player.name, force.name})
@@ -68,9 +66,9 @@ local function confirm_diplomacy(event)
 			elseif child.name:find("_enemy") then
 				local name = child.name:gsub("_enemy", "")
 				local force = game.forces[name]
-				local stance = get_stance_diplomacy(player_force, force)
-				if stance ~= "enemy" then
-					set_politice["enemy"](force, player_force)
+				local stance_type = get_stance_diplomacy_type(player_force, force)
+				if stance_type ~= FILTER_DIPLOMACY_TYPE_ENEMY then
+					set_politice["enemy"](force, player_force, player.index)
 					game.print({"team-changed-diplomacy", player_force.name, force.name, {"enemy"}})
 					force.print({"player-changed-diplomacy", player.name, player_force.name})
 					player_force.print({"player-changed-diplomacy", player.name, force.name})
