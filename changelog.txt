@@ -1,4 +1,143 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.4
+Date: 2019-12-08
+  Bugfixes:
+    - Fixed commands for headless server
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.7.3
+Date: 2019-12-07
+  Bugfixes:
+    - Fixed new events
+  Features:
+    - Updated data of new events
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.7.2
+Date: 2019-12-06
+  Bugfixes:
+    - Disabled handling of some events because of bugs and interrupting of UI
+  Features:
+    - Added filter by stances in the diplomacy UI
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.7.1
+Date: 2019-12-06
+  Bugfixes:
+    - More updates of diplomacy UI because of events related to forces
+  Features:
+    - Added filter of players in the diplomacy UI
+  Notes:
+    - TODO: new optimization because of new global data for players :P
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.7.0
+Date: 2019-12-06
+  Bugfixes:
+    - Fixed commands for MP
+  Features:
+    - New events in the mod API (on_ally, on_enemy, on_neutral)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.6.3
+Date: 2019-12-06
+  Bugfixes:
+    - Fixed interactions with the disabled chat mod (https://mods.factorio.com/mod/diplomacy/discussion/5dd1b8514979ff000c13d4a6)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.6.2
+Date: 2019-11-17
+  Bugfixes:
+    - Disabled handling of PvP scenario/mod events (https://mods.factorio.com/mod/diplomacy/discussion/5dd0603d34bde6000c15d8ae)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.6.1
+Date: 2019-11-11
+  Bugfixes:
+    - Fixed loading for PvP scenarios/mods (https://mods.factorio.com/mod/diplomacy/discussion/5dc8a7be7f56f0000d961e6d)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.6.0
+Date: 2019-11-09
+  Bugfixes:
+    - Fixed working and events of the chat mod!
+    - Definitely fixed diplomacy button visibility
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.5.2
+Date: 2019-11-08
+  Bugfixes:
+    - Fixed setting of Building Prohibition Radius
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.5.1
+Date: 2019-11-07
+  Bugfixes:
+    - Fixed bug during on_runtime_mod_setting_changed event
+    - Proper hiding of entities
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.5.0
+Date: 2019-11-07
+  Features:
+    - Added restrict building radius for enemies
+  Bugfixes:
+    - Returned lost button of diplomacy
+    - Fixed flags during data stage (https://mods.factorio.com/mod/diplomacy/discussion/5dc33045778503000bfdea59)
+  Changes:
+    - Changed command "change-stance" (recreated diplomacy button if you call the command without parameters)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.4.3
+Date: 2019-09-02
+  Bugfixes:
+    - Fixed compatibility with the map editor (https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.4.2
+Date: 2019-09-01
+  Bugfixes:
+    - There is diplomacy button into already started PVP world now (https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9)
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.4.1
+Date: 2019-08-09
+  Bugfixes:
+    - Creating button for saves (https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9)
+  Notes:
+    - Changed MIT license to Apache license 2.0
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2019-07-14
+  Features:
+    - Added turn switches for startup settings
+  Changes:
+    - Improved localisations
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2019-06-23
+  Changes:
+    - Removed rich text in the mod name
+    - Changed en, ru locales
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.3.2
 Date: 2019-05-02
   Notes:
@@ -78,7 +217,7 @@ Version: 2.1.0
 Date: 2019-03-01
   Changes:
     - Updated for Factorio 0.17
-    - Updated localization
+    - Updated localisation
     - Bugfixes
     - Added module «Event listener»
   Notes:
@@ -91,7 +230,7 @@ Date: 2019-01-31
   Features:
     - New settings
   Changes:
-    - Improved localization
+    - Improved localisation
     - Improved performance
     - Added mod interface
     - A lot of bugfixes
@@ -99,5 +238,5 @@ Date: 2019-01-31
     - Changes in evolution factor from research and etc is deleted (use «Soft evolution»)
   Notes:
     - Uploaded to GitLab
-    - Refactoring (not finished)
+    - Refactoring (not finished!)
     - Full changelog only on GitLab

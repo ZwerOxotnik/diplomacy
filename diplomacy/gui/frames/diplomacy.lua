@@ -1,7 +1,21 @@
--- Copyright (c) 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
--- Licensed under the MIT licence;
+--[[
+Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
 
-local get_stance_diplomacy = require("diplomacy/util").get_stance_diplomacy
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+]]--
+
+local get_stance_diplomacy_type = require("diplomacy/util").get_stance_diplomacy_type
+local get_stance_name_diplomacy_by_type = require("diplomacy/util").get_stance_name_diplomacy_by_type
 local diplomacy_frame = {}
 
 local function add_player_list_gui(force, gui)
@@ -78,11 +92,30 @@ local function get_color_team(team, lighten)
 	end
 end
 
-diplomacy_frame.create = function(player)
+local function create_diplomacy_table(gui, player_settings)
+	if gui.diplomacy_table then
+		gui.diplomacy_table.destroy()
+	end
+
+	local column_count = 6
+	if player_settings.show_players_state == false then
+		column_count = column_count - 1
+	end
+	diplomacy_table = gui.add{type = "table", name = "diplomacy_table", column_count = column_count}
+	diplomacy_table.style.horizontal_spacing = 16
+	diplomacy_table.style.vertical_spacing = 8
+	diplomacy_table.draw_horizontal_lines = true
+	diplomacy_table.draw_vertical_lines = true
+	return diplomacy_table
+end
+
+diplomacy_frame.fill = function(player)
 	local flow = player.gui.center.diplomacy_frame
 	if not flow then return end
 	local gui = flow.diplomacy_inner_frame
 	if not gui then return end
+
+	local player_settings = global.diplomacy.players[player.index]
 
 	-- Remember diplomacy table
 	local diplomacy_scrollpane = gui.diplomacy_scrollpane
@@ -92,11 +125,7 @@ diplomacy_frame.create = function(player)
 	if not diplomacy_scrollpane then
 		local scroll = gui.add{name = "diplomacy_scrollpane", type = "scroll-pane"}
 		scroll.style.maximal_height = 320
-		diplomacy_table = scroll.add{type = "table", name = "diplomacy_table", column_count = 6}
-		diplomacy_table.style.horizontal_spacing = 16
-		diplomacy_table.style.vertical_spacing = 8
-		diplomacy_table.draw_horizontal_lines = true
-		diplomacy_table.draw_vertical_lines = true
+		diplomacy_table = create_diplomacy_table(scroll, player_settings)
 	else
 		diplomacy_table = gui.diplomacy_scrollpane.diplomacy_table
 		is_changed = true
@@ -105,10 +134,16 @@ diplomacy_frame.create = function(player)
 				temp_diplomacy_table[child.name] = {state = child.state}
 			end
 		end
-		diplomacy_table.clear()
+		diplomacy_table = create_diplomacy_table(diplomacy_scrollpane, player_settings)
 	end
 
-	for _, name in pairs({"team-name", "gui-browse-games.players", "stance", "enemy", "neutral", "ally"}) do
+	local table_list = {}
+	if player_settings.show_players_state then
+		table_list = {"team-name", "gui-browse-games.players", "stance", "enemy", "neutral", "ally"}
+	else
+		table_list = {"team-name", "stance", "enemy", "neutral", "ally"}
+	end
+	for _, name in pairs(table_list) do
 		local label = diplomacy_table.add{type = "label", name = name, caption = {name}}
 		label.style.font = "default-bold"
 	end
@@ -125,49 +160,53 @@ diplomacy_frame.create = function(player)
 		teams = diplomacy.teams or game.forces
 	end
 
-	-- Create table
+	-- Fill the table
 	for _, team in pairs(teams) do
 		local force = game.forces[team.name]
-		if force then
+		if force and force.valid then
+			local stance_type = get_stance_diplomacy_type(player.force, force)
 			if is_show_all_teams or diplomacy.teams ~= nil or #force.players ~= 0 then
-				local label = diplomacy_table.add{type = "label", name = team.name .. "_name", caption = team.name}
-				label.style.single_line = false
-				label.style.maximal_width = 150
-				label.style.font = "default-semibold"
-				label.style.font_color = get_color_team(team, true)
-				add_player_list_gui(force, diplomacy_table)
-				if force.name == player.force.name then
-					diplomacy_table.add{type = "label"}
-					diplomacy_table.add{type = "label"}
-					diplomacy_table.add{type = "label"}
-					diplomacy_table.add{type = "label"}
-				else
-					local stance = get_stance_diplomacy(player.force, force)
-					local stance_label = diplomacy_table.add{type = "label", name = team.name .. "_stance", caption = {stance}}
-					if stance == "ally" then
-						stance_label.style.font_color = {r = 0.5, g = 1, b = 0.5}
-					elseif stance == "enemy" then
-						stance_label.style.font_color = {r = 1, g = 0.5, b = 0.5}
+				if player_settings.filter_of_diplomacy_stance == FILTER_DIPLOMACY_TYPE_ALL or stance_type == player_settings.filter_of_diplomacy_stance then
+					local label = diplomacy_table.add{type = "label", name = team.name .. "_name", caption = team.name}
+					label.style.single_line = false
+					label.style.maximal_width = 150
+					label.style.font = "default-semibold"
+					label.style.font_color = get_color_team(team, true)
+					if player_settings.show_players_state then
+						add_player_list_gui(force, diplomacy_table)
 					end
-
-					if is_changed then
-						if temp_diplomacy_table[team.name .. "_enemy"] ~= nil then
-							local state
-							state = temp_diplomacy_table[team.name .. "_enemy"].state
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = state}
-							state = temp_diplomacy_table[team.name .. "_neutral"].state
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = state}
-							state = temp_diplomacy_table[team.name .. "_ally"].state
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = state}
-						else
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = (stance == "enemy")}
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = (stance == "neutral")}
-							diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = (stance == "ally")}
-						end
+					if force.name == player.force.name then
+						diplomacy_table.add{type = "label"}
+						diplomacy_table.add{type = "label"}
+						diplomacy_table.add{type = "label"}
+						diplomacy_table.add{type = "label"}
 					else
-						diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = (stance == "enemy"), enabled = not global.diplomacy.locked_teams}
-						diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = (stance == "neutral"), enabled = not global.diplomacy.locked_teams}
-						diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = (stance == "ally"), enabled = not global.diplomacy.locked_teams}
+						local stance_label = diplomacy_table.add{type = "label", name = team.name .. "_stance", caption = {get_stance_name_diplomacy_by_type(stance_type)}}
+						if stance_type == FILTER_DIPLOMACY_TYPE_ALLY then
+							stance_label.style.font_color = {r = 0.5, g = 1, b = 0.5}
+						elseif stance_type == FILTER_DIPLOMACY_TYPE_ENEMY then
+							stance_label.style.font_color = {r = 1, g = 0.5, b = 0.5}
+						end
+
+						if is_changed then
+							if temp_diplomacy_table[team.name .. "_enemy"] ~= nil then
+								local state
+								state = temp_diplomacy_table[team.name .. "_enemy"].state
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = state}
+								state = temp_diplomacy_table[team.name .. "_neutral"].state
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = state}
+								state = temp_diplomacy_table[team.name .. "_ally"].state
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = state}
+							else
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = (stance_type == FILTER_DIPLOMACY_TYPE_ENEMY)}
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = (stance_type == FILTER_DIPLOMACY_TYPE_NEUTRAL)}
+								diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = (stance_type == FILTER_DIPLOMACY_TYPE_ALLY)}
+							end
+						else
+							diplomacy_table.add{type = "checkbox", name = team.name .. "_enemy", state = (stance_type == FILTER_DIPLOMACY_TYPE_ENEMY), enabled = not global.diplomacy.locked_teams}
+							diplomacy_table.add{type = "checkbox", name = team.name .. "_neutral", state = (stance_type == FILTER_DIPLOMACY_TYPE_NEUTRAL), enabled = not global.diplomacy.locked_teams}
+							diplomacy_table.add{type = "checkbox", name = team.name .. "_ally", state = (stance_type == FILTER_DIPLOMACY_TYPE_ALLY), enabled = not global.diplomacy.locked_teams}
+						end
 					end
 				end
 			end
@@ -185,10 +224,47 @@ diplomacy_frame.create = function(player)
 	end
 end
 
-diplomacy_frame.update = function()
-	for _, player in pairs(game.connected_players) do
-		diplomacy_frame.create(player)
+diplomacy_frame.update = function(player)
+	if player and player.valid and player.connected then
+		diplomacy_frame.fill(player)
+	else
+		for _, player in pairs(game.connected_players) do
+			diplomacy_frame.fill(player)
+		end
 	end
+end
+
+diplomacy_frame.create = function(player)
+	local flow = player.gui.center
+	local frame = flow.diplomacy_frame
+	if frame then
+		frame.destroy()
+		return
+	end
+
+	frame = flow.add{type = "frame", name = "diplomacy_frame", caption = {"mod-name.diplomacy"}, direction = "vertical"}
+	frame.visible = true
+
+	local player_settings = global.diplomacy.players[player.index]
+	local table_settings = frame.add{type = "table", name = 'settings', column_count = 4}
+	table_settings.add{type = "label", caption = {"", {"diplomacy.gui.show_players_state"}, {"colon"}}}
+	if player_settings.show_players_state == nil then
+		player_settings.show_players_state = true
+	end
+	local show_players_state = player_settings.show_players_state
+	table_settings.add{type = "checkbox", name = "d_show_players_state", state = show_players_state}
+	table_settings.add{type = "label", caption = {"", {"diplomacy.gui.filter_of_diplomacy_stance"}, {"colon"}}}
+	if player_settings.filter_of_diplomacy_stance == nil then
+		player_settings.filter_of_diplomacy_stance = FILTER_DIPLOMACY_TYPE_ALL
+	end
+	table_settings.add{type = "drop-down", name = "d_filter_of_diplomacy_stance", items = FILTER_DIPLOMACY_TYPE_ITEMS, selected_index = player_settings.filter_of_diplomacy_stance}
+
+	local inner_frame = frame.add{type = "frame", style = "image_frame", name = "diplomacy_inner_frame", direction = "vertical"}
+	inner_frame.style.left_padding = 8
+	inner_frame.style.top_padding = 8
+	inner_frame.style.right_padding = 8
+	inner_frame.style.bottom_padding = 8
+	diplomacy_frame.fill(player)
 end
 
 return diplomacy_frame
