@@ -66,8 +66,8 @@ end
 module.create_button = function(player)
 	destroy_button(player)
 	mod_gui.get_button_flow(player).add{
-		type = "button",
-		caption = {"mod-name.diplomacy"},
+		type = "sprite-button",
+		sprite = "virtual-signal/diplomacy",
 		name = "diplomacy_button",
 		style = mod_gui.button_style
 	}

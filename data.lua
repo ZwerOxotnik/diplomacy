@@ -8,7 +8,7 @@ data:extend(
 	}
 })
 
-for _, name in pairs({"enemy", "neutral", "ally"}) do
+for _, name in pairs({"enemy", "neutral", "ally", "diplomacy"}) do
 	data:extend(
 	{
 		{
