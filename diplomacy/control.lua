@@ -1,5 +1,5 @@
 --[[
-Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+Copyright 2018-2020 ZwerOxotnik <zweroxotnik@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -66,8 +66,8 @@ end
 module.create_button = function(player)
 	destroy_button(player)
 	mod_gui.get_button_flow(player).add{
-		type = "button",
-		caption = {"mod-name.diplomacy"},
+		type = "sprite-button",
+		sprite = "virtual-signal/diplomacy",
 		name = "diplomacy_button",
 		style = mod_gui.button_style
 	}
@@ -546,7 +546,7 @@ end
 
 local function on_player_removed(event)
 	update_diplomacy_frame()
-	diplomacy.players[event.player_index] = nil
+	global.diplomacy.players[event.player_index] = nil
 end
 
 remote.remove_interface("diplomacy")
