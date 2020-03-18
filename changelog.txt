@@ -2,7 +2,7 @@
 Version: 2.7.9
 Date: 2020-03-18
   Bugfixes:
-    - Fixed player data for on_player_left_game event
+    - Fixed on_player_removed event
   Notes:
     - This update for Factorio 0.17
 ---------------------------------------------------------------------------------------------------
