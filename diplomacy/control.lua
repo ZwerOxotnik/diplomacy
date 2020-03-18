@@ -546,7 +546,7 @@ end
 
 local function on_player_removed(event)
 	update_diplomacy_frame()
-	diplomacy.players[event.player_index] = nil
+	global.diplomacy.players[event.player_index] = nil
 end
 
 remote.remove_interface("diplomacy")
