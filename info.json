@@ -1,6 +1,6 @@
 {
     "name": "diplomacy",
-    "version": "2.7.5",
+    "version": "2.7.10",
     "factorio_version": "0.18",
     "title": "Diplomacy",
     "author": "ZwerOxotnik",
@@ -9,7 +9,6 @@
     "homepage": "https://reddit.com/r/ZwerOxotnik",
     "dependencies": [
         "event-listener >= 0.8.0",
-        "? secondary-chat >= 1.23.4",
-        "base >= 0.17.35"
+        "? secondary-chat >= 1.23.4"
     ]
 }
