@@ -52,7 +52,6 @@ local function check_stance(cmd)
 		print_to_sender(force.name .. " >" .. get_stance_diplomacy(force, other_force) .. "< " .. params[1], player)
 	end
 end
-commands.add_command("check-stance", {"command-help.check_stance"}, check_stance)
 
 local function player_force(cmd)
 	-- Validation of data
@@ -63,7 +62,6 @@ local function player_force(cmd)
 	if player_name == nil or game.players[player_name] == nil then player.print({"multiplayer.unknown-username", player_name}) return end
 	print_to_sender(player_name .. " - " .. game.players[player_name].force.name, player)
 end
-commands.add_command("player-force", {"command-help.player_force"}, player_force)
 
 local function change_stance(cmd)
 	-- Validation of data
@@ -131,15 +129,15 @@ local function change_stance(cmd)
 			diplomacy_button.destroy()
 		end
 		mod_gui.get_button_flow(player).add{
-			type = "button",
-			caption = {"mod-name.diplomacy"},
+			type = "sprite-button",
+			sprite = "virtual-signal/diplomacy",
 			name = "diplomacy_button",
-			style = mod_gui.button_style
+			style = mod_gui.button_style,
+			tooltip = {"mod-name.diplomacy"}
 		}
 		create_diplomacy_frame(player)
 	end
 end
-commands.add_command("change-stance", {"command-help.change_stance"}, change_stance)
 
 local function cancel_stance(cmd)
 	-- Validation of data
@@ -175,4 +173,12 @@ local function cancel_stance(cmd)
 		end
 	end
 end
-commands.add_command("cancel-stance", {"command-help.cancel_stance"}, cancel_stance)
+
+commands.add_commands = function()
+	commands.add_command("check-stance", {"command-help.check_stance"}, check_stance)
+	commands.add_command("player-force", {"command-help.player_force"}, player_force)
+	commands.add_command("change-stance", {"command-help.change_stance"}, change_stance)
+	commands.add_command("cancel-stance", {"command-help.cancel_stance"}, cancel_stance)
+end
+
+return commands

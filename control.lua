@@ -1,6 +1,6 @@
-event_listener = require("__event-listener__/branch-2/stable-version")
+event_listener = require("__event-listener__/branch-3/stable-version")
 mod_defines = require("mod-defines")
 diplomacy_events = require("self_events")
-local modules = require("modules")
+local libs = require("libs")
 
-event_listener.add_events(modules)
+event_listener.add_libraries(libs)

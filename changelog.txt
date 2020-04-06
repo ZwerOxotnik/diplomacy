@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.8.1
+Date: 2020-04-06
+  Changes:
+    - Bugfixes
+    - Refactored
+    - Fixed MP interactions with the chat mod
+  Notes:
+    - This update for Factorio 0.18
+---------------------------------------------------------------------------------------------------
+Version: 2.8.0
+Date: 2020-04-06
+  Changes:
+    - Bugfixes
+    - Refactored
+    - Fixed MP interactions with the chat mod
+  Notes:
+    - This update for Factorio 0.17
+---------------------------------------------------------------------------------------------------
 Version: 2.7.9
 Date: 2020-03-18
   Bugfixes:
