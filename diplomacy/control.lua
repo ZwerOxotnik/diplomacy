@@ -50,7 +50,7 @@ lib.create_button = function(player)
 end
 
 local function destroy_diplomacy_gui(player)
-	local diplomacy_frame = player.gui.center.diplomacy_frame
+	local diplomacy_frame = player.gui.screen.diplomacy_frame
 	if diplomacy_frame then
 		diplomacy_frame.destroy()
 	end

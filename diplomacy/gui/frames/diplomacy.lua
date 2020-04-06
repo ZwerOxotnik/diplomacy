@@ -110,7 +110,7 @@ local function create_diplomacy_table(gui, player_settings)
 end
 
 diplomacy_frame.fill = function(player)
-	local flow = player.gui.center.diplomacy_frame
+	local flow = player.gui.screen.diplomacy_frame
 	if not flow then return end
 	local gui = flow.diplomacy_inner_frame
 	if not gui then return end
@@ -235,7 +235,7 @@ diplomacy_frame.update = function(player)
 end
 
 diplomacy_frame.create = function(player)
-	local flow = player.gui.center
+	local flow = player.gui.screen
 	local frame = flow.diplomacy_frame
 	if frame then
 		frame.destroy()
@@ -244,6 +244,8 @@ diplomacy_frame.create = function(player)
 
 	frame = flow.add{type = "frame", name = "diplomacy_frame", caption = {"mod-name.diplomacy"}, direction = "vertical"}
 	frame.visible = true
+	frame.auto_center = true
+	flow.add{type = "empty-widget", drag_target = frame}
 
 	local player_settings = global.diplomacy.players[player.index]
 	local table_settings = frame.add{type = "table", name = 'settings', column_count = 4}

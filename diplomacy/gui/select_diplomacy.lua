@@ -82,8 +82,8 @@ local function confirm_diplomacy(event)
 	if some_change then
 		update_diplomacy_frame()
 	end
-	if player.gui.center.diplomacy_frame then
-		player.gui.center.diplomacy_frame.destroy()
+	if player.gui.screen.diplomacy_frame then
+		player.gui.screen.diplomacy_frame.destroy()
 	end
 end
 
