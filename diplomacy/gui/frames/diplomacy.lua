@@ -261,7 +261,7 @@ diplomacy_frame.create = function(player)
 	end
 	table_settings.add{type = "drop-down", name = "d_filter_of_diplomacy_stance", items = FILTER_DIPLOMACY_TYPE_ITEMS, selected_index = player_settings.filter_of_diplomacy_stance}
 
-	local inner_frame = frame.add{type = "frame", style = "image_frame", name = "diplomacy_inner_frame", direction = "vertical"}
+	local inner_frame = frame.add{type = "frame", style = "inside_shallow_frame", name = "diplomacy_inner_frame", direction = "vertical"}
 	inner_frame.style.left_padding = 8
 	inner_frame.style.top_padding = 8
 	inner_frame.style.right_padding = 8
