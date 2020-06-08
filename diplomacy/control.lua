@@ -118,7 +118,7 @@ local function forbidden_entity_mined(event)
 
 	local max_health = game.entity_prototypes[entity.name].max_health
 	if max_health >= settings.global["diplomacy_HP_forbidden_entity_on_mined"].value or is_forbidden_entity_diplomacy(entity) then
-		set_politice["neutral"](force, mining_force, cmd.player_index)
+		set_politice["neutral"](force, mining_force, event.player_index)
 		game.print({"team-changed-diplomacy", mining_force.name, force.name, {"neutral"}})
 		mining_force.print({"player-changed-diplomacy", player.name, force.name})
 		force.print({"player-changed-diplomacy", player.name, mining_force.name})
