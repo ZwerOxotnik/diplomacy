@@ -1,5 +1,5 @@
 --[[
-Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+Copyright 2018-2020 ZwerOxotnik <zweroxotnik@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,43 +19,14 @@ local cancel_request_diplomacy_force = require("diplomacy/util").cancel_request_
 local get_stance_diplomacy_type = require("diplomacy/util").get_stance_diplomacy_type
 local set_politice = require("diplomacy/util").set_politice
 
-local get_event
-if event_listener then
-	get_event = function(event)
-		return defines.events[event] or event
-	end
-else
-	get_event = function(event)
-		if type(event) == "number" then
-			return event
-		else
-			return defines.events[event]
-		end
-	end
-end
-
--- This function for compatibility with "Event listener" module and into other modules
-local function put_event(event, func, module)
-	event = get_event(event)
-	if event then
-		module.events[event] = func
-		event_listener.update_event(event)
-		return true
-	else
-		log("The event is undefined")
-		-- error("The event is undefined")
-	end
-	return false
-end
-
-local modules = {}
-modules.diplomacy = require("diplomacy/control")
-modules.restrict_building = require("modules/restrict_building")
+local libs = {}
+libs.diplomacy = require("diplomacy/control")
+libs.restrict_building = require("libs/restrict_building")
 
 -- TODO: refactor this module
-modules.for_secondary_chat = {}
-modules.for_secondary_chat.events = {}
-modules.for_secondary_chat.check_events = function()
+libs.for_secondary_chat = {}
+libs.for_secondary_chat.events = {}
+libs.for_secondary_chat.check_events = function()
 	global.diplomacy.registredPvPs = {}
 	local function_name = "get_event_name"
 	for interface_name, _ in pairs( remote.interfaces ) do
@@ -74,8 +45,10 @@ modules.for_secondary_chat.check_events = function()
 	then
 		global.diplomacy.registredChat = true
 	end
+
+	libs.for_secondary_chat.handle_events()
 end
-modules.for_secondary_chat.handle_events = function()
+libs.for_secondary_chat.handle_events = function()
 	---- https://mods.factorio.com/mod/diplomacy/discussion/5dd0603d34bde6000c15d8ae
     -- 	if global.diplomacy.registredPvPs then
     -- 		-- Handling events "on_round_start" and "on_round_end"
@@ -87,35 +60,35 @@ modules.for_secondary_chat.handle_events = function()
     -- 				if (type(ID_1) == "number") and (type(ID_2) == "number") then
     -- 					if (script.get_event_handler(ID_1) == nil) and (script.get_event_handler(ID_2) == nil) then
     -- 						local interface_function = "get_teams"
-    
+
     -- 						-- Attach "on_round_start" event for creating gui
-    -- 						put_event(ID_1, function()
+    -- 						libs.for_secondary_chat.events[ID_1] = function()
     -- 							local diplomacy = global.diplomacy
     -- 							if remote.interfaces[interface_name] then
     -- 								if remote.interfaces[interface_name][interface_function] then
     -- 									diplomacy.teams = remote.call(interface_name, interface_function)
     -- 									for _, player in pairs(game.players) do
-    -- 										modules.diplomacy.create_button(player)
+    -- 										libs.diplomacy.create_button(player)
     -- 										global.diplomacy.locked_teams = false
     -- 										return
     -- 									end
     -- 								end
     -- 							end
-    -- 						end, modules.for_secondary_chat)
-    
+    -- 						end
+
     -- 						-- Attach "on_round_end" event for destroying gui
-    -- 						put_event(ID_2, function()
+    -- 						libs.for_secondary_chat.events[ID_2] = function()
     -- 							local diplomacy = global.diplomacy
     -- 							if remote.interfaces[interface_name] then
     -- 								if remote.interfaces[interface_name][interface_function] then
     -- 									diplomacy.teams = {}
     -- 									for _, player in pairs(game.players) do
-    -- 										modules.diplomacy.destroy_gui(player)
+    -- 										libs.diplomacy.destroy_gui(player)
     -- 										global.diplomacy.locked_teams = true
     -- 									end
     -- 								end
     -- 							end
-    -- 						end, modules.for_secondary_chat)
+    -- 						end
     -- 					end
     -- 				end
     -- 			end
@@ -156,7 +129,7 @@ modules.for_secondary_chat.handle_events = function()
 			end
 
 			-- Attach "on_update_chat_and_drop_down" event for inserting gui with selecting diplomacy
-			local is_added = put_event(ID_1, function(event)
+			libs.for_secondary_chat.events[ID_1] = function(event)
 				local player = game.players[event.player_index]
 				local diplomacy = global.diplomacy
 				if diplomacy.locked_teams then return end
@@ -175,12 +148,12 @@ modules.for_secondary_chat.handle_events = function()
 
 				local stance_type = get_stance_diplomacy_type(player.force, selected_faction)
 				create_selecting_diplomacy_gui(interaction_gui, stance_type)
-			end, modules.for_secondary_chat)
+			end
 
-			if not is_added then
-				put_event("on_gui_click", function() end, modules.for_secondary_chat)
+			if ID_1 == nil then
+				libs.for_secondary_chat.events[defines.events.on_gui_click] = function() end
 			else
-				put_event("on_gui_click", function(event)
+				libs.for_secondary_chat.events[defines.events.on_gui_click] = function(event)
 					-- Validation of data
 					local gui = event.element
 					if not (gui and gui.valid and gui.name) then return end
@@ -253,16 +226,13 @@ modules.for_secondary_chat.handle_events = function()
 						end
 						return true
 					end
-				end, modules.for_secondary_chat)
+				end
 			end
 		end
 	end
 end
-modules.for_secondary_chat.on_load = modules.for_secondary_chat.handle_events
-modules.for_secondary_chat.on_init = modules.for_secondary_chat.check_events
-modules.for_secondary_chat.on_configuration_changed = function()
-	modules.for_secondary_chat.check_events()
-	modules.for_secondary_chat.handle_events()
-end
+libs.for_secondary_chat.on_load = libs.for_secondary_chat.handle_events
+libs.for_secondary_chat.on_init = libs.for_secondary_chat.check_events
+libs.for_secondary_chat.on_configuration_changed = libs.for_secondary_chat.check_events
 
-return modules
+return libs

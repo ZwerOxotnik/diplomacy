@@ -5,8 +5,7 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 
 ## Quick Links
 
-[Changelog](CHANGELOG.md)
-|---|
+* [Changelog](CHANGELOG.md)
 
 ## Contents
 
@@ -27,8 +26,8 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 
 ## Overview
 
-Adds modified version diplomacy, diplomatic requests, commands needful, auto-diplomacy, customizable protection from theft of electricity and customized settings balance.
-Compatible with any PvP scenario. UPS friendly.
+Adds advanced diplomacy system, diplomatic requests, needful commands, auto-diplomacy, customizable protection from theft of electricity and customized settings balance, etc etc.
+Compatible with any PvP scenario. High performance.
 
 I recommend using with mods: [secondary chat][secondary chat] as it is possible write to allies;
 [Tiny pole][Tiny pole] if the protection from theft of electricity disabled;

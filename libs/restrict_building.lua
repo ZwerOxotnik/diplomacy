@@ -1,5 +1,5 @@
 --[[
-Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+Copyright 2018-2020 ZwerOxotnik <zweroxotnik@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -65,8 +65,8 @@ local function on_runtime_mod_setting_changed(event)
             module.events[defines.events.on_built_entity] = function() end
             module.events[defines.events.on_robot_built_entity] = function() end
         end
-        event_listener.update_event("on_built_entity")
-        event_listener.update_event("on_robot_built_entity")
+        event_listener.update_event(lib, defines.events.on_built_entity)
+		event_listener.update_event(lib, defines.events.on_robot_built_entity)
     end
 end
 

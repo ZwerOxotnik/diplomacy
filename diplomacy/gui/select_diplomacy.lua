@@ -1,5 +1,5 @@
 --[[
-Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+Copyright 2018-2020 ZwerOxotnik <zweroxotnik@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -82,8 +82,8 @@ local function confirm_diplomacy(event)
 	if some_change then
 		update_diplomacy_frame()
 	end
-	if player.gui.center.diplomacy_frame then
-		player.gui.center.diplomacy_frame.destroy()
+	if player.gui.screen.diplomacy_frame then
+		player.gui.screen.diplomacy_frame.destroy()
 	end
 end
 

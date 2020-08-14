@@ -1,5 +1,5 @@
 --[[
-Copyright 2018-2019 ZwerOxotnik <zweroxotnik@gmail.com>
+Copyright 2018-2020 ZwerOxotnik <zweroxotnik@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,39 +22,14 @@ limitations under the License.
 local color_map = require("diplomacy/color_map")
 local set_politice = require("diplomacy/util").set_politice
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
-require("diplomacy/commands")
 local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
 local select_diplomacy = require("diplomacy/gui/select_diplomacy")
 local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local mod_gui = require("mod-gui")
 
-local module = {}
-module.version = "2.7.3"
-module.events = {}
-
-local function get_event(event)
-	if type(event) == "number" then
-		return event
-	else
-		return defines.events[event] --or event
-	end
-end
-
--- This function for compatibility with "Event listener" module and into other modules
-local function put_event(event, func)
-	event = get_event(event)
-	if event then
-		module.events[event] = func
-		if Event then
-			Event.register(event, func)
-		end
-		return true
-	else
-		log("The event is nil")
-		-- error("The event is nil")
-	end
-	return false
-end
+local lib = {}
+lib.events = {}
+lib.add_commands = require("diplomacy/commands").add_commands
 
 local function destroy_button(player)
 	local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
@@ -63,24 +38,25 @@ local function destroy_button(player)
 	end
 end
 
-module.create_button = function(player)
+lib.create_button = function(player)
 	destroy_button(player)
 	mod_gui.get_button_flow(player).add{
-		type = "button",
-		caption = {"mod-name.diplomacy"},
+		type = "sprite-button",
+		sprite = "virtual-signal/diplomacy",
 		name = "diplomacy_button",
-		style = mod_gui.button_style
+		style = mod_gui.button_style,
+		tooltip = {"mod-name.diplomacy"}
 	}
 end
 
 local function destroy_diplomacy_gui(player)
-	local diplomacy_frame = player.gui.center.diplomacy_frame
+	local diplomacy_frame = player.gui.screen.diplomacy_frame
 	if diplomacy_frame then
 		diplomacy_frame.destroy()
 	end
 end
 
-module.destroy_gui = function(player)
+lib.destroy_gui = function(player)
 	destroy_button(player)
 	destroy_diplomacy_gui(player)
 	destroy_diplomacy_selection_frame(player)
@@ -142,7 +118,7 @@ local function forbidden_entity_mined(event)
 
 	local max_health = game.entity_prototypes[entity.name].max_health
 	if max_health >= settings.global["diplomacy_HP_forbidden_entity_on_mined"].value or is_forbidden_entity_diplomacy(entity) then
-		set_politice["neutral"](force, mining_force, cmd.player_index)
+		set_politice["neutral"](force, mining_force, event.player_index)
 		game.print({"team-changed-diplomacy", mining_force.name, force.name, {"neutral"}})
 		mining_force.print({"player-changed-diplomacy", player.name, force.name})
 		force.print({"player-changed-diplomacy", player.name, mining_force.name})
@@ -286,7 +262,7 @@ local function on_player_created(event)
 	if not (player and player.valid) then return end
 
 	global.diplomacy.players[event.player_index] = {}
-	module.create_button(player)
+	lib.create_button(player)
 end
 
 local function on_gui_checked_state_changed(event)
@@ -439,39 +415,34 @@ end
 local function on_runtime_mod_setting_changed(event)
 	if event.setting_type ~= "runtime-global" then return end
 
-	local events = module.events
+	local events = lib.events
 	if event.setting == "diplomacy_protection_from_theft_of_electricity" then
 		if settings.global[event.setting].value then
-			events.on_built_entity = protect_from_theft_of_electricity
-			events.on_robot_built_entity = protect_from_theft_of_electricity
-			event_listener.update_event("on_built_entity")
-			event_listener.update_event("on_robot_built_entity")
+			events[defines.events.on_built_entity] = protect_from_theft_of_electricity
+			events[defines.events.on_robot_built_entity] = protect_from_theft_of_electricity
 		else
-			events.on_built_entity = function() end
-			events.on_robot_built_entity = function() end
-			event_listener.update_event("on_built_entity")
-			event_listener.update_event("on_robot_built_entity")
+			events[defines.events.on_built_entity] = function() end
+			events[defines.events.on_robot_built_entity] = function() end
 		end
+		event_listener.update_event(lib, defines.events.on_built_entity)
+		event_listener.update_event(lib, defines.events.on_robot_built_entity)
 	elseif event.setting == "diplomacy_on_entity_damaged_state" then
 		if settings.global[event.setting].value then
-			events.on_entity_damaged = on_entity_damaged
-			event_listener.update_event("on_entity_damaged")
+			events[defines.events.on_entity_damaged] = on_entity_damaged
 		else
-			events.on_entity_damaged = function() end
-			event_listener.update_event("on_entity_damaged")
+			events[defines.events.on_entity_damaged] = function() end
 		end
+		event_listener.update_event(lib, defines.events.on_entity_damaged)
 	elseif event.setting == "diplomacy_allow_mine_entity" then
 		if settings.global[event.setting].value then
-			events.on_selected_entity_changed = function() end
-			events.on_player_mined_entity = forbidden_entity_mined
-			event_listener.update_event("on_selected_entity_changed")
-			event_listener.update_event("on_player_mined_entity")
+			events[defines.events.on_selected_entity_changed] = function() end
+			events[defines.events.on_player_mined_entity] = forbidden_entity_mined
 		else
-			events.on_player_mined_entity = function() end
-			events.on_selected_entity_changed = forbidden_entity_mine
-			event_listener.update_event("on_selected_entity_changed")
-			event_listener.update_event("on_player_mined_entity")
+			events[defines.events.on_player_mined_entity] = function() end
+			events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
 		end
+		event_listener.update_event(lib, defines.events.on_player_mined_entity)
+		event_listener.update_event(lib, defines.events.on_selected_entity_changed)
 	elseif event.setting == "who_decides_diplomacy" then
 		global.diplomacy.who_decides_diplomacy = settings.global[event.setting].value
 	elseif event.setting == "diplomacy_visible_all_teams" then
@@ -512,23 +483,21 @@ local function update_global_data()
 		end
 	end
 end
-
-module.on_init = update_global_data
-
-module.on_load = function()
+lib.on_init = update_global_data
+lib.on_load = function()
 	if not game then
 		if global.diplomacy == nil then
-			module.on_init()
+			lib.on_init()
 		end
 	end
 end
 
-module.on_configuration_changed = function(data)
+lib.on_configuration_changed = function(data)
 	update_global_data()
 
 	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
 	for _, player in pairs(game.players) do
-		module.create_button(player) -- still there are some bugs
+		lib.create_button(player) -- still there are some bugs
 	end
 end
 
@@ -546,104 +515,105 @@ end
 
 local function on_player_removed(event)
 	update_diplomacy_frame()
-	diplomacy.players[event.player_index] = nil
+	global.diplomacy.players[event.player_index] = nil
 end
 
-remote.remove_interface("diplomacy")
-remote.add_interface("diplomacy",
-{
-	get_event_name = function(name)
-		return diplomacy_events[name]
-	end,
-	get_data = function()
-		return global.diplomacy
-	end,
-	add_team = function(team)
-		local list = global.diplomacy.teams
-		table.insert(list, team)
-	end,
-	set_teams = function(teams)
-		global.diplomacy.teams = teams
-	end,
-	remove_team = function(name)
-		local teams = global.diplomacy.teams
-		for k, team in pairs(teams) do
-			if team.name == name then
-				table.remove(teams, k)
-				return k
+lib.add_remote_interface = function()
+	remote.remove_interface("diplomacy")
+	remote.add_interface("diplomacy",
+	{
+		get_event_name = function(name)
+			return diplomacy_events[name]
+		end,
+		get_data = function()
+			return global.diplomacy
+		end,
+		add_team = function(team)
+			local list = global.diplomacy.teams
+			table.insert(list, team)
+		end,
+		set_teams = function(teams)
+			global.diplomacy.teams = teams
+		end,
+		remove_team = function(name)
+			local teams = global.diplomacy.teams
+			for k, team in pairs(teams) do
+				if team.name == name then
+					table.remove(teams, k)
+					return k
+				end
 			end
-		end
 
-		return 0 -- not found
-	end,
-	find_team = function(name)
-		local teams = global.diplomacy.teams
-		for k, team in pairs(teams) do
-			if team.name == name then
-				return k
+			return 0 -- not found
+		end,
+		find_team = function(name)
+			local teams = global.diplomacy.teams
+			for k, team in pairs(teams) do
+				if team.name == name then
+					return k
+				end
 			end
+
+			return 0 -- not found
+		end,
+		delete_teams = function()
+			global.diplomacy.teams = nil
+		end,
+		get_who_decides_diplomacy = function()
+			return global.diplomacy.who_decides_diplomacy
+		end,
+		set_who_decides_diplomacy = function(target)
+			global.diplomacy.who_decides_diplomacy = target
+		end,
+		get_locked_teams = function()
+			return global.diplomacy.locked_teams
+		end,
+		set_locked_teams = function(bool)
+			global.diplomacy.locked_teams = bool
+			update_diplomacy_frame()
 		end
-
-		return 0 -- not found
-	end,
-	delete_teams = function()
-		global.diplomacy.teams = nil
-	end,
-	get_who_decides_diplomacy = function()
-		return global.diplomacy.who_decides_diplomacy
-	end,
-	set_who_decides_diplomacy = function(target)
-		global.diplomacy.who_decides_diplomacy = target
-	end,
-	get_locked_teams = function()
-		return global.diplomacy.locked_teams
-	end,
-	set_locked_teams = function(bool)
-		global.diplomacy.locked_teams = bool
-		update_diplomacy_frame()
-	end
-})
-
+	})
+end
 
 -- For attaching events
-put_event("on_entity_damaged", on_entity_damaged)
-put_event("on_entity_died", on_entity_died)
-put_event("on_player_changed_force", on_player_changed_force)
-put_event("on_player_created", on_player_created)
-put_event("on_player_left_game", on_player_left_game)
-put_event("on_player_removed", on_player_removed)
-put_event("on_player_joined_game", on_player_joined_game)
-put_event("on_gui_click", on_gui_click)
-put_event("on_gui_checked_state_changed", on_gui_checked_state_changed)
-put_event("on_runtime_mod_setting_changed", on_runtime_mod_setting_changed)
-put_event("on_force_created", on_force_created)
--- put_event("on_force_friends_changed", update_diplomacy_frame) -- TODO: test it thoroughly
--- put_event("on_force_cease_fire_changed", update_diplomacy_frame) -- TODO: test it thoroughly
-put_event("on_gui_selection_state_changed", on_gui_selection_state_changed)
--- put_event("on_forces_merged", on_forces_merged)
+lib.events[defines.events.on_entity_damaged] = on_entity_damaged
+lib.events[defines.events.on_entity_died] = on_entity_died
+lib.events[defines.events.on_player_changed_force] = on_player_changed_force
+lib.events[defines.events.on_player_created] = on_player_created
+lib.events[defines.events.on_player_left_game] = on_player_left_game
+lib.events[defines.events.on_player_removed] = on_player_removed
+lib.events[defines.events.on_player_joined_game] = on_player_joined_game
+lib.events[defines.events.on_gui_click] = on_gui_click
+lib.events[defines.events.on_gui_checked_state_changed] = on_gui_checked_state_changed
+lib.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
+lib.events[defines.events.on_force_created] = on_force_created
+-- lib.events[defines.events.on_force_friends_changed] = update_diplomacy_frame -- TODO: test it thoroughly
+-- lib.events[defines.events.on_force_cease_fire_changed] = update_diplomacy_frame -- TODO: test it thoroughly
+lib.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
+-- lib.events[defines.events.on_forces_merged] = on_forces_merged
 
 if not settings.global["diplomacy_protection_from_theft_of_electricity"].value then
-	put_event("on_built_entity", function() end)
-	put_event("on_robot_built_entity", function() end)
+	lib.events[defines.events.on_built_entity] = function() end
+	lib.events[defines.events.on_robot_built_entity] = function() end
 else
-	put_event("on_built_entity", protect_from_theft_of_electricity)
-	put_event("on_robot_built_entity", protect_from_theft_of_electricity)
+	lib.events[defines.events.on_built_entity] = protect_from_theft_of_electricity
+	lib.events[defines.events.on_robot_built_entity] = protect_from_theft_of_electricity
 end
 
 if settings.global["diplomacy_on_entity_damaged_state"].value then
-	put_event("on_entity_damaged", on_entity_damaged)
+	lib.events[defines.events.on_entity_damaged] = on_entity_damaged
 else
-	put_event("on_entity_damaged", function() end)
+	lib.events[defines.events.on_entity_damaged] = function() end
 end
 if settings.global["diplomacy_allow_mine_entity"].value then
-	put_event("on_selected_entity_changed", function() end)
+	lib.events[defines.events.on_selected_entity_changed] = function() end
 else
-	put_event("on_selected_entity_changed", forbidden_entity_mine)
+	lib.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
 end
 if not settings.global["diplomacy_allow_mine_entity"].value then
-	put_event("on_player_mined_entity", function() end)
+	lib.events[defines.events.on_player_mined_entity] = function() end
 else
-	put_event("on_player_mined_entity", forbidden_entity_mined)
+	lib.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
 end
 
-return module
+return lib
