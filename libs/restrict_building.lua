@@ -65,8 +65,8 @@ local function on_runtime_mod_setting_changed(event)
             module.events[defines.events.on_built_entity] = function() end
             module.events[defines.events.on_robot_built_entity] = function() end
         end
-        event_listener.update_event(lib, defines.events.on_built_entity)
-		event_listener.update_event(lib, defines.events.on_robot_built_entity)
+        event_listener.update_event(module, defines.events.on_built_entity)
+		event_listener.update_event(module, defines.events.on_robot_built_entity)
     end
 end
 
