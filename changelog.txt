@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.8.7
+Date: 2020-09-01
+  Bugfixes:
+    - Fixed crash by changing "Prohibition Radius" during game (https://mods.factorio.com/mod/diplomacy/discussion/5f4e9648d83a7f64870aa342)
+  Notes:
+    - This update for Factorio 1.0
+---------------------------------------------------------------------------------------------------
 Version: 2.8.2
 Date: 2020-04-06
   Changes:
