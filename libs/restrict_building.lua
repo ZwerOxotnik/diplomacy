@@ -34,7 +34,7 @@ local function find_near_enemy(created_entity)
     return false
 end
 
--- TODO: return the entity to player
+-- TODO: check cheat mode of players and refactor
 local function restrict_building_on_built_entity(event)
     local created_entity = event.created_entity
     if not (created_entity and created_entity.valid) then return end
@@ -52,6 +52,12 @@ local function restrict_building_on_built_entity(event)
         color = {r = 1, g = 0, b = 0, a = 0.5}
     }
     created_entity.destroy()
+
+    if event.player_index and event.item then
+        local player = game.players[event.player_index]
+        if not (player and player.valid) then return end
+        player.insert{name = event.item.name}
+    end
 end
 
 local function on_runtime_mod_setting_changed(event)

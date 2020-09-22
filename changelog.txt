@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.8.8
+Date: 2020-09-22
+  Bugfixes:
+    - Fixed a problem with missed items during bulding near an enemy (https://mods.factorio.com/mod/diplomacy/discussion/5f68ef05dd72c55778b67fee)
+---------------------------------------------------------------------------------------------------
 Version: 2.8.7
 Date: 2020-09-01
   Bugfixes:

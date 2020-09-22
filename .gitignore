@@ -117,4 +117,4 @@ typings/
 # Serverless directories
 .serverless
 # Visual studio directories
-.vscode
+.vscode/launch.json
