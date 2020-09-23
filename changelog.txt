@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.8.9
+Date: 2020-09-23
+  Bugfixes:
+    - Fixed "last fix", no duplicate items through building ghost entities and works properly in another modes now (https://mods.factorio.com/mod/diplomacy/discussion/5f68ef05dd72c55778b67fee)
+---------------------------------------------------------------------------------------------------
 Version: 2.8.8
 Date: 2020-09-22
   Bugfixes:

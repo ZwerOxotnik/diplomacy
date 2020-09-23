@@ -34,8 +34,33 @@ local function find_near_enemy(created_entity)
     return false
 end
 
--- TODO: check cheat mode of players and refactor
-local function restrict_building_on_built_entity(event)
+local function on_built_entity(event)
+    local created_entity = event.created_entity
+    if not (created_entity and created_entity.valid) then return end
+    if created_entity.force.name == "neutral" then return end
+    local player = game.players[event.player_index]
+    if not (player and player.valid) then return end
+    if not (player.controller_type == defines.controllers.character or player.controller_type == defines.controllers.god) then return end
+
+    if not find_near_enemy(created_entity) then return end
+
+    if event.player_index and event.item and created_entity.type ~= "entity-ghost" then
+        player.insert{name = event.item.name}
+        rendering.draw_text{
+            text = {"diplomacy.messages.warning_restricted_building"},
+            surface = created_entity.surface,
+            target = created_entity.position,
+            players = {player},
+            visible = true,
+            alignment = "center",
+            time_to_live = 60 * 3,
+            color = {r = 1, g = 0, b = 0, a = 0.5}
+        }
+    end
+    created_entity.destroy()
+end
+
+local function on_robot_built_entity(event)
     local created_entity = event.created_entity
     if not (created_entity and created_entity.valid) then return end
     if created_entity.force.name == "neutral" then return end
@@ -52,12 +77,6 @@ local function restrict_building_on_built_entity(event)
         color = {r = 1, g = 0, b = 0, a = 0.5}
     }
     created_entity.destroy()
-
-    if event.player_index and event.item then
-        local player = game.players[event.player_index]
-        if not (player and player.valid) then return end
-        player.insert{name = event.item.name}
-    end
 end
 
 local function on_runtime_mod_setting_changed(event)
@@ -65,8 +84,8 @@ local function on_runtime_mod_setting_changed(event)
 
     if event.setting == "diplomacy_restrict_building_radius" then
         if settings.global[event.setting].value > 0 then
-            module.events[defines.events.on_built_entity] = restrict_building_on_built_entity
-            module.events[defines.events.on_robot_built_entity] = restrict_building_on_built_entity
+            module.events[defines.events.on_built_entity] = on_built_entity
+            module.events[defines.events.on_robot_built_entity] = on_robot_built_entity
         else
             module.events[defines.events.on_built_entity] = function() end
             module.events[defines.events.on_robot_built_entity] = function() end
@@ -77,8 +96,8 @@ local function on_runtime_mod_setting_changed(event)
 end
 
 if settings.global["diplomacy_restrict_building_radius"].value > 0 then
-    module.events[defines.events.on_built_entity] = restrict_building_on_built_entity
-    module.events[defines.events.on_robot_built_entity] = restrict_building_on_built_entity
+    module.events[defines.events.on_built_entity] = on_built_entity
+    module.events[defines.events.on_robot_built_entity] = on_robot_built_entity
 else
 	module.events[defines.events.on_built_entity] = function() end
 	module.events[defines.events.on_robot_built_entity] = function() end
