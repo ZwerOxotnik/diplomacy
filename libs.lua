@@ -21,7 +21,6 @@ local set_politice = require("diplomacy/util").set_politice
 
 local libs = {}
 libs.diplomacy = require("diplomacy/control")
-libs.restrict_building = require("libs/restrict_building")
 
 -- TODO: refactor this module
 libs.for_secondary_chat = {}

@@ -62,24 +62,6 @@ lib.destroy_gui = function(player)
 	destroy_diplomacy_selection_frame(player)
 end
 
-local function protect_from_theft_of_electricity(event)
-	-- Validation of data
-	local entity = event.created_entity
-	if not (entity and entity.valid) then return end
-
-	local force = entity.force
-	if entity.type == "electric-pole" then
-		local copper_neighbours = entity.neighbours["copper"]
-		for _, neighbour in pairs(copper_neighbours) do
-			if force ~= neighbour.force then
-				if not force.get_cease_fire(neighbour.force) then
-					entity.disconnect_neighbour(neighbour)
-				end
-			end
-		end
-	end
-end
-
 local function is_forbidden_entity_diplomacy(entity)
 	if entity.type:find("turret") then return true end
 	if entity.type:find("wagon") then return true end
@@ -416,17 +398,7 @@ local function on_runtime_mod_setting_changed(event)
 	if event.setting_type ~= "runtime-global" then return end
 
 	local events = lib.events
-	if event.setting == "diplomacy_protection_from_theft_of_electricity" then
-		if settings.global[event.setting].value then
-			events[defines.events.on_built_entity] = protect_from_theft_of_electricity
-			events[defines.events.on_robot_built_entity] = protect_from_theft_of_electricity
-		else
-			events[defines.events.on_built_entity] = function() end
-			events[defines.events.on_robot_built_entity] = function() end
-		end
-		event_listener.update_event(lib, defines.events.on_built_entity)
-		event_listener.update_event(lib, defines.events.on_robot_built_entity)
-	elseif event.setting == "diplomacy_on_entity_damaged_state" then
+	if event.setting == "diplomacy_on_entity_damaged_state" then
 		if settings.global[event.setting].value then
 			events[defines.events.on_entity_damaged] = on_entity_damaged
 		else
@@ -591,14 +563,6 @@ lib.events[defines.events.on_force_created] = on_force_created
 -- lib.events[defines.events.on_force_cease_fire_changed] = update_diplomacy_frame -- TODO: test it thoroughly
 lib.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
 -- lib.events[defines.events.on_forces_merged] = on_forces_merged
-
-if not settings.global["diplomacy_protection_from_theft_of_electricity"].value then
-	lib.events[defines.events.on_built_entity] = function() end
-	lib.events[defines.events.on_robot_built_entity] = function() end
-else
-	lib.events[defines.events.on_built_entity] = protect_from_theft_of_electricity
-	lib.events[defines.events.on_robot_built_entity] = protect_from_theft_of_electricity
-end
 
 if settings.global["diplomacy_on_entity_damaged_state"].value then
 	lib.events[defines.events.on_entity_damaged] = on_entity_damaged

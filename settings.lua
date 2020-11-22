@@ -1,12 +1,6 @@
 data:extend({
 	{
 		type = "bool-setting",
-		name = "diplomacy_protection_from_theft_of_electricity",
-		setting_type = "runtime-global",
-		default_value = true
-	},
-	{
-		type = "bool-setting",
 		name = "diplomacy_visible_all_teams",
 		setting_type = "runtime-global",
 		default_value = false
@@ -110,14 +104,6 @@ data:extend({
 		maximum_value = 100000000000,
 	},
 	{
-		type = "int-setting",
-		name = "diplomacy_restrict_building_radius",
-		setting_type = "runtime-global",
-		default_value = 3,
-		minimum_value = 0,
-		maximum_value = 25,
-	},
-	{
 		type = "string-setting",
 		name = "who_decides_diplomacy",
 		setting_type = "runtime-global",
@@ -125,3 +111,6 @@ data:extend({
 		allowed_values = {"all_players", "team_leader"}
 	},
 })
+
+data.raw["string-setting"]["zk-lib_PrivateElectricity"].default_value = "mutable"
+data.raw["string-setting"]["zk-lib_restrict_building"].default_value = "mutable"
