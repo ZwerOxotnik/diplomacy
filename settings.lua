@@ -112,5 +112,5 @@ data:extend({
 	},
 })
 
-data.raw["string-setting"]["zk-lib_PrivateElectricity"].default_value = "mutable"
-data.raw["string-setting"]["zk-lib_restrict_building"].default_value = "mutable"
+data.raw["bool-setting"]["zk-lib_PrivateElectricity"].default_value = true
+data.raw["bool-setting"]["zk-lib_restrict_building"].default_value = true
