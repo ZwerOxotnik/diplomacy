@@ -9,7 +9,7 @@
     "homepage": "https://reddit.com/r/ZwerOxotnik",
     "dependencies": [
         "base >= 0.18.28",
-        "zk-lib",
+        "zk-lib >= 0.4.2",
         "? secondary-chat >= 1.23.4"
     ]
 }
