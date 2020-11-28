@@ -111,6 +111,3 @@ data:extend({
 		allowed_values = {"all_players", "team_leader"}
 	},
 })
-
-data.raw["bool-setting"]["zk-lib_PrivateElectricity"].default_value = true
-data.raw["bool-setting"]["zk-lib_restrict_building"].default_value = true
