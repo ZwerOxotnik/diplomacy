@@ -289,7 +289,7 @@ local function on_gui_click(event)
 	if not parent then return end
 
 	local parent_name = parent.name
-	if parent_name == 'mod_gui_button_flow' or parent_name == 'diplomacy_frame' then
+	if parent_name == 'mod_gui_inner_frame' or parent_name == 'diplomacy_frame' then
 		select_diplomacy.on_gui_click(event)
 		return true
 	elseif parent_name == 'diplomacy_selection_frame' or parent_name == "holding_table_buttons" then
