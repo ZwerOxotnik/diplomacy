@@ -25,7 +25,7 @@ local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomac
 local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
 local select_diplomacy = require("diplomacy/gui/select_diplomacy")
 local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
-local mod_gui = require("mod-gui")
+mod_gui = require("mod-gui")
 
 local lib = {}
 lib.events = {}
