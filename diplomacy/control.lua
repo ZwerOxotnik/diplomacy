@@ -406,11 +406,18 @@ local function on_runtime_mod_setting_changed(event)
 		end
 		event_listener.update_event(lib, defines.events.on_entity_damaged)
 	elseif event.setting == "diplomacy_allow_mine_entity" then
+		if settings.global["diplomacy_HP_forbidden_entity_on_mined"].value == 0 then
+			events[defines.events.on_player_mined_entity] = function() end
+		else
+			if settings.global[event.setting].value then
+				events[defines.events.on_player_mined_entity] = forbidden_entity_mined
+			else
+				events[defines.events.on_player_mined_entity] = function() end
+			end
+		end
 		if settings.global[event.setting].value then
 			events[defines.events.on_selected_entity_changed] = function() end
-			events[defines.events.on_player_mined_entity] = forbidden_entity_mined
 		else
-			events[defines.events.on_player_mined_entity] = function() end
 			events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
 		end
 		event_listener.update_event(lib, defines.events.on_player_mined_entity)
@@ -569,15 +576,21 @@ if settings.global["diplomacy_on_entity_damaged_state"].value then
 else
 	lib.events[defines.events.on_entity_damaged] = function() end
 end
+
+if settings.global["diplomacy_HP_forbidden_entity_on_mined"].value == 0 then
+	lib.events[defines.events.on_player_mined_entity] = function() end
+else
+	if not settings.global["diplomacy_allow_mine_entity"].value then
+		lib.events[defines.events.on_player_mined_entity] = function() end
+	else
+		lib.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
+	end
+end
+
 if settings.global["diplomacy_allow_mine_entity"].value then
 	lib.events[defines.events.on_selected_entity_changed] = function() end
 else
 	lib.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
-end
-if not settings.global["diplomacy_allow_mine_entity"].value then
-	lib.events[defines.events.on_player_mined_entity] = function() end
-else
-	lib.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
 end
 
 return lib

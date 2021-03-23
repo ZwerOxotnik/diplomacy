@@ -92,7 +92,7 @@ data:extend({
 		name = "diplomacy_HP_forbidden_entity_on_mined",
 		setting_type = "runtime-global",
 		default_value = 300,
-		minimum_value = 1,
+		minimum_value = 0,
 		maximum_value = 100000000000,
 	},
 	{
