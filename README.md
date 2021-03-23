@@ -54,7 +54,7 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 | Protection from theft of electricity - does not allow enemies to connect to someone else's electricity | boolean | true |
 | Show all factions - Hides in diplomacy factions without playersHides in diplomacy factions without players | boolean | false |
 | Required HP for changing relationships for a killed object - changes state relationships when killed an entity HP >= this parameter value | 1-100000000000 | 300 |
-| Required HP for changing relationships for a mined object - changes state relationships when mined an object HP >= this parameter value | 1-100000000000 | 300 |
+| Required HP for changing relationships for a mined object - changes state relationships when mined an object HP >= this parameter value | 0-100000000000 | 300 |
 | Required HP for changing relationships for damage to an object - changes state relationships when damage to the object HP >= this parameter value (happens with low probability) | 1-100000000000 | 300 |
 | Allow players mine objects from allied factions | boolean | false |
 | Auto-diplomacy when dealing damage - checks damage and changes relationships between factions | boolean | true |
