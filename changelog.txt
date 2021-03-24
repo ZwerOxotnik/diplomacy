@@ -1,8 +1,15 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.8
+Date: 2021-03-24
+  Bugfixes:
+    - Fixed desync from v2.9.8
+  Notes:
+    - This update for Factorio 1.1
+---------------------------------------------------------------------------------------------------
+Version: 2.9.8
 Date: 2021-03-23
   Features:
-    - Players can disable auto-diplomacy for mined objects now (choose 0 in settings "Required HP for changing relationships for a mined object" for it) 
+    - Players can disable auto-diplomacy for mined objects now (choose 0 in "Required HP for changing relationships for a mined object" setting for it) 
   Changes:
     - Optimized images
   Notes:
