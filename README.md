@@ -58,6 +58,7 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 | Required HP for changing relationships for damage to an object - changes state relationships when damage to the object HP >= this parameter value (happens with low probability) | 1-100000000000 | 300 |
 | Allow players mine objects from allied factions | boolean | false |
 | Auto-diplomacy when dealing damage - checks damage and changes relationships between factions | boolean | true |
+| Disable auto-diplomacy trigger on destroying - Doesn't change diplomacy on destroying entities | boolean | false |
 | Diplomatic privilege - which players are able to change teams diplomatic stance towards other teams. All players: Every player on the team. Team leader: The connected player who has been on the team longest. | ["all players", "team leader"] | all players |
 | Building Prohibition Radius - you can't build near enemies within this radius | 0-25 | 3 |
 

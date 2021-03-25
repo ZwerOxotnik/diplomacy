@@ -405,6 +405,13 @@ local function on_runtime_mod_setting_changed(event)
 			events[defines.events.on_entity_damaged] = function() end
 		end
 		event_listener.update_event(lib, defines.events.on_entity_damaged)
+	elseif event.setting == "disable_diplomacy_on_entity_died" then
+		if settings.global[event.setting].value then
+			events[defines.events.on_entity_died] = function() end
+		else
+			events[defines.events.on_entity_died] = on_entity_died
+		end
+		event_listener.update_event(lib, defines.events.on_entity_died)
 	elseif event.setting == "diplomacy_allow_mine_entity" or
 		event.setting == "diplomacy_HP_forbidden_entity_on_mined" then
 		if settings.global["diplomacy_HP_forbidden_entity_on_mined"].value == 0 then
@@ -556,7 +563,6 @@ lib.add_remote_interface = function()
 end
 
 -- For attaching events
-lib.events[defines.events.on_entity_damaged] = on_entity_damaged
 lib.events[defines.events.on_entity_died] = on_entity_died
 lib.events[defines.events.on_player_changed_force] = on_player_changed_force
 lib.events[defines.events.on_player_created] = on_player_created
@@ -571,6 +577,12 @@ lib.events[defines.events.on_force_created] = on_force_created
 -- lib.events[defines.events.on_force_cease_fire_changed] = update_diplomacy_frame -- TODO: test it thoroughly
 lib.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
 -- lib.events[defines.events.on_forces_merged] = on_forces_merged
+
+if settings.global["disable_diplomacy_on_entity_died"].value then
+	lib.events[defines.events.on_player_changed_force] = function() end
+else
+	lib.events[defines.events.on_player_changed_force] = on_entity_died
+end
 
 if settings.global["diplomacy_on_entity_damaged_state"].value then
 	lib.events[defines.events.on_entity_damaged] = on_entity_damaged

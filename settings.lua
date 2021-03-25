@@ -25,6 +25,12 @@ data:extend({
 	},
 	{
 		type = "bool-setting",
+		name = "disable_diplomacy_on_entity_died",
+		setting_type = "runtime-global",
+		default_value = false
+	},
+	{
+		type = "bool-setting",
 		name = "diplomacy_hp_rocket_silo_switcher",
 		setting_type = "startup",
 		default_value = true
