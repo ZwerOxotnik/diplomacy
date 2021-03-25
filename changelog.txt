@@ -3,6 +3,8 @@ Version: 2.9.10
 Date: 2021-03-25
   Features:
     - Added setting for disabling auto-diplomacy for destroyed entities
+  Bugfuxes:
+    - Auto-diplomacy doesn't affect teams anymore when player mines enitities in editor
   Notes:
     - This update for Factorio 1.1
 ---------------------------------------------------------------------------------------------------

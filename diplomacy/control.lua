@@ -79,6 +79,7 @@ local function forbidden_entity_mine(event)
 	if player.selected == nil then return end
 	local entity = player.selected
 	if not (entity and entity.valid) then return end
+	if player.controller_type == defines.controllers.editor then return end
 	local force = player.force
 	local mining_force = entity.force
 	if not force.get_friend(mining_force) or force == mining_force then return end
@@ -93,6 +94,7 @@ local function forbidden_entity_mined(event)
 	-- Validation of data
 	local entity = event.entity
 	if not (entity and entity.valid) then return end
+	if player.controller_type == defines.controllers.editor then return end
 	local force = entity.force
 	local player = game.players[event.player_index]
 	local mining_force = player.force
