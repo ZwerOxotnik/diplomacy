@@ -5,6 +5,7 @@
 # Git #
 #######
 *.orig
+itory
 
 # Packages #
 ############
@@ -116,5 +117,5 @@ typings/
 .vuepress/dist
 # Serverless directories
 .serverless
-# Visual studio directories
+# VS Code stuff
 .vscode/launch.json
