@@ -94,9 +94,9 @@ local function forbidden_entity_mined(event)
 	-- Validation of data
 	local entity = event.entity
 	if not (entity and entity.valid) then return end
-	if player.controller_type == defines.controllers.editor then return end
 	local force = entity.force
 	local player = game.players[event.player_index]
+	if player.controller_type == defines.controllers.editor then return end
 	local mining_force = player.force
 	if force == mining_force or not force.get_friend(mining_force) then return end
 
@@ -312,13 +312,13 @@ local function on_player_changed_force(event)
 	update_diplomacy_frame()
 end
 
-local function on_forces_merging(event)
-	for _, player in pairs(event.source.players) do
-		destroy_diplomacy_selection_frame(player)
-	end
+-- local function on_forces_merging(event)
+-- 	for _, player in pairs(event.source.players) do
+-- 		destroy_diplomacy_selection_frame(player)
+-- 	end
 
-	update_diplomacy_frame()
-end
+-- 	update_diplomacy_frame()
+-- end
 
 local function check_stance_on_entity_damaged(event)
 	-- Validation of data
