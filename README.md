@@ -9,20 +9,23 @@ Read this in another language | [English](/README.md) | [Русский](/docs/r
 
 ## Contents
 
-* [Overview](#overview)
-    * [Auto-diplomacy](#autodiplomacy)
-* [Mod settings](#mod-settings)
-    * [For maps](#for-maps)
-    * [Startup](#startup)
-* [Future plans](#future-plans)
-* [Issues](#issue)
-* [Features](#feature)
-* [Installing](#installing)
-* [Dependencies](#dependencies)
-    * [Required](#required)
-    * [Optional](#optional)
-* [Special thanks](#special-thanks)
-* [License](#license)
+- [Diplomacy](#diplomacy)
+  - [Quick Links](#quick-links)
+  - [Contents](#contents)
+  - [Overview](#overview)
+  - [<a name="autodiplomacy"></a> Auto-diplomacy](#-auto-diplomacy)
+  - [<a name="mod settings"></a> Mod settings](#-mod-settings)
+    - [<a name="for-maps"></a> For maps](#-for-maps)
+    - [<a name="startup"></a> Startup](#-startup)
+  - [<a name="future-plans"></a> Future plans](#-future-plans)
+  - [<a name="issue"></a> Found an Issue?](#-found-an-issue)
+  - [<a name="feature"></a> Want a Feature?](#-want-a-feature)
+  - [Installing](#installing)
+  - [Dependencies](#dependencies)
+    - [Required](#required)
+    - [Optional](#optional)
+  - [Special thanks](#special-thanks)
+  - [License](#license)
 
 ## Overview
 
@@ -85,11 +88,11 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 
 ## <a name="issue"></a> Found an Issue?
 
-Please report any issues or a mistake in the documentation, you can help us by [submitting an issue][issues] to our GitLab Repository or on [mods.factorio.com][mod portal] or on [forums.factorio.com][homepage].
+Please report any issues or a mistake in the documentation, you can help us by [submitting an issue][issues] to our GitHub Repository or on [mods.factorio.com][mod portal] or on [forums.factorio.com][homepage].
 
 ## <a name="feature"></a> Want a Feature?
 
-You can *request* a new feature by [submitting an issue][issues] to our GitLab Repository or on [mods.factorio.com][mod portal] or on [forums.factorio.com][homepage].
+You can *request* a new feature by [submitting an issue][issues] to our GitHub Repository or on [mods.factorio.com][mod portal] or on [forums.factorio.com][homepage].
 
 ## Installing
 
@@ -99,7 +102,7 @@ If you have downloaded a zip archive:
 
 For more information, see [Installing Mods on the Factorio wiki](https://wiki.factorio.com/index.php?title=Installing_Mods).
 
-If you have downloaded the source archive (GitLab):
+If you have downloaded the source archive (GitHub):
 
 * copy the mod directory into your factorio mods directory
 * rename the mod directory to diplomacy_*versionnumber*, where *versionnumber* is the version of the mod that you've downloaded (e.g., 2.9.0)
@@ -127,7 +130,7 @@ Please read files [/Terms-of-Service-and-information.txt](/Terms-of-Service-and-
 [Pack scenarios]: https://mods.factorio.com/mod/pack-scenarios
 [Soft evolution]: https://mods.factorio.com/mod/soft-evolution
 [Dirty talk]: https://mods.factorio.com/mod/dirty-talk
-[issues]: https://gitlab.com/ZwerOxotnik/diplomacy/issues
+[issues]: https://github.com/ZwerOxotnik/diplomacy/issues
 [mod portal]: https://mods.factorio.com/mod/diplomacy/discussion
 [homepage]: https://forums.factorio.com/viewtopic.php?f=190&t=64630
 [Factorio]: https://factorio.com/
