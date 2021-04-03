@@ -25,11 +25,11 @@ local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomac
 local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
 local select_diplomacy = require("diplomacy/gui/select_diplomacy")
 local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
-mod_gui = require("mod-gui")
+local mod_gui = require("mod-gui")
 
-local lib = {}
-lib.events = {}
-lib.add_commands = require("diplomacy/commands").add_commands
+local mod = {}
+mod.events = {}
+mod.add_commands = require("diplomacy/commands").add_commands
 
 local function destroy_button(player)
 	local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
@@ -38,7 +38,7 @@ local function destroy_button(player)
 	end
 end
 
-lib.create_button = function(player)
+mod.create_button = function(player)
 	destroy_button(player)
 	mod_gui.get_button_flow(player).add{
 		type = "sprite-button",
@@ -56,7 +56,7 @@ local function destroy_diplomacy_gui(player)
 	end
 end
 
-lib.destroy_gui = function(player)
+mod.destroy_gui = function(player)
 	destroy_button(player)
 	destroy_diplomacy_gui(player)
 	destroy_diplomacy_selection_frame(player)
@@ -246,7 +246,7 @@ local function on_player_created(event)
 	if not (player and player.valid) then return end
 
 	global.diplomacy.players[event.player_index] = {}
-	lib.create_button(player)
+	mod.create_button(player)
 end
 
 local function on_gui_checked_state_changed(event)
@@ -399,21 +399,21 @@ end
 local function on_runtime_mod_setting_changed(event)
 	if event.setting_type ~= "runtime-global" then return end
 
-	local events = lib.events
+	local events = mod.events
 	if event.setting == "diplomacy_on_entity_damaged_state" then
 		if settings.global[event.setting].value then
 			events[defines.events.on_entity_damaged] = on_entity_damaged
 		else
 			events[defines.events.on_entity_damaged] = function() end
 		end
-		event_listener.update_event(lib, defines.events.on_entity_damaged)
+		event_listener.update_event(mod, defines.events.on_entity_damaged)
 	elseif event.setting == "disable_diplomacy_on_entity_died" then
 		if settings.global[event.setting].value then
 			events[defines.events.on_entity_died] = function() end
 		else
 			events[defines.events.on_entity_died] = on_entity_died
 		end
-		event_listener.update_event(lib, defines.events.on_entity_died)
+		event_listener.update_event(mod, defines.events.on_entity_died)
 	elseif event.setting == "diplomacy_allow_mine_entity" or
 		event.setting == "diplomacy_HP_forbidden_entity_on_mined" then
 		if settings.global["diplomacy_HP_forbidden_entity_on_mined"].value == 0 then
@@ -430,8 +430,8 @@ local function on_runtime_mod_setting_changed(event)
 		else
 			events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
 		end
-		event_listener.update_event(lib, defines.events.on_player_mined_entity)
-		event_listener.update_event(lib, defines.events.on_selected_entity_changed)
+		event_listener.update_event(mod, defines.events.on_player_mined_entity)
+		event_listener.update_event(mod, defines.events.on_selected_entity_changed)
 	elseif event.setting == "who_decides_diplomacy" then
 		global.diplomacy.who_decides_diplomacy = settings.global[event.setting].value
 	elseif event.setting == "diplomacy_visible_all_teams" then
@@ -472,21 +472,21 @@ local function update_global_data()
 		end
 	end
 end
-lib.on_init = update_global_data
-lib.on_load = function()
+mod.on_init = update_global_data
+mod.on_load = function()
 	if not game then
 		if global.diplomacy == nil then
-			lib.on_init()
+			mod.on_init()
 		end
 	end
 end
 
-lib.on_configuration_changed = function(data)
+mod.on_configuration_changed = function(data)
 	update_global_data()
 
 	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
 	for _, player in pairs(game.players) do
-		lib.create_button(player) -- still there are some bugs
+		mod.create_button(player) -- still there are some bugs
 	end
 end
 
@@ -507,7 +507,7 @@ local function on_player_removed(event)
 	global.diplomacy.players[event.player_index] = nil
 end
 
-lib.add_remote_interface = function()
+mod.add_remote_interface = function()
 	remote.remove_interface("diplomacy")
 	remote.add_interface("diplomacy",
 	{
@@ -565,46 +565,46 @@ lib.add_remote_interface = function()
 end
 
 -- For attaching events
-lib.events[defines.events.on_entity_died] = on_entity_died
-lib.events[defines.events.on_player_changed_force] = on_player_changed_force
-lib.events[defines.events.on_player_created] = on_player_created
-lib.events[defines.events.on_player_left_game] = on_player_left_game
-lib.events[defines.events.on_player_removed] = on_player_removed
-lib.events[defines.events.on_player_joined_game] = on_player_joined_game
-lib.events[defines.events.on_gui_click] = on_gui_click
-lib.events[defines.events.on_gui_checked_state_changed] = on_gui_checked_state_changed
-lib.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
-lib.events[defines.events.on_force_created] = on_force_created
--- lib.events[defines.events.on_force_friends_changed] = update_diplomacy_frame -- TODO: test it thoroughly
--- lib.events[defines.events.on_force_cease_fire_changed] = update_diplomacy_frame -- TODO: test it thoroughly
-lib.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
--- lib.events[defines.events.on_forces_merged] = on_forces_merged
+mod.events[defines.events.on_entity_died] = on_entity_died
+mod.events[defines.events.on_player_changed_force] = on_player_changed_force
+mod.events[defines.events.on_player_created] = on_player_created
+mod.events[defines.events.on_player_left_game] = on_player_left_game
+mod.events[defines.events.on_player_removed] = on_player_removed
+mod.events[defines.events.on_player_joined_game] = on_player_joined_game
+mod.events[defines.events.on_gui_click] = on_gui_click
+mod.events[defines.events.on_gui_checked_state_changed] = on_gui_checked_state_changed
+mod.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
+mod.events[defines.events.on_force_created] = on_force_created
+-- mod.events[defines.events.on_force_friends_changed] = update_diplomacy_frame -- TODO: test it thoroughly
+-- mod.events[defines.events.on_force_cease_fire_changed] = update_diplomacy_frame -- TODO: test it thoroughly
+mod.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
+-- mod.events[defines.events.on_forces_merged] = on_forces_merged
 
 if settings.global["disable_diplomacy_on_entity_died"].value then
-	lib.events[defines.events.on_player_changed_force] = function() end
+	mod.events[defines.events.on_player_changed_force] = function() end
 else
-	lib.events[defines.events.on_player_changed_force] = on_entity_died
+	mod.events[defines.events.on_player_changed_force] = on_entity_died
 end
 
 if settings.global["diplomacy_on_entity_damaged_state"].value then
-	lib.events[defines.events.on_entity_damaged] = on_entity_damaged
+	mod.events[defines.events.on_entity_damaged] = on_entity_damaged
 else
-	lib.events[defines.events.on_entity_damaged] = function() end
+	mod.events[defines.events.on_entity_damaged] = function() end
 end
 
 if settings.global["diplomacy_HP_forbidden_entity_on_mined"].value == 0 then
-	lib.events[defines.events.on_player_mined_entity] = function() end
+	mod.events[defines.events.on_player_mined_entity] = function() end
 else
 	if settings.global["diplomacy_allow_mine_entity"].value then
-		lib.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
+		mod.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
 	else
-		lib.events[defines.events.on_player_mined_entity] = function() end
+		mod.events[defines.events.on_player_mined_entity] = function() end
 	end
 end
 if settings.global["diplomacy_allow_mine_entity"].value then
-	lib.events[defines.events.on_selected_entity_changed] = function() end
+	mod.events[defines.events.on_selected_entity_changed] = function() end
 else
-	lib.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
+	mod.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
 end
 
-return lib
+return mod

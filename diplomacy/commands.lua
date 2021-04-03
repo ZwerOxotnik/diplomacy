@@ -20,6 +20,7 @@ local get_stance_diplomacy = require("diplomacy/util").get_stance_diplomacy
 local create_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").create
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
 local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").create
+local mod_gui = require("mod-gui")
 
 local function print_to_sender(message, player)
 	if player then
