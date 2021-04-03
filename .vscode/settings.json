@@ -9,10 +9,18 @@
     ],
     "lua.targetVersion": "5.2",
     "Lua.diagnostics.globals": [
-        "global"
-    ],
-    "Lua.diagnostics.disable": [
-        "undefined-global"
+        "global",
+        "defines",
+        "game",
+        "script",
+        "remote",
+        "data",
+        "bit32",
+        "settings",
+        "mods",
+        "rendering",
+        "commands",
+        "log"
     ],
     "Lua.runtime.version": "Lua 5.2"
 }
