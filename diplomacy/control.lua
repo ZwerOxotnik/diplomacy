@@ -328,7 +328,6 @@ local function check_stance_on_entity_damaged(event)
 	if not (force and force.valid) then return end
 	local killing_force = event.force
 	if not (killing_force and killing_force.valid) then return end
-	if event.final_damage_amount < 1 then return end
 	if not force.get_cease_fire(killing_force) or killing_force == force then return end
 
 	-- Find in list the teams
@@ -390,8 +389,9 @@ local function check_stance_on_entity_damaged(event)
 	end
 end
 
+local random = math.random
 local function on_entity_damaged(event)
-	if math.random(100) <= 3 then
+	if random(100) <= 3 then
 		check_stance_on_entity_damaged(event)
 	end
 end
@@ -473,13 +473,6 @@ local function update_global_data()
 	end
 end
 mod.on_init = update_global_data
-mod.on_load = function()
-	if not game then
-		if global.diplomacy == nil then
-			mod.on_init()
-		end
-	end
-end
 
 mod.on_configuration_changed = function(data)
 	update_global_data()
@@ -561,6 +554,13 @@ mod.add_remote_interface = function()
 			global.diplomacy.locked_teams = bool
 			update_diplomacy_frame()
 		end
+	})
+end
+
+mod.actions_after_init = function()
+	script.set_event_filter(defines.events.on_entity_damaged, {
+		{filter = "final-damage-amount", comparison = ">", value = 1, mode = "and"},
+		-- {filter = "final-health", comparison = "<", value = 120, mode = "and"}
 	})
 end
 
