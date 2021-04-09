@@ -74,7 +74,7 @@ local function change_stance(cmd)
 	local diplomacy = global.diplomacy
 	if diplomacy.locked_teams then player.print({"teams-is-locked"}) return end
 	if diplomacy.who_decides_diplomacy == "team_leader" then
-		local team_leader = player.force.connected_players[1]
+		local team_leader = player.force.players[1]
 		if player.name ~= team_leader.name then
 			player.print({"not-team-leader", team_leader.name})
 			return
@@ -152,7 +152,7 @@ local function cancel_stance(cmd)
 		player.print({"teams-is-locked"})
 		return
 	elseif diplomacy.who_decides_diplomacy == "team_leader" then
-		local team_leader = player.force.connected_players[1]
+		local team_leader = player.force.players[1]
 		if player.name ~= team_leader.name then
 			player.print({"not-team-leader", team_leader.name})
 			return

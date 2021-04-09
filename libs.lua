@@ -133,7 +133,7 @@ libs.for_secondary_chat.handle_events = function()
 				local diplomacy = global.diplomacy
 				if diplomacy.locked_teams then return end
 				if diplomacy.who_decides_diplomacy == "team_leader" then
-					local team_leader = player.force.connected_players[1]
+					local team_leader = player.force.players[1]
 					if player ~= team_leader then
 						return
 					end

@@ -477,6 +477,8 @@ mod.on_init = update_global_data
 mod.on_configuration_changed = function(data)
 	update_global_data()
 
+	game.print("Diplomacy: hey, did you know that this mod compatible with \"teams\" addon?\nYou can turn it on in zk-lib and it was improved and added even more commands. And glhf! (Let me know if you like it, because I might add even more)")
+
 	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
 	for _, player in pairs(game.players) do
 		mod.create_button(player) -- still there are some bugs

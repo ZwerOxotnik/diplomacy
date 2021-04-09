@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.13
+Date: 2021-04-09
+  Bugfixes:
+    - Fixed exploit with teamleader
+  Changes:
+    - Added some news during old game
+  Notes:
+    - This update for Factorio 1.1
+---------------------------------------------------------------------------------------------------
 Version: 2.9.12
 Date: 2021-04-05
   Changes:
