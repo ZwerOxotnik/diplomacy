@@ -129,7 +129,7 @@ libs.for_secondary_chat.handle_events = function()
 
 			-- Attach "on_update_chat_and_drop_down" event for inserting gui with selecting diplomacy
 			libs.for_secondary_chat.events[ID_1] = function(event)
-				local player = game.players[event.player_index]
+				local player = game.get_player(event.player_index)
 				local diplomacy = global.diplomacy
 				if diplomacy.locked_teams then return end
 				if diplomacy.who_decides_diplomacy == "team_leader" then
@@ -156,7 +156,7 @@ libs.for_secondary_chat.handle_events = function()
 					-- Validation of data
 					local gui = event.element
 					if not (gui and gui.valid and gui.name) then return end
-					local player = game.players[event.player_index]
+					local player = game.get_player(event.player_index)
 					if not (player and player.valid) then return end
 					local parent = gui.parent
 					if not parent or parent.name ~= "diplomacy" then return end

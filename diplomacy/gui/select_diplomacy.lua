@@ -23,13 +23,13 @@ local create_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").create
 local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").create
 
 local function diplomacy_button_press(event)
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	create_diplomacy_frame(player)
 end
 
 local function confirm_diplomacy(event)
 	local gui = event.element
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	local diplomacy_table = gui.parent.diplomacy_inner_frame.diplomacy_scrollpane.diplomacy_table
 	local some_change = false
 	local player_force = player.force
@@ -132,7 +132,7 @@ end
 
 local button_press_functions = {
 	["diplomacy_button"] = diplomacy_button_press,
-	["diplomacy_cancel"] = function(event) game.players[event.player_index].diplomacy_frame.destroy() end,
+	["diplomacy_cancel"] = function(event) game.get_player(event.player_index).diplomacy_frame.destroy() end,
 	["confirm_diplomacy"] = confirm_diplomacy,
 }
 

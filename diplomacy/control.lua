@@ -75,7 +75,7 @@ end
 
 local function forbidden_entity_mine(event)
 	-- Validation of data
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if player.selected == nil then return end
 	local entity = player.selected
 	if not (entity and entity.valid) then return end
@@ -95,7 +95,7 @@ local function forbidden_entity_mined(event)
 	local entity = event.entity
 	if not (entity and entity.valid) then return end
 	local force = entity.force
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if player.controller_type == defines.controllers.editor then return end
 	local mining_force = player.force
 	if force == mining_force or not force.get_friend(mining_force) then return end
@@ -242,7 +242,7 @@ end
 
 local function on_player_created(event)
 	-- Validation of data
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 
 	global.diplomacy.players[event.player_index] = {}
@@ -253,7 +253,7 @@ local function on_gui_checked_state_changed(event)
 	-- Validation of data
 	local gui = event.element
 	if not (gui and gui.valid) then return end
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 	local parent = gui.parent
 	if not parent then return end
@@ -270,7 +270,7 @@ local function on_gui_selection_state_changed(event)
 	-- Validation of data
 	local gui = event.element
 	if not (gui and gui.valid) then return end
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 	local parent = gui.parent
 	if not parent then return end
@@ -285,7 +285,7 @@ local function on_gui_click(event)
 	-- Validation of data
 	local gui = event.element
 	if not (gui and gui.valid and gui.name) then return end
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 	local parent = gui.parent
 	if not parent then return end
@@ -302,7 +302,7 @@ end
 
 local function on_player_changed_force(event)
 	-- Validation of data
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 
 	-- TODO: tests for checking special opimization
@@ -441,7 +441,7 @@ end
 
 local function on_player_left_game(event)
 	-- Validation of data
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 
 	select_diplomacy.on_player_left_game(player)
@@ -477,7 +477,7 @@ mod.on_init = update_global_data
 mod.on_configuration_changed = function(data)
 	update_global_data()
 
-	game.print("Diplomacy: hey, did you know that this mod compatible with \"teams\" addon?\nYou can turn it on in zk-lib and it was improved and added even more commands. And glhf! (Let me know if you like it, because I might add even more)")
+	game.print("Diplomacy: New update!\nYou can turn on new commands for teams in zk-lib and it was improved, glhf! (Let me know if you like it, because I might add even more)")
 
 	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
 	for _, player in pairs(game.players) do
@@ -487,7 +487,7 @@ end
 
 local function on_player_joined_game(event)
 	-- Validation of data
-	local player = game.players[event.player_index]
+	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 
 	update_diplomacy_frame()
