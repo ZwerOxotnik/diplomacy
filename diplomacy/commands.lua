@@ -73,7 +73,7 @@ local function player_force(cmd)
 	-- Validation of data
 	local caller = game.get_player(cmd.player_index)
 	if cmd.parameter == nil then print_to_caller({"command-help.player_force"}, caller) return end
-	if #cmd.parameter > 30 then
+	if #cmd.parameter > 32 then
 		print_to_caller({"too-long-nickname"}, caller)
 		return
 	end
@@ -182,7 +182,7 @@ local function cancel_stance(cmd)
 	end
 
 	if cmd.parameter then
-		if #cmd.parameter > 50 then
+		if #cmd.parameter > 52 then
 			caller.print({"too-long-team-name"})
 			return
 		else
