@@ -477,7 +477,7 @@ mod.on_init = update_global_data
 mod.on_configuration_changed = function(data)
 	update_global_data()
 
-	game.print("Diplomacy: New update!\nYou can turn on new commands for teams in zk-lib and it was improved, glhf! (Let me know if you like it, because I might add even more)")
+	game.print("Diplomacy: commands for teams have been moved to mods.factorio.com/mod/teams-zo (\"Teams\" mod)")
 
 	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
 	for _, player in pairs(game.players) do
