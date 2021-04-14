@@ -74,7 +74,7 @@ local function player_force(cmd)
 	local caller = game.get_player(cmd.player_index)
 	if cmd.parameter == nil then print_to_caller({"command-help.player_force"}, caller) return end
 	if #cmd.parameter > 32 then
-		print_to_caller({"too-long-nickname"}, caller)
+		print_to_caller({"gui-auth-server.username-too-long"}, caller)
 		return
 	end
 	cmd.parameter = trim(cmd.parameter)
