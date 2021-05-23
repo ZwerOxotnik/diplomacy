@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.17
+Date: 2021-05-23
+  Changes:
+    - Updated translations
+    - Added Czech translation
+  Notes:
+    - Thanks to https://crowdin.com/profile/diraria/activity and other people for translations
+---------------------------------------------------------------------------------------------------
 Version: 2.9.16
 Date: 2021-04-13
   Changes:
