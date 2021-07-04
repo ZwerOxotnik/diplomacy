@@ -109,7 +109,7 @@ local function forbidden_entity_mined(event)
 	end
 end
 
-local function check_stance_when_killed(event)
+local function check_stance_on_entity_died(event)
 	local entity = event.entity
 	local force = entity.force
 	local killing_force = event.force
@@ -229,15 +229,7 @@ local function check_stance_when_killed(event)
 end
 
 local function on_entity_died(event)
-	-- Validation of data
-	local entity = event.entity
-	if not (entity and entity.valid) then return end
-	local force = entity.force
-	if not (force and force.valid) then return end
-	local killing_force = event.force
-	if not (killing_force and killing_force.valid) then return end
-
-	check_stance_when_killed(event)
+	pcall(check_stance_on_entity_died, event)
 end
 
 local function on_player_created(event)
@@ -323,11 +315,8 @@ end
 local function check_stance_on_entity_damaged(event)
 	-- Validation of data
 	local entity = event.entity
-	if not (entity and entity.valid) then return end
 	local force = entity.force
-	if not (force and force.valid) then return end
 	local killing_force = event.force
-	if not (killing_force and killing_force.valid) then return end
 	if not force.get_cease_fire(killing_force) or killing_force == force then return end
 
 	-- Find in list the teams
@@ -392,7 +381,7 @@ end
 local random = math.random
 local function on_entity_damaged(event)
 	if random(100) <= 3 then
-		check_stance_on_entity_damaged(event)
+		pcall(check_stance_on_entity_damaged, event)
 	end
 end
 
@@ -583,9 +572,9 @@ mod.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_sta
 -- mod.events[defines.events.on_forces_merged] = on_forces_merged
 
 if settings.global["disable_diplomacy_on_entity_died"].value then
-	mod.events[defines.events.on_player_changed_force] = function() end
+	mod.events[defines.events.on_entity_died] = function() end
 else
-	mod.events[defines.events.on_player_changed_force] = on_entity_died
+	mod.events[defines.events.on_entity_died] = on_entity_died
 end
 
 if settings.global["diplomacy_on_entity_damaged_state"].value then
