@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.9.22
+Date: 2021-08-08
+  Changes:
+    - Updated Spanish translation (thanks to @josemirm on crowdin)
+  Notes:
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
 Version: 2.9.21
 Date: 2021-07-18
   Changes:
