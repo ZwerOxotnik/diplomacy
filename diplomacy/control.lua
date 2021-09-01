@@ -466,8 +466,6 @@ mod.on_init = update_global_data
 mod.on_configuration_changed = function(data)
 	update_global_data()
 
-	game.print("Diplomacy: commands for teams have been moved to mods.factorio.com/mod/teams-zo (\"Teams\" mod)")
-
 	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
 	for _, player in pairs(game.players) do
 		mod.create_button(player) -- still there are some bugs
