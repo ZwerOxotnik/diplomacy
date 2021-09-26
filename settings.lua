@@ -102,14 +102,6 @@ data:extend({
 		maximum_value = 100000000000,
 	},
 	{
-		type = "int-setting",
-		name = "diplomacy_HP_forbidden_entity_on_damaged",
-		setting_type = "runtime-global",
-		default_value = 300,
-		minimum_value = 1,
-		maximum_value = 100000000000,
-	},
-	{
 		type = "string-setting",
 		name = "who_decides_diplomacy",
 		setting_type = "runtime-global",

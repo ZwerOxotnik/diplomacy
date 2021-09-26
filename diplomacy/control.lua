@@ -312,91 +312,11 @@ end
 -- 	update_diplomacy_frame()
 -- end
 
-local function check_stance_on_entity_damaged(event)
-	-- Validation of data
-	local entity = event.entity
-	local force = entity.force
-	local killing_force = event.force
-	if not force.get_cease_fire(killing_force) or killing_force == force then return end
-
-	-- Find in list the teams
-	local teams = global.diplomacy.teams
-	if teams then
-		local found_1st = false
-		local found_2nd = false
-		for _, team in pairs(teams) do
-			if force.name == team.name then
-				found_1st = true
-			elseif killing_force.name == team.name then
-				found_2nd = true
-			end
-		end
-		if not (found_1st and found_2nd) then return end
-	end
-
-	-- Change policy between teams and print information
-	local cause = event.cause
-	if cause and cause.valid then
-		if game.entity_prototypes[entity.name].max_health >= settings.global["diplomacy_HP_forbidden_entity_on_damaged"].value then --entity.type == "rocket-silo"
-			if force.get_cease_fire(killing_force) then
-				set_politice["enemy"](force, killing_force)
-				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
-				if cause.type == "character" then
-					killing_force.print({"player-changed-diplomacy", cause.player.name, force.name})
-					force.print({"player-changed-diplomacy", cause.player.name, killing_force.name})
-				elseif cause.type == "car" then
-					local passenger = cause.get_passenger()
-					local driver = cause.get_driver()
-					if passenger and driver then
-						killing_force.print({"player-changed-diplomacy", driver.player.name .. " & " .. passenger.player.name, force.name})
-						force.print({"player-changed-diplomacy", driver.player.name .. " & " .. passenger.player.name, killing_force.name})
-					elseif passenger then
-						killing_force.print({"player-changed-diplomacy", passenger.player.name, force.name})
-						force.print({"player-changed-diplomacy", passenger.player.name, killing_force.name})
-					elseif driver then
-						killing_force.print({"player-changed-diplomacy", driver.player.name, force.name})
-						force.print({"player-changed-diplomacy", driver.player.name, killing_force.name})
-					else
-						killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
-						force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
-					end
-				else
-					killing_force.print({"player-changed-diplomacy", cause.localised_name, force.name})
-					force.print({"player-changed-diplomacy", cause.localised_name, killing_force.name})
-				end
-			end
-		end
-	else
-		if game.entity_prototypes[entity.name].max_health >= settings.global["diplomacy_HP_forbidden_entity_on_damaged"].value then --entity.type == "rocket-silo"
-			if force.get_cease_fire(killing_force) then
-				set_politice["enemy"](force, killing_force)
-				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
-				killing_force.print({"player-changed-diplomacy", "ANY", force.name})
-				force.print({"player-changed-diplomacy", "ANY", killing_force.name})
-			end
-		end
-	end
-end
-
-local random = math.random
-local function on_entity_damaged(event)
-	if random(100) <= 3 then
-		pcall(check_stance_on_entity_damaged, event)
-	end
-end
-
 local function on_runtime_mod_setting_changed(event)
 	if event.setting_type ~= "runtime-global" then return end
 
 	local events = mod.events
-	if event.setting == "diplomacy_on_entity_damaged_state" then
-		if settings.global[event.setting].value then
-			events[defines.events.on_entity_damaged] = on_entity_damaged
-		else
-			events[defines.events.on_entity_damaged] = function() end
-		end
-		event_listener.update_event(mod, defines.events.on_entity_damaged)
-	elseif event.setting == "disable_diplomacy_on_entity_died" then
+	if event.setting == "disable_diplomacy_on_entity_died" then
 		if settings.global[event.setting].value then
 			events[defines.events.on_entity_died] = function() end
 		else
