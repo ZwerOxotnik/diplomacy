@@ -31,6 +31,33 @@ local mod = {}
 mod.events = {}
 mod.add_commands = require("diplomacy/commands").add_commands
 
+
+--#region Constants
+local FORBIDDEN_TYPES = {
+	["artillery-wagon"] = true,
+	["electric-turret"] = true,
+	["spider-vehicle"] = true,
+	["fluid-turret"] = true,
+	["rocket-silo"] = true,
+	["cargo-wagon"] = true,
+	["fluid-wagon"] = true,
+	["ammo-turret"] = true,
+	["locomotive"] = true,
+	["character"] = true,
+	["roboport"] = true,
+	["radar"] = true,
+	["car"] = true
+}
+--#endregion
+
+
+--#region Settings
+local diplomacy_HP_forbidden_entity_on_killed = settings.global["diplomacy_HP_forbidden_entity_on_killed"].value
+local diplomacy_HP_forbidden_entity_on_mined = settings.global["diplomacy_HP_forbidden_entity_on_mined"].value
+--#endregion
+
+
+
 local function destroy_button(player)
 	local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
 	if diplomacy_button then
@@ -62,17 +89,6 @@ mod.destroy_gui = function(player)
 	destroy_diplomacy_selection_frame(player)
 end
 
-local function is_forbidden_entity_diplomacy(entity)
-	if entity.type:find("turret") then return true end
-	if entity.type:find("wagon") then return true end
-	if entity.type == "locomotive" then return true end
-	if entity.type == "car" then return true end
-	if entity.type == "roboport" then return true end
-	if entity.type == "radar" then return true end
-	if entity.type == "rocket-silo" then return true end
-	return false
-end
-
 local function forbidden_entity_mine(event)
 	-- Validation of data
 	local player = game.get_player(event.player_index)
@@ -85,7 +101,7 @@ local function forbidden_entity_mine(event)
 	if not force.get_friend(mining_force) or force == mining_force then return end
 
 	local max_health = game.entity_prototypes[entity.name].max_health
-	if max_health >= settings.global["diplomacy_HP_forbidden_entity_on_mined"].value or is_forbidden_entity_diplomacy(entity) then
+	if max_health >= diplomacy_HP_forbidden_entity_on_mined or FORBIDDEN_TYPES[entity.type] then
 		player.clear_selected_entity()
 	end
 end
@@ -101,7 +117,7 @@ local function forbidden_entity_mined(event)
 	if force == mining_force or not force.get_friend(mining_force) then return end
 
 	local max_health = game.entity_prototypes[entity.name].max_health
-	if max_health >= settings.global["diplomacy_HP_forbidden_entity_on_mined"].value or is_forbidden_entity_diplomacy(entity) then
+	if max_health >= diplomacy_HP_forbidden_entity_on_mined or FORBIDDEN_TYPES[entity.type] then
 		set_politice["neutral"](force, mining_force, event.player_index)
 		game.print({"team-changed-diplomacy", mining_force.name, force.name, {"neutral"}})
 		mining_force.print({"player-changed-diplomacy", player.name, force.name})
@@ -135,8 +151,7 @@ local function check_stance_on_entity_died(event)
 	if cause and cause.valid then
 		local causer_index = nil
 		if force.get_friend(killing_force) then
-			if game.entity_prototypes[entity.name].max_health >= settings.global["diplomacy_HP_forbidden_entity_on_killed"].value or is_forbidden_entity_diplomacy(entity) or
-					entity.type == "character" then
+			if game.entity_prototypes[entity.name].max_health >= diplomacy_HP_forbidden_entity_on_killed or FORBIDDEN_TYPES[entity.type] then
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
 				if cause.type == "character" then
 					causer_index = cause.player.index
@@ -207,8 +222,7 @@ local function check_stance_on_entity_died(event)
 		end
 	else
 		if force.get_friend(killing_force) then
-			if game.entity_prototypes[entity.name].max_health >= settings.global["diplomacy_HP_forbidden_entity_on_killed"].value or is_forbidden_entity_diplomacy(entity) or
-					entity.type == "character" then
+			if game.entity_prototypes[entity.name].max_health >= diplomacy_HP_forbidden_entity_on_killed or FORBIDDEN_TYPES[entity.type] then
 				set_politice["enemy"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
 				killing_force.print({"player-changed-diplomacy", "ANY", force.name})
@@ -312,40 +326,68 @@ end
 -- 	update_diplomacy_frame()
 -- end
 
-local function on_runtime_mod_setting_changed(event)
-	if event.setting_type ~= "runtime-global" then return end
 
-	local events = mod.events
-	if event.setting == "disable_diplomacy_on_entity_died" then
-		if settings.global[event.setting].value then
-			events[defines.events.on_entity_died] = function() end
+local mod_settings = {
+	["who_decides_diplomacy"] = function(value)
+		global.diplomacy.who_decides_diplomacy = value
+	end,
+	["diplomacy_visible_all_teams"] = function(value)
+		update_diplomacy_frame()
+	end,
+	["diplomacy_HP_forbidden_entity_on_killed"] = function(value)
+		diplomacy_HP_forbidden_entity_on_killed = value
+	end,
+	["disable_diplomacy_on_entity_died"] = function(value)
+		if value then
+			mod.events[defines.events.on_entity_died] = function() end
 		else
-			events[defines.events.on_entity_died] = on_entity_died
+			mod.events[defines.events.on_entity_died] = on_entity_died
 		end
 		event_listener.update_event(mod, defines.events.on_entity_died)
-	elseif event.setting == "diplomacy_allow_mine_entity" or
-		event.setting == "diplomacy_HP_forbidden_entity_on_mined" then
-		if settings.global["diplomacy_HP_forbidden_entity_on_mined"].value == 0 then
-			events[defines.events.on_player_mined_entity] = function() end
+	end,
+	["diplomacy_HP_forbidden_entity_on_mined"] = function(value)
+		diplomacy_HP_forbidden_entity_on_mined = value
+		if value == 0 then
+			mod.events[defines.events.on_player_mined_entity] = function() end
 		else
 			if settings.global["diplomacy_allow_mine_entity"].value then
-				events[defines.events.on_player_mined_entity] = forbidden_entity_mined
+				mod.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
 			else
-				events[defines.events.on_player_mined_entity] = function() end
+				mod.events[defines.events.on_player_mined_entity] = function() end
 			end
 		end
 		if settings.global["diplomacy_allow_mine_entity"].value then
-			events[defines.events.on_selected_entity_changed] = function() end
+			mod.events[defines.events.on_selected_entity_changed] = function() end
 		else
-			events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
+			mod.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
 		end
 		event_listener.update_event(mod, defines.events.on_player_mined_entity)
 		event_listener.update_event(mod, defines.events.on_selected_entity_changed)
-	elseif event.setting == "who_decides_diplomacy" then
-		global.diplomacy.who_decides_diplomacy = settings.global[event.setting].value
-	elseif event.setting == "diplomacy_visible_all_teams" then
-		update_diplomacy_frame()
-	end
+	end,
+	["diplomacy_allow_mine_entity"] = function(value)
+		if diplomacy_HP_forbidden_entity_on_mined == 0 then
+			mod.events[defines.events.on_player_mined_entity] = function() end
+		else
+			if value then
+				mod.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
+			else
+				mod.events[defines.events.on_player_mined_entity] = function() end
+			end
+		end
+		if value then
+			mod.events[defines.events.on_selected_entity_changed] = function() end
+		else
+			mod.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
+		end
+		event_listener.update_event(mod, defines.events.on_player_mined_entity)
+		event_listener.update_event(mod, defines.events.on_selected_entity_changed)
+	end,
+}
+local function on_runtime_mod_setting_changed(event)
+	-- if event.setting_type ~= "runtime-global" then return end
+
+	local f = mod_settings[event.setting]
+	if f then f(settings.global[event.setting].value) end
 end
 
 local function on_player_left_game(event)
@@ -375,9 +417,9 @@ local function update_global_data()
 
 	if not game then return end
 
-	for i, _ in pairs(game.players) do
-		if diplomacy.players[i] == nil then
-			diplomacy.players[i] = {}
+	for player_index in pairs(game.players) do
+		if diplomacy.players[player_index] == nil then
+			diplomacy.players[player_index] = {}
 		end
 	end
 end
@@ -467,10 +509,7 @@ mod.add_remote_interface = function()
 end
 
 mod.actions_after_init = function()
-	script.set_event_filter(defines.events.on_entity_damaged, {
-		{filter = "final-damage-amount", comparison = ">", value = 1, mode = "and"},
-		-- {filter = "final-health", comparison = "<", value = 120, mode = "and"}
-	})
+
 end
 
 -- For attaching events
@@ -495,13 +534,7 @@ else
 	mod.events[defines.events.on_entity_died] = on_entity_died
 end
 
-if settings.global["diplomacy_on_entity_damaged_state"].value then
-	mod.events[defines.events.on_entity_damaged] = on_entity_damaged
-else
-	mod.events[defines.events.on_entity_damaged] = function() end
-end
-
-if settings.global["diplomacy_HP_forbidden_entity_on_mined"].value == 0 then
+if diplomacy_HP_forbidden_entity_on_mined == 0 then
 	mod.events[defines.events.on_player_mined_entity] = function() end
 else
 	if settings.global["diplomacy_allow_mine_entity"].value then
