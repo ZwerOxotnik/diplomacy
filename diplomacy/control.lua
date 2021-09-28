@@ -92,7 +92,6 @@ end
 local function forbidden_entity_mine(event)
 	-- Validation of data
 	local player = game.get_player(event.player_index)
-	if player.selected == nil then return end
 	local entity = player.selected
 	if not (entity and entity.valid) then return end
 	if player.controller_type == defines.controllers.editor then return end
@@ -255,61 +254,50 @@ local function on_player_created(event)
 	mod.create_button(player)
 end
 
-local function on_gui_checked_state_changed(event)
-	-- Validation of data
-	local gui = event.element
-	if not (gui and gui.valid) then return end
-	local player = game.get_player(event.player_index)
-	if not (player and player.valid) then return end
-	local parent = gui.parent
-	if not parent then return end
-
-	if parent.name == "diplomacy_table" then
+local STATE_GUIS = {
+	["diplomacy_table"] = function(event)
 		select_diplomacy.diplomacy_check_press(event)
-	elseif gui.name == "d_show_players_state" then
-		global.diplomacy.players[event.player_index].show_players_state = gui.state
+	end,
+	["d_show_players_state"] = function(event, player, element)
+		global.diplomacy.players[event.player_index].show_players_state = element.state
 		update_diplomacy_frame(player)
-	end
+	end,
+}
+local function on_gui_checked_state_changed(event)
+	local f = STATE_GUIS[event.element.parent.name]
+	if f then f(event.element, game.get_player(event.player_index), event) end
 end
 
 local function on_gui_selection_state_changed(event)
-	-- Validation of data
-	local gui = event.element
-	if not (gui and gui.valid) then return end
-	local player = game.get_player(event.player_index)
-	if not (player and player.valid) then return end
-	local parent = gui.parent
-	if not parent then return end
-
-	if gui.name == "d_filter_of_diplomacy_stance" then
-		global.diplomacy.players[event.player_index].filter_of_diplomacy_stance = gui.selected_index
+	if event.element.name == "d_filter_of_diplomacy_stance" then
+		local player = game.get_player(event.player_index)
+		global.diplomacy.players[event.player_index].filter_of_diplomacy_stance = event.element.selected_index
 		update_diplomacy_frame(player)
 	end
 end
 
-local function on_gui_click(event)
-	-- Validation of data
-	local gui = event.element
-	if not (gui and gui.valid and gui.name) then return end
-	local player = game.get_player(event.player_index)
-	if not (player and player.valid) then return end
-	local parent = gui.parent
-	if not parent then return end
 
-	local parent_name = parent.name
-	if parent_name == 'mod_gui_inner_frame' or parent_name == 'diplomacy_frame' then
+local GUIS = {
+	["mod_gui_inner_frame"] = function(element, player, event)
 		select_diplomacy.on_gui_click(event)
-		return true
-	elseif parent_name == 'diplomacy_selection_frame' or parent_name == "holding_table_buttons" then
-		confirm_diplomacy.on_gui_click(player, gui.name)
-		return true
-	end
+	end,
+	["diplomacy_frame"] = function(element, player, event)
+		select_diplomacy.on_gui_click(event)
+	end,
+	["diplomacy_selection_frame"] = function(element, player, event)
+		confirm_diplomacy.on_gui_click(player, element.name)
+	end,
+	["holding_table_buttons"] = function(element, player, event)
+		confirm_diplomacy.on_gui_click(player, element.name)
+	end,
+}
+local function on_gui_click(event)
+	local f = GUIS[event.element.parent.name]
+	if f then f(event.element, game.get_player(event.player_index), event) end
 end
 
 local function on_player_changed_force(event)
-	-- Validation of data
 	local player = game.get_player(event.player_index)
-	if not (player and player.valid) then return end
 
 	-- TODO: tests for checking special opimization
 	--       between "on_player_changed_force" and "on_forces_merging" and "on_forces_merged"
@@ -514,18 +502,18 @@ end
 
 -- For attaching events
 mod.events[defines.events.on_entity_died] = on_entity_died
-mod.events[defines.events.on_player_changed_force] = on_player_changed_force
+mod.events[defines.events.on_player_changed_force] = function(e) pcall(on_player_changed_force, e) end
 mod.events[defines.events.on_player_created] = on_player_created
 mod.events[defines.events.on_player_left_game] = on_player_left_game
 mod.events[defines.events.on_player_removed] = on_player_removed
 mod.events[defines.events.on_player_joined_game] = on_player_joined_game
-mod.events[defines.events.on_gui_click] = on_gui_click
-mod.events[defines.events.on_gui_checked_state_changed] = on_gui_checked_state_changed
+mod.events[defines.events.on_gui_click] = function(e) pcall(on_gui_click, e) end
+mod.events[defines.events.on_gui_checked_state_changed] = function(e) pcall(on_gui_checked_state_changed, e) end
 mod.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
 mod.events[defines.events.on_force_created] = on_force_created
 -- mod.events[defines.events.on_force_friends_changed] = update_diplomacy_frame -- TODO: test it thoroughly
 -- mod.events[defines.events.on_force_cease_fire_changed] = update_diplomacy_frame -- TODO: test it thoroughly
-mod.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
+mod.events[defines.events.on_gui_selection_state_changed] = function(e) pcall(on_gui_selection_state_changed, e) end
 -- mod.events[defines.events.on_forces_merged] = on_forces_merged
 
 if settings.global["disable_diplomacy_on_entity_died"].value then
