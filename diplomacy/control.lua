@@ -65,16 +65,22 @@ local function destroy_button(player)
 	end
 end
 
-mod.create_button = function(player)
-	destroy_button(player)
-	mod_gui.get_button_flow(player).add{
+local function create_button(player)
+	local button_flow = mod_gui.get_button_flow(player)
+	if button_flow.diplomacy_button then
+		button_flow.diplomacy_button.destroy()
+	end
+	button_flow.add{
 		type = "sprite-button",
 		sprite = "virtual-signal/diplomacy",
+		hovered_sprite = "diplomacy_black",
+		clicked_sprite = "diplomacy_black",
 		name = "diplomacy_button",
-		style = mod_gui.button_style,
+		style = "slot_button",
 		tooltip = {"mod-name.diplomacy"}
 	}
 end
+mod.create_button = create_button
 
 local function destroy_diplomacy_gui(player)
 	local diplomacy_frame = player.gui.screen.diplomacy_frame
@@ -251,7 +257,7 @@ local function on_player_created(event)
 	if not (player and player.valid) then return end
 
 	global.diplomacy.players[event.player_index] = {}
-	mod.create_button(player)
+	create_button(player)
 end
 
 local STATE_GUIS = {
@@ -405,9 +411,10 @@ local function update_global_data()
 
 	if not game then return end
 
+	local players_data = diplomacy.players
 	for player_index in pairs(game.players) do
-		if diplomacy.players[player_index] == nil then
-			diplomacy.players[player_index] = {}
+		if players_data[player_index] == nil then
+			players_data[player_index] = {}
 		end
 	end
 end
@@ -418,7 +425,7 @@ mod.on_configuration_changed = function(data)
 
 	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
 	for _, player in pairs(game.players) do
-		mod.create_button(player) -- still there are some bugs
+		create_button(player) -- still there are some bugs
 	end
 end
 
