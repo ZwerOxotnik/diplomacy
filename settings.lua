@@ -19,12 +19,6 @@ data:extend({
 	},
 	{
 		type = "bool-setting",
-		name = "diplomacy_on_entity_damaged_state",
-		setting_type = "runtime-global",
-		default_value = true
-	},
-	{
-		type = "bool-setting",
 		name = "disable_diplomacy_on_entity_died",
 		setting_type = "runtime-global",
 		default_value = false

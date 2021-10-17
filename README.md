@@ -46,8 +46,6 @@ If you mined entity.type = (forbidden_entity) **OR** entity.max_health >= settin
 
 If you destroy entity.type = (forbidden_entity or player) **OR** entity.max_health >= settings.global["diplomacy-HP-forbidden-entity-on-killed"].value another faction become enemy, else neutral (if you are not already enemies).
 
-If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidden-entity-on-damage"].value another faction become enemy with low probability.
-
 ## <a name="mod settings"></a> Mod settings
 
 ### <a name="for-maps"></a> For maps
@@ -58,9 +56,7 @@ If you damage to the entity.max_health >= settings.global["diplomacy-HP-forbidde
 | Show all factions - Hides in diplomacy factions without playersHides in diplomacy factions without players | boolean | false |
 | Required HP for changing relationships for a killed object - changes state relationships when killed an entity HP >= this parameter value | 1-100000000000 | 300 |
 | Required HP for changing relationships for a mined object - changes state relationships when mined an object HP >= this parameter value | 0-100000000000 | 300 |
-| Required HP for changing relationships for damage to an object - changes state relationships when damage to the object HP >= this parameter value (happens with low probability) | 1-100000000000 | 300 |
 | Allow players mine objects from allied factions | boolean | false |
-| Auto-diplomacy when dealing damage - checks damage and changes relationships between factions | boolean | true |
 | Disable auto-diplomacy trigger on destroying - Doesn't change diplomacy on destroying entities | boolean | false |
 | Diplomatic privilege - which players are able to change teams diplomatic stance towards other teams. All players: Every player on the team. Team leader: The connected player who has been on the team longest. | ["all players", "team leader"] | all players |
 | Building Prohibition Radius - you can't build near enemies within this radius | 0-25 | 3 |
