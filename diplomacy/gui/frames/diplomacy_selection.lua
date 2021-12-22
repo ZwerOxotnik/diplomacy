@@ -23,6 +23,7 @@ diplomacy_selection_frame.destroy = function(player)
 	end
 end
 
+-- TODO: improve
 diplomacy_selection_frame.create = function(force, int_force_name, stance)
 	local diplomacy = global.diplomacy
 	local selected_players
@@ -33,7 +34,8 @@ diplomacy_selection_frame.create = function(force, int_force_name, stance)
 	end
 	if selected_players == nil then return end
 
-	for _, player in pairs(selected_players) do
+	for i=1, #selected_players do
+		local player = selected_players[i]
 		local gui = player.gui.left
 		diplomacy_selection_frame.destroy(player)
 		local frame = gui.add{type = "frame", name = "diplomacy_selection_frame", caption = {stance}}
