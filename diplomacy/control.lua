@@ -59,25 +59,24 @@ local diplomacy_HP_forbidden_entity_on_mined = settings.global["diplomacy_HP_for
 
 
 local function destroy_button(player)
-	local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
+	local diplomacy_button = player.gui.relative.diplomacy_button
 	if diplomacy_button then
 		diplomacy_button.destroy()
 	end
 end
 
 local function create_button(player)
-	local button_flow = mod_gui.get_button_flow(player)
-	if button_flow.diplomacy_button then
-		button_flow.diplomacy_button.destroy()
+	local relative = player.gui.relative
+	if relative.diplomacy_button then
+		return
 	end
-	button_flow.add{
+
+	local left_anchor = {gui = defines.relative_gui_type.controller_gui, position = defines.relative_gui_position.left}
+	relative.add{
 		type = "sprite-button",
-		sprite = "virtual-signal/diplomacy",
-		hovered_sprite = "diplomacy_black",
-		clicked_sprite = "diplomacy_black",
 		name = "diplomacy_button",
-		style = "slot_button",
-		tooltip = {"mod-name.diplomacy"}
+		style = "diplomacy_button", -- see data.lua
+		anchor = left_anchor
 	}
 end
 mod.create_button = create_button
@@ -115,6 +114,7 @@ local function forbidden_entity_mined(event)
 	-- Validation of data
 	local entity = event.entity
 	if not (entity and entity.valid) then return end
+
 	local force = entity.force
 	local player = game.get_player(event.player_index)
 	if player.controller_type == defines.controllers.editor then return end
@@ -284,6 +284,9 @@ end
 
 
 local GUIS = {
+	diplomacy_button = select_diplomacy.diplomacy_button_press
+}
+local DEEP_GUIS = {
 	["mod_gui_inner_frame"] = function(element, player, event)
 		select_diplomacy.on_gui_click(event)
 	end,
@@ -297,9 +300,14 @@ local GUIS = {
 		confirm_diplomacy.on_gui_click(player, element.name)
 	end,
 }
+-- TODO: refactor
 local function on_gui_click(event)
-	local f = GUIS[event.element.parent.name]
-	if f then f(event.element, game.get_player(event.player_index), event) end
+	local element = event.element
+	local f = GUIS[element.name]
+	if f then f(event) return end
+
+	f = DEEP_GUIS[element.parent.name]
+	if f then f(element, game.get_player(event.player_index), event) end
 end
 
 local function on_player_changed_force(event)
@@ -420,12 +428,22 @@ local function update_global_data()
 end
 mod.on_init = update_global_data
 
-mod.on_configuration_changed = function(data)
+mod.on_configuration_changed = function(event)
 	update_global_data()
 
-	-- see https://mods.factorio.com/mod/diplomacy/discussion/5d4caea33fac7d000b20a3c9
-	for _, player in pairs(game.players) do
-		create_button(player) -- still there are some bugs
+	local mod_changes = event.mod_changes["diplomacy"]
+	if not (mod_changes and mod_changes.old_version) then return end
+
+	local version = tonumber(string.gmatch(mod_changes.old_version, "%d+.%d+")())
+
+	if version < 2.12 then
+		for _, player in pairs(game.players) do
+			local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
+			if diplomacy_button then
+				diplomacy_button.destroy()
+			end
+			create_button(player)
+		end
 	end
 end
 

@@ -22,11 +22,6 @@ local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
 local create_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").create
 local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").create
 
-local function diplomacy_button_press(event)
-	local player = game.get_player(event.player_index)
-	create_diplomacy_frame(player)
-end
-
 local function confirm_diplomacy(event)
 	local gui = event.element
 	local player = game.get_player(event.player_index)
@@ -90,6 +85,12 @@ end
 
 local select_diplomacy = {}
 
+-- TODO: refactor
+select_diplomacy.diplomacy_button_press = function(event)
+	local player = game.get_player(event.player_index)
+	create_diplomacy_frame(player)
+end
+
 select_diplomacy.diplomacy_check_press = function(event)
 	local gui = event.element
 	if not gui.valid then return end
@@ -131,7 +132,6 @@ select_diplomacy.on_player_left_game = function(player)
 end
 
 local button_press_functions = {
-	["diplomacy_button"] = diplomacy_button_press,
 	["diplomacy_cancel"] = function(event) game.get_player(event.player_index).diplomacy_frame.destroy() end,
 	["confirm_diplomacy"] = confirm_diplomacy,
 }
