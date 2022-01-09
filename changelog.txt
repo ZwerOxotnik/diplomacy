@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.12.2
+Date: 2021-01-09
+  Locale:
+    - Updated Norwegian translation (thanks to @Eerrikki (Robin Braathen) on crowdin)
+    - Updated French translation (thanks to @eric.rossignol40 (Eric Rossignol) on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
 Version: 2.12.1
 Date: 2021-12-22
   Changes:
@@ -13,18 +20,16 @@ Date: 2021-12-22
 ---------------------------------------------------------------------------------------------------
 Version: 2.11.2
 Date: 2021-12-05
-  Changes:
+  Locale:
     - Updated French translation (thanks to @sollevix (David TAORMINA) on crowdin)
     - Updated again Brazilian Portuguese translation (thanks to @BM123499 (Bruno Melo) on crowdin)
-  Notes:
     - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
 ---------------------------------------------------------------------------------------------------
 Version: 2.11.1
 Date: 2021-10-17
-  Changes:
+  Locale:
     - Partially updated Russian translation (thanks to @_Andrey_ (Андрей Пискунов) on crowdin)
     - Removed an unnecessary setting and locales
-  Notes:
     - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
 ---------------------------------------------------------------------------------------------------
 Version: 2.11.0
@@ -57,8 +62,9 @@ Date: 2021-09-26
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.25
 Date: 2021-09-05
-  Changes:
+  Locale:
     - Updated Brazilian Portuguese translation (thanks to @BM123499 (Bruno Melo) on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.24
 Date: 2021-09-01
@@ -67,25 +73,22 @@ Date: 2021-09-01
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.23
 Date: 2021-08-29
-  Changes:
+  Locale:
     - Updated Brazilian Portuguese translation (thanks to @BM123499 (Bruno Melo) on crowdin)
     - Updated Norwegian translation (thanks to @Sandify (Team Noob) on crowdin)
-  Notes:
     - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.22
 Date: 2021-08-08
-  Changes:
+  Locale:
     - Updated Spanish translation (thanks to @josemirm on crowdin)
-  Notes:
     - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.21
 Date: 2021-07-18
-  Changes:
+  Locale:
     - Updated Belarusian translation (thanks to @not.a.whale (Mikita Tsikhanovich) on crowdin)
     - Updated German translation (thanks to @teite on crowdin)
-  Notes:
     - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.20
@@ -98,9 +101,8 @@ Date: 2021-07-04
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.19
 Date: 2021-05-30
-  Changes:
+  Locale:
     - Updated German translation
-  Notes:
     - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.18
@@ -110,10 +112,9 @@ Date: 2021-05-25
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.17
 Date: 2021-05-23
-  Changes:
+  Locale:
     - Updated translations
     - Added Czech translation
-  Notes:
     - Thanks to https://crowdin.com/profile/diraria/activity and other people for translations
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.16
