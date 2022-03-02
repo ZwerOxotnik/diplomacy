@@ -1,3 +1,5 @@
+[![Repo on GitHub](https://img.shields.io/badge/repo-GitHub-3D76C2.svg)](https://github.com/ZwerOxotnik/diplomacy)
+[![Repo on GitLab](https://img.shields.io/badge/repo-GitLab-6C488A.svg)](https://gitlab.com/ZwerOxotnik/diplomacy)
 # Diplomacy
 
 Read this in another language | [English](/README.md) | [Русский](/docs/ru/README.md)
