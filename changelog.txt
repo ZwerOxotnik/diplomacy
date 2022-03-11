@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.13.0
+Date: 2022-03-11
+  Locale:
+    - Updated French translation (thanks to @daikyraraga (DaiKy RaRaga) on crowdin)
+    - Updated French translation (thanks to @Wiwiweb on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+  Bugfixes:
+    - Fixed potential incompatibility with some
+  Changes:
+    - Changed icon color of diplomacy
+  Scripting:
+    - Renamed button name "diplomacy_button" to "ZD_diplomacy_button"
+    - Renamed button style "diplomacy_button" to "ZD_diplomacy_button"
+---------------------------------------------------------------------------------------------------
 Version: 2.12.2
 Date: 2021-01-09
   Locale:

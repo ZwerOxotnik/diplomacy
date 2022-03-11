@@ -1,5 +1,5 @@
 --[[
-Copyright 2018-2021 ZwerOxotnik <zweroxotnik@gmail.com>
+Copyright 2018-2022 ZwerOxotnik <zweroxotnik@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomac
 local cancel_request_diplomacy_force = require("diplomacy/util").cancel_request_diplomacy_force
 local get_stance_diplomacy_type = require("diplomacy/util").get_stance_diplomacy_type
 local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
-local create_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").create
 local create_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").create
 
 local function confirm_diplomacy(event)
@@ -84,12 +83,6 @@ end
 
 
 local select_diplomacy = {}
-
--- TODO: refactor
-select_diplomacy.diplomacy_button_press = function(event)
-	local player = game.get_player(event.player_index)
-	create_diplomacy_frame(player)
-end
 
 select_diplomacy.diplomacy_check_press = function(event)
 	local gui = event.element

@@ -1,5 +1,5 @@
 --[[
-Copyright 2018-2021 ZwerOxotnik <zweroxotnik@gmail.com>
+Copyright 2018-2022 ZwerOxotnik <zweroxotnik@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ limitations under the License.
 local color_map = require("diplomacy/color_map")
 local set_politice = require("diplomacy/util").set_politice
 local destroy_diplomacy_selection_frame = require("diplomacy/gui/frames/diplomacy_selection").destroy
-local update_diplomacy_frame = require("diplomacy/gui/frames/diplomacy").update
 local select_diplomacy = require("diplomacy/gui/select_diplomacy")
 local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
+local DIPLOMACY_FRAME = require("diplomacy/gui/frames/diplomacy")
 local mod_gui = require("mod-gui")
 
 local mod = {}
@@ -59,7 +59,7 @@ local diplomacy_HP_forbidden_entity_on_mined = settings.global["diplomacy_HP_for
 
 
 local function destroy_button(player)
-	local diplomacy_button = player.gui.relative.diplomacy_button
+	local diplomacy_button = player.gui.relative.ZD_diplomacy_button
 	if diplomacy_button then
 		diplomacy_button.destroy()
 	end
@@ -67,15 +67,15 @@ end
 
 local function create_button(player)
 	local relative = player.gui.relative
-	if relative.diplomacy_button then
+	if relative.ZD_diplomacy_button then
 		return
 	end
 
 	local left_anchor = {gui = defines.relative_gui_type.controller_gui, position = defines.relative_gui_position.left}
 	relative.add{
 		type = "sprite-button",
-		name = "diplomacy_button",
-		style = "diplomacy_button", -- see data.lua
+		name = "ZD_diplomacy_button",
+		style = "ZD_diplomacy_button", -- see data.lua
 		anchor = left_anchor
 	}
 end
@@ -266,7 +266,7 @@ local STATE_GUIS = {
 	end,
 	["d_show_players_state"] = function(event, player, element)
 		global.diplomacy.players[event.player_index].show_players_state = element.state
-		update_diplomacy_frame(player)
+		DIPLOMACY_FRAME.update(player)
 	end,
 }
 local function on_gui_checked_state_changed(event)
@@ -278,14 +278,11 @@ local function on_gui_selection_state_changed(event)
 	if event.element.name == "d_filter_of_diplomacy_stance" then
 		local player = game.get_player(event.player_index)
 		global.diplomacy.players[event.player_index].filter_of_diplomacy_stance = event.element.selected_index
-		update_diplomacy_frame(player)
+		DIPLOMACY_FRAME.update(player)
 	end
 end
 
 
-local GUIS = {
-	diplomacy_button = select_diplomacy.diplomacy_button_press
-}
 local DEEP_GUIS = {
 	["mod_gui_inner_frame"] = function(element, player, event)
 		select_diplomacy.on_gui_click(event)
@@ -303,11 +300,17 @@ local DEEP_GUIS = {
 -- TODO: refactor
 local function on_gui_click(event)
 	local element = event.element
-	local f = GUIS[element.name]
-	if f then f(event) return end
+	if not (element and element.valid) then return end
 
-	f = DEEP_GUIS[element.parent.name]
-	if f then f(element, game.get_player(event.player_index), event) end
+	if element.name == "ZD_diplomacy_button" then
+		local player = game.get_player(event.player_index)
+		DIPLOMACY_FRAME.create(player)
+	else
+		f = DEEP_GUIS[element.parent.name]
+		if f then
+			f(element, game.get_player(event.player_index), event)
+		end
+	end
 end
 
 local function on_player_changed_force(event)
@@ -317,7 +320,7 @@ local function on_player_changed_force(event)
 	--       between "on_player_changed_force" and "on_forces_merging" and "on_forces_merged"
 
 	destroy_diplomacy_selection_frame(player)
-	update_diplomacy_frame()
+	DIPLOMACY_FRAME.update()
 end
 
 -- local function on_forces_merging(event)
@@ -325,7 +328,7 @@ end
 -- 		destroy_diplomacy_selection_frame(player)
 -- 	end
 
--- 	update_diplomacy_frame()
+-- 	DIPLOMACY_FRAME.update()
 -- end
 
 
@@ -334,7 +337,7 @@ local mod_settings = {
 		global.diplomacy.who_decides_diplomacy = value
 	end,
 	["diplomacy_visible_all_teams"] = function(value)
-		update_diplomacy_frame()
+		DIPLOMACY_FRAME.update()
 	end,
 	["diplomacy_HP_forbidden_entity_on_killed"] = function(value)
 		diplomacy_HP_forbidden_entity_on_killed = value
@@ -405,7 +408,7 @@ local function on_force_created(event)
 	local force = event.force
 	if not (force and force.valid) then return end
 
-	update_diplomacy_frame()
+	DIPLOMACY_FRAME.update()
 end
 
 local function update_global_data()
@@ -436,13 +439,19 @@ mod.on_configuration_changed = function(event)
 
 	local version = tonumber(string.gmatch(mod_changes.old_version, "%d+.%d+")())
 
-	if version < 2.12 then
+	if version < 2.13 then
 		for _, player in pairs(game.players) do
-			local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
-			if diplomacy_button then
-				diplomacy_button.destroy()
+			if player.valid then
+				local diplomacy_button = mod_gui.get_button_flow(player).diplomacy_button
+				if diplomacy_button then
+					diplomacy_button.destroy()
+				end
+				diplomacy_button = player.gui.relative.diplomacy_button
+				if diplomacy_button then
+					diplomacy_button.destroy()
+				end
+				create_button(player)
 			end
-			create_button(player)
 		end
 	end
 end
@@ -452,7 +461,7 @@ local function on_player_joined_game(event)
 	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 
-	update_diplomacy_frame()
+	DIPLOMACY_FRAME.update()
 end
 
 -- local function on_forces_merged(event)
@@ -460,7 +469,7 @@ end
 -- end
 
 local function on_player_removed(event)
-	update_diplomacy_frame()
+	DIPLOMACY_FRAME.update()
 	global.diplomacy.players[event.player_index] = nil
 end
 
@@ -516,7 +525,7 @@ mod.add_remote_interface = function()
 		end,
 		set_locked_teams = function(bool)
 			global.diplomacy.locked_teams = bool
-			update_diplomacy_frame()
+			DIPLOMACY_FRAME.update()
 		end
 	})
 end
@@ -532,12 +541,12 @@ mod.events[defines.events.on_player_created] = on_player_created
 mod.events[defines.events.on_player_left_game] = on_player_left_game
 mod.events[defines.events.on_player_removed] = on_player_removed
 mod.events[defines.events.on_player_joined_game] = on_player_joined_game
-mod.events[defines.events.on_gui_click] = function(e) pcall(on_gui_click, e) end
+mod.events[defines.events.on_gui_click] = on_gui_click
 mod.events[defines.events.on_gui_checked_state_changed] = function(e) pcall(on_gui_checked_state_changed, e) end
 mod.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
 mod.events[defines.events.on_force_created] = on_force_created
--- mod.events[defines.events.on_force_friends_changed] = update_diplomacy_frame -- TODO: test it thoroughly
--- mod.events[defines.events.on_force_cease_fire_changed] = update_diplomacy_frame -- TODO: test it thoroughly
+-- mod.events[defines.events.on_force_friends_changed] = DIPLOMACY_FRAME.update -- TODO: test it thoroughly
+-- mod.events[defines.events.on_force_cease_fire_changed] = DIPLOMACY_FRAME.update -- TODO: test it thoroughly
 mod.events[defines.events.on_gui_selection_state_changed] = function(e) pcall(on_gui_selection_state_changed, e) end
 -- mod.events[defines.events.on_forces_merged] = on_forces_merged
 

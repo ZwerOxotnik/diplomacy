@@ -31,7 +31,7 @@ end
 local styles = data.raw["gui-style"].default
 local slot_button = styles.slot_button
 
-styles.diplomacy_button = {
+styles.ZD_diplomacy_button = {
   type = "button_style",
 	parent = "slot_button",
 	tooltip = "mod-name.diplomacy",
@@ -39,8 +39,8 @@ styles.diplomacy_button = {
 	hovered_graphical_set = deepcopy(slot_button.hovered_graphical_set),
 	clicked_graphical_set = deepcopy(slot_button.clicked_graphical_set)
 }
-local diplomacy_button = styles.diplomacy_button
-diplomacy_button.default_graphical_set.glow = {
+local ZD_diplomacy_button = styles.ZD_diplomacy_button
+ZD_diplomacy_button.default_graphical_set.glow = {
 	top_outer_border_shift = 4,
 	bottom_outer_border_shift = -4,
 	left_outer_border_shift = 4,
@@ -51,13 +51,13 @@ diplomacy_button.default_graphical_set.glow = {
 	size = 32,
 	scale = 1
 }
-diplomacy_button.hovered_graphical_set.glow.center = {
+ZD_diplomacy_button.hovered_graphical_set.glow.center = {
 	filename = "__diplomacy__/graphics/diplomacy_black.png",
 	flags = {"gui-icon"},
 	size = 32,
 	scale = 1
 }
-diplomacy_button.clicked_graphical_set.glow = {
+ZD_diplomacy_button.clicked_graphical_set.glow = {
 	top_outer_border_shift = 2,
 	bottom_outer_border_shift = -2,
 	left_outer_border_shift = 2,
