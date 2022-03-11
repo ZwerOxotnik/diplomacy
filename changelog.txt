@@ -6,7 +6,7 @@ Date: 2022-03-11
     - Updated French translation (thanks to @Wiwiweb on crowdin)
     - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
   Bugfixes:
-    - Fixed potential incompatibility with some
+    - Fixed potential incompatibility with some mods
   Changes:
     - Changed icon color of diplomacy
   Scripting:
