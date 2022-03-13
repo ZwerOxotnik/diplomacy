@@ -305,11 +305,15 @@ local function on_gui_click(event)
 	if element.name == "ZD_diplomacy_button" then
 		local player = game.get_player(event.player_index)
 		DIPLOMACY_FRAME.create(player)
-	else
-		f = DEEP_GUIS[element.parent.name]
-		if f then
-			f(element, game.get_player(event.player_index), event)
-		end
+		return
+	end
+
+	local parent = element.parent
+	if not (parent and parent.valid) then return end
+
+	f = DEEP_GUIS[element.parent.name]
+	if f then
+		f(element, game.get_player(event.player_index), event)
 	end
 end
 
