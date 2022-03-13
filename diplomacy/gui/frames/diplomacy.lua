@@ -246,8 +246,10 @@ diplomacy_frame.fill = function(player)
 end
 
 diplomacy_frame.update = function(player)
-	if player and player.valid and player.connected then
-		diplomacy_frame.fill(player)
+	if player and player.valid then
+		if player.connected then
+			diplomacy_frame.fill(player)
+		end
 	else
 		for _, _player in pairs(game.connected_players) do
 			diplomacy_frame.fill(_player)

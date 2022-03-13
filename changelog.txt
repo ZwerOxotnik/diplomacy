@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.13.2
+Date: 2022-03-13
+  Bugfixes:
+    - Improved stability with some gui events
+    - Fixed interaction with checkboxes
+    - Buttons create in existing saves where there wasn't the mod before
+---------------------------------------------------------------------------------------------------
 Version: 2.13.1
 Date: 2022-03-13
   Bugfixes:

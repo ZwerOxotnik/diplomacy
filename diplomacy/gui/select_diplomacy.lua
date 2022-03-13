@@ -84,13 +84,11 @@ end
 
 local select_diplomacy = {}
 
-select_diplomacy.diplomacy_check_press = function(event)
-	local gui = event.element
-	if not gui.valid then return end
-
-	if not (gui.name:find("_enemy")
-		or gui.name:find("_neutral")
-		or gui.name:find("_ally")) then
+select_diplomacy.diplomacy_check_press = function(gui)
+	local gui_name = gui.name
+	if not (gui_name:find("_enemy")
+		or gui_name:find("_neutral")
+		or gui_name:find("_ally")) then
 		return
 	end
 
@@ -100,22 +98,23 @@ select_diplomacy.diplomacy_check_press = function(event)
 	end
 
 	local index = 1
-	for k, child in pairs(gui.parent.children) do
-		if child.name == gui.name then
+	local children = gui.parent.children
+	for k, child in pairs(children) do
+		if child.name == gui_name then
 			index = k
 			break
 		end
 	end
 
-	if gui.name:find("_neutral") then
-		gui.parent.children[index+1].state = false
-		gui.parent.children[index-1].state = false
-	elseif gui.name:find("_ally") then
-		gui.parent.children[index-2].state = false
-		gui.parent.children[index-1].state = false
+	if gui_name:find("_neutral") then
+		children[index+1].state = false
+		children[index-1].state = false
+	elseif gui_name:find("_ally") then
+		children[index-2].state = false
+		children[index-1].state = false
 	else
-		gui.parent.children[index+1].state = false
-		gui.parent.children[index+2].state = false
+		children[index+1].state = false
+		children[index+2].state = false
 	end
 end
 

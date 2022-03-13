@@ -261,23 +261,32 @@ local function on_player_created(event)
 end
 
 local STATE_GUIS = {
-	["diplomacy_table"] = function(event)
-		select_diplomacy.diplomacy_check_press(event)
-	end,
-	["d_show_players_state"] = function(event, player, element)
+	["diplomacy_table"] = select_diplomacy.diplomacy_check_press,
+	["d_show_players_state"] = function(element, player, event)
 		global.diplomacy.players[event.player_index].show_players_state = element.state
 		DIPLOMACY_FRAME.update(player)
 	end,
 }
 local function on_gui_checked_state_changed(event)
-	local f = STATE_GUIS[event.element.parent.name]
-	if f then f(event.element, game.get_player(event.player_index), event) end
+	-- Validation of data
+	local element = event.element
+	if not (element and element.valid) then return end
+	local parent = element.parent
+	if not (parent and parent.valid) then return end
+
+	local f = STATE_GUIS[parent.name]
+	if f then f(element, game.get_player(event.player_index), event) end
 end
 
 local function on_gui_selection_state_changed(event)
-	if event.element.name == "d_filter_of_diplomacy_stance" then
-		local player = game.get_player(event.player_index)
-		global.diplomacy.players[event.player_index].filter_of_diplomacy_stance = event.element.selected_index
+	-- Validation of data
+	local element = event.element
+	if not (element and element.valid) then return end
+
+	if element.name == "d_filter_of_diplomacy_stance" then
+		local player_index = event.player_index
+		global.diplomacy.players[player_index].filter_of_diplomacy_stance = element.selected_index
+		local player = game.get_player(player_index)
 		DIPLOMACY_FRAME.update(player)
 	end
 end
@@ -427,9 +436,12 @@ local function update_global_data()
 	if not game then return end
 
 	local players_data = diplomacy.players
-	for player_index in pairs(game.players) do
-		if players_data[player_index] == nil then
-			players_data[player_index] = {}
+	for player_index, player in pairs(game.players) do
+		if player.valid then
+			create_button(player)
+			if players_data[player_index] == nil then
+				players_data[player_index] = {}
+			end
 		end
 	end
 end
