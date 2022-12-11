@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.13.3
+Date: 2022-12-11
+  Locale:
+    - Updated Ukrainian translation (thanks to @de_jure (Yuriy) on crowdin)
+    - Updated Chinese Traditional translation (thanks to @hunterkm (ハンターKM) on crowdin)
+    - Updated German translation (thanks to @Xman1109 and @PatrickBlack and @M.Colcko and @RainbowBier on crowdin)
+    - Updated Spanish translation (thanks to @Magick93 (José Eduardo) on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
 Version: 2.13.2
 Date: 2022-03-13
   Bugfixes:
