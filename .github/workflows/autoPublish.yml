@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository and submodules
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: recursive
-    - name: get version
-      id: version
+    - name: get mod_version
+      id: mod_version
       uses: notiz-dev/github-action-json-property@release
       with:
         path: 'info.json'
@@ -42,7 +42,7 @@ jobs:
     - uses: marvinpinto/action-automatic-releases@latest
       id: aar
       with:
-        automatic_release_tag: "${{steps.version.outputs.prop}}"
+        automatic_release_tag: "${{steps.mod_version.outputs.prop}}"
         title: "For factorio ${{steps.factorio_version.outputs.prop}}"
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         prerelease: false

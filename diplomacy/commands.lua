@@ -91,7 +91,7 @@ local function change_stance(cmd)
 	if not (caller and caller.valid) then return end
 	if caller.force.name == "spectator" then caller.print({"command-attempted-not-allowed", caller.name, "change-stance"}) return end
 
-	local diplomacy = global.diplomacy
+	local diplomacy = storage.diplomacy
 	if diplomacy.locked_teams then caller.print({"teams-is-locked"}) return end
 	if diplomacy.who_decides_diplomacy == "team_leader" then
 		local team_leader = caller.force.players[1]
@@ -169,7 +169,7 @@ local function cancel_stance(cmd)
 	if not (caller and caller.valid) then return end
 	if caller.force.name == "spectator" then caller.print({"command-attempted-not-allowed", caller.name, "cancel-stance"}) return end
 
-	local diplomacy = global.diplomacy
+	local diplomacy = storage.diplomacy
 	if diplomacy.locked_teams then
 		caller.print({"teams-is-locked"})
 		return
@@ -195,7 +195,7 @@ local function cancel_stance(cmd)
 			cancel_request_diplomacy_force(caller.force, other_force)
 		end
 	else
-		local teams = global.diplomacy.teams or game.forces
+		local teams = storage.diplomacy.teams or game.forces
 		for _, other_force in pairs(teams) do
 			if other_force ~= caller.force then
 				cancel_request_diplomacy_force(caller.force, other_force)

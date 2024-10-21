@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.14.0
+Date: 2024-10-21
+  Locale:
+    - Updated Ukrainian translation (thanks to @player_force on crowdin)
+    - Updated Catalan translation (thanks to @badall and @diralik on crowdin)
+    - Updated Hungarian translation (thanks to @Kipurcantix on crowdin)
+    - Updated German translation (thanks to @jankaluza07 (Satherov) and @Tomhero200 and @Batrick on crowdin)
+    - Translations: https://crowdin.com/project/factorio-mods-localization (thank you for contributions, I really appreciate it)
+---------------------------------------------------------------------------------------------------
 Version: 2.13.3
 Date: 2022-12-11
   Locale:
@@ -284,7 +293,7 @@ Date: 2020-03-18
   Changes:
     - This update for Factorio 0.17
 ---------------------------------------------------------------------------------------------------
-Version: 2.7.4
+Version: 2.7.5
 Date: 2019-12-15
   Changes:
     - Added sprite on the diplomacy button

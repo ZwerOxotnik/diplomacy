@@ -88,8 +88,8 @@ local function get_color_team(team, lighten)
 	local force = game.forces[team.name]
 	if force == team then
 		return get_color_force(force)
-	elseif team.color and global.diplomacy.color_map[team.color] then
-		local c = global.diplomacy.color_map[team.color]
+	elseif team.color and storage.diplomacy.color_map[team.color] then
+		local c = storage.diplomacy.color_map[team.color]
 		if lighten then
 			return {r = 1 - (1 - c.r) * 0.5, g = 1 - (1 - c.g) * 0.5, b = 1 - (1 - c.b) * 0.5, a = 1}
 		end
@@ -122,7 +122,7 @@ diplomacy_frame.fill = function(player)
 	local gui = flow.diplomacy_inner_frame
 	if not gui then return end
 
-	local player_settings = global.diplomacy.players[player.index]
+	local player_settings = storage.diplomacy.players[player.index]
 
 	-- Remember diplomacy table
 	local diplomacy_scrollpane = gui.diplomacy_scrollpane
@@ -162,7 +162,7 @@ diplomacy_frame.fill = function(player)
 		label.style.font = "default-bold"
 	end
 
-	local diplomacy = global.diplomacy
+	local diplomacy = storage.diplomacy
 
 	-- Find teams
 	local forces = game.forces
@@ -224,9 +224,9 @@ diplomacy_frame.fill = function(player)
 								add{type = "checkbox", name = team.name .. "_ally", state = (stance_type == FILTER_DIPLOMACY_TYPE_ALLY)}
 							end
 						else
-							add{type = "checkbox", name = team.name .. "_enemy", state = (stance_type == FILTER_DIPLOMACY_TYPE_ENEMY), enabled = not global.diplomacy.locked_teams}
-							add{type = "checkbox", name = team.name .. "_neutral", state = (stance_type == FILTER_DIPLOMACY_TYPE_NEUTRAL), enabled = not global.diplomacy.locked_teams}
-							add{type = "checkbox", name = team.name .. "_ally", state = (stance_type == FILTER_DIPLOMACY_TYPE_ALLY), enabled = not global.diplomacy.locked_teams}
+							add{type = "checkbox", name = team.name .. "_enemy", state = (stance_type == FILTER_DIPLOMACY_TYPE_ENEMY), enabled = not storage.diplomacy.locked_teams}
+							add{type = "checkbox", name = team.name .. "_neutral", state = (stance_type == FILTER_DIPLOMACY_TYPE_NEUTRAL), enabled = not storage.diplomacy.locked_teams}
+							add{type = "checkbox", name = team.name .. "_ally", state = (stance_type == FILTER_DIPLOMACY_TYPE_ALLY), enabled = not storage.diplomacy.locked_teams}
 						end
 					end
 				end
@@ -239,7 +239,7 @@ diplomacy_frame.fill = function(player)
 	-- Create button "confirm"
 	if not flow.confirm_diplomacy then
 		local button = flow.add{type = "button", name = "confirm_diplomacy", caption = {"gui-tag-edit.confirm"}}
-		-- if global.is_blacklist_diplomacy[player.force.name] ~= nil then
+		-- if storage.is_blacklist_diplomacy[player.force.name] ~= nil then
 		--   button.enabled = false
 		-- end
 	end
@@ -270,7 +270,7 @@ diplomacy_frame.create = function(player)
 	frame.location = {x = 0, y = 50}
 
 	screen.add{type = "empty-widget", drag_target = frame}
-	local player_settings = global.diplomacy.players[player.index]
+	local player_settings = storage.diplomacy.players[player.index]
 	local table_settings = frame.add{type = "table", name = 'settings', column_count = 4}
 	table_settings.add{type = "label", caption = {"", {"diplomacy.gui.show_players_state"}, {"colon"}}}
 	if player_settings.show_players_state == nil then

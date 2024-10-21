@@ -25,7 +25,7 @@ end
 
 -- TODO: improve
 diplomacy_selection_frame.create = function(force, int_force_name, stance)
-	local diplomacy = global.diplomacy
+	local diplomacy = storage.diplomacy
 	local selected_players
 	if diplomacy.who_decides_diplomacy == "team_leader" then
 		selected_players = {force.connected_players[1]}

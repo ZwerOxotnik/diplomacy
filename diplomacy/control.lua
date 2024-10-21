@@ -1,5 +1,5 @@
 --[[
-Copyright 2018-2022 ZwerOxotnik <zweroxotnik@gmail.com>
+Copyright 2018-2022, 2024 ZwerOxotnik <zweroxotnik@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ local confirm_diplomacy = require("diplomacy/gui/confirm_diplomacy")
 local DIPLOMACY_FRAME = require("diplomacy/gui/frames/diplomacy")
 local mod_gui = require("mod-gui")
 
-local mod = {}
-mod.events = {}
-mod.add_commands = require("diplomacy/commands").add_commands
+local M = {}
+M.events = {}
+M.add_commands = require("diplomacy/commands").add_commands
 
 
 --#region Constants
@@ -74,12 +74,12 @@ local function create_button(player)
 	local left_anchor = {gui = defines.relative_gui_type.controller_gui, position = defines.relative_gui_position.left}
 	relative.add{
 		type = "sprite-button",
-		name = "ZD_diplomacy_button",
+		name  = "ZD_diplomacy_button",
 		style = "ZD_diplomacy_button", -- see data.lua
 		anchor = left_anchor
 	}
 end
-mod.create_button = create_button
+M.create_button = create_button
 
 local function destroy_diplomacy_gui(player)
 	local diplomacy_frame = player.gui.screen.diplomacy_frame
@@ -88,7 +88,7 @@ local function destroy_diplomacy_gui(player)
 	end
 end
 
-mod.destroy_gui = function(player)
+M.destroy_gui = function(player)
 	destroy_button(player)
 	destroy_diplomacy_gui(player)
 	destroy_diplomacy_selection_frame(player)
@@ -104,7 +104,7 @@ local function forbidden_entity_mine(event)
 	local mining_force = entity.force
 	if not force.get_friend(mining_force) or force == mining_force then return end
 
-	local max_health = game.entity_prototypes[entity.name].max_health
+	local max_health = entity.max_health
 	if max_health >= diplomacy_HP_forbidden_entity_on_mined or FORBIDDEN_TYPES[entity.type] then
 		player.clear_selected_entity()
 	end
@@ -121,7 +121,7 @@ local function forbidden_entity_mined(event)
 	local mining_force = player.force
 	if force == mining_force or not force.get_friend(mining_force) then return end
 
-	local max_health = game.entity_prototypes[entity.name].max_health
+	local max_health = entity.max_health
 	if max_health >= diplomacy_HP_forbidden_entity_on_mined or FORBIDDEN_TYPES[entity.type] then
 		set_politice["neutral"](force, mining_force, event.player_index)
 		game.print({"team-changed-diplomacy", mining_force.name, force.name, {"neutral"}})
@@ -137,7 +137,7 @@ local function check_stance_on_entity_died(event)
 	if not force.get_cease_fire(killing_force) or killing_force == force then return end
 
 	-- Find in list the teams
-	local teams = global.diplomacy.teams
+	local teams = storage.diplomacy.teams
 	if teams then
 		local found_1st = false
 		local found_2nd = false
@@ -156,7 +156,7 @@ local function check_stance_on_entity_died(event)
 	if cause and cause.valid then
 		local causer_index = nil
 		if force.get_friend(killing_force) then
-			if game.entity_prototypes[entity.name].max_health >= diplomacy_HP_forbidden_entity_on_killed or FORBIDDEN_TYPES[entity.type] then
+			if entity.max_health >= diplomacy_HP_forbidden_entity_on_killed or FORBIDDEN_TYPES[entity.type] then
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
 				if cause.type == "character" then
 					causer_index = cause.player.index
@@ -227,7 +227,7 @@ local function check_stance_on_entity_died(event)
 		end
 	else
 		if force.get_friend(killing_force) then
-			if game.entity_prototypes[entity.name].max_health >= diplomacy_HP_forbidden_entity_on_killed or FORBIDDEN_TYPES[entity.type] then
+			if entity.max_health >= diplomacy_HP_forbidden_entity_on_killed or FORBIDDEN_TYPES[entity.type] then
 				set_politice["enemy"](force, killing_force)
 				game.print({"team-changed-diplomacy", killing_force.name, force.name, {"enemy"}})
 				killing_force.print({"player-changed-diplomacy", "ANY", force.name})
@@ -248,7 +248,8 @@ local function check_stance_on_entity_died(event)
 end
 
 local function on_entity_died(event)
-	pcall(check_stance_on_entity_died, event)
+	check_stance_on_entity_died(event)
+	-- pcall(check_stance_on_entity_died, event)
 end
 
 local function on_player_created(event)
@@ -256,14 +257,14 @@ local function on_player_created(event)
 	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 
-	global.diplomacy.players[event.player_index] = {}
+	storage.diplomacy.players[event.player_index] = {}
 	create_button(player)
 end
 
 local STATE_GUIS = {
 	["diplomacy_table"] = select_diplomacy.diplomacy_check_press,
 	["d_show_players_state"] = function(element, player, event)
-		global.diplomacy.players[event.player_index].show_players_state = element.state
+		storage.diplomacy.players[event.player_index].show_players_state = element.state
 		DIPLOMACY_FRAME.update(player)
 	end,
 }
@@ -285,7 +286,7 @@ local function on_gui_selection_state_changed(event)
 
 	if element.name == "d_filter_of_diplomacy_stance" then
 		local player_index = event.player_index
-		global.diplomacy.players[player_index].filter_of_diplomacy_stance = element.selected_index
+		storage.diplomacy.players[player_index].filter_of_diplomacy_stance = element.selected_index
 		local player = game.get_player(player_index)
 		DIPLOMACY_FRAME.update(player)
 	end
@@ -347,7 +348,7 @@ end
 
 local mod_settings = {
 	["who_decides_diplomacy"] = function(value)
-		global.diplomacy.who_decides_diplomacy = value
+		storage.diplomacy.who_decides_diplomacy = value
 	end,
 	["diplomacy_visible_all_teams"] = function(value)
 		DIPLOMACY_FRAME.update()
@@ -357,48 +358,43 @@ local mod_settings = {
 	end,
 	["disable_diplomacy_on_entity_died"] = function(value)
 		if value then
-			mod.events[defines.events.on_entity_died] = function() end
+			script.on_event(defines.events.on_entity_died, function() end)
 		else
-			mod.events[defines.events.on_entity_died] = on_entity_died
+			script.on_event(defines.events.on_entity_died, on_entity_died)
 		end
-		event_listener.update_event(mod, defines.events.on_entity_died)
 	end,
 	["diplomacy_HP_forbidden_entity_on_mined"] = function(value)
 		diplomacy_HP_forbidden_entity_on_mined = value
 		if value == 0 then
-			mod.events[defines.events.on_player_mined_entity] = function() end
+			script.on_event(defines.events.on_player_mined_entity, function() end)
 		else
 			if settings.global["diplomacy_allow_mine_entity"].value then
-				mod.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
+				script.on_event(defines.events.on_player_mined_entity, forbidden_entity_mined)
 			else
-				mod.events[defines.events.on_player_mined_entity] = function() end
+				script.on_event(defines.events.on_player_mined_entity, function() end)
 			end
 		end
 		if settings.global["diplomacy_allow_mine_entity"].value then
-			mod.events[defines.events.on_selected_entity_changed] = function() end
+			script.on_event(defines.events.on_selected_entity_changed, function() end)
 		else
-			mod.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
+			script.on_event(defines.events.on_selected_entity_changed, forbidden_entity_mine)
 		end
-		event_listener.update_event(mod, defines.events.on_player_mined_entity)
-		event_listener.update_event(mod, defines.events.on_selected_entity_changed)
 	end,
 	["diplomacy_allow_mine_entity"] = function(value)
 		if diplomacy_HP_forbidden_entity_on_mined == 0 then
-			mod.events[defines.events.on_player_mined_entity] = function() end
+			script.on_event(defines.events.on_player_mined_entity, function() end)
 		else
 			if value then
-				mod.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
+				script.on_event(defines.events.on_player_mined_entity, forbidden_entity_mined)
 			else
-				mod.events[defines.events.on_player_mined_entity] = function() end
+				script.on_event(defines.events.on_player_mined_entity, function() end)
 			end
 		end
 		if value then
-			mod.events[defines.events.on_selected_entity_changed] = function() end
+			script.on_event(defines.events.on_selected_entity_changed, function() end)
 		else
-			mod.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
+			script.on_event(defines.events.on_selected_entity_changed, forbidden_entity_mine)
 		end
-		event_listener.update_event(mod, defines.events.on_player_mined_entity)
-		event_listener.update_event(mod, defines.events.on_selected_entity_changed)
 	end,
 }
 local function on_runtime_mod_setting_changed(event)
@@ -425,8 +421,8 @@ local function on_force_created(event)
 end
 
 local function update_global_data()
-	global.diplomacy = global.diplomacy or {}
-	local diplomacy = global.diplomacy
+	storage.diplomacy = storage.diplomacy or {}
+	local diplomacy = storage.diplomacy
 	diplomacy.teams = diplomacy.teams or nil
 	diplomacy.locked_teams = diplomacy.locked_teams or false
 	diplomacy.who_decides_diplomacy = diplomacy.who_decides_diplomacy or settings.global["who_decides_diplomacy"].value
@@ -445,9 +441,9 @@ local function update_global_data()
 		end
 	end
 end
-mod.on_init = update_global_data
+M.on_init = update_global_data
 
-mod.on_configuration_changed = function(event)
+M.on_configuration_changed = function(event)
 	update_global_data()
 
 	local mod_changes = event.mod_changes["diplomacy"]
@@ -472,11 +468,12 @@ mod.on_configuration_changed = function(event)
 	end
 end
 
-local function on_player_joined_game(event)
+function M.on_player_joined_game(event)
 	-- Validation of data
 	local player = game.get_player(event.player_index)
 	if not (player and player.valid) then return end
 
+	create_button(player)
 	DIPLOMACY_FRAME.update()
 end
 
@@ -486,10 +483,10 @@ end
 
 local function on_player_removed(event)
 	DIPLOMACY_FRAME.update()
-	global.diplomacy.players[event.player_index] = nil
+	storage.diplomacy.players[event.player_index] = nil
 end
 
-mod.add_remote_interface = function()
+M.add_remote_interface = function()
 	remote.remove_interface("diplomacy")
 	remote.add_interface("diplomacy",
 	{
@@ -497,17 +494,17 @@ mod.add_remote_interface = function()
 			return diplomacy_events[name]
 		end,
 		get_data = function()
-			return global.diplomacy
+			return storage.diplomacy
 		end,
 		add_team = function(team)
-			local list = global.diplomacy.teams
+			local list = storage.diplomacy.teams
 			table.insert(list, team)
 		end,
 		set_teams = function(teams)
-			global.diplomacy.teams = teams
+			storage.diplomacy.teams = teams
 		end,
 		remove_team = function(name)
-			local teams = global.diplomacy.teams
+			local teams = storage.diplomacy.teams
 			for k, team in pairs(teams) do
 				if team.name == name then
 					table.remove(teams, k)
@@ -518,7 +515,7 @@ mod.add_remote_interface = function()
 			return 0 -- not found
 		end,
 		find_team = function(name)
-			local teams = global.diplomacy.teams
+			local teams = storage.diplomacy.teams
 			for k, team in pairs(teams) do
 				if team.name == name then
 					return k
@@ -528,63 +525,66 @@ mod.add_remote_interface = function()
 			return 0 -- not found
 		end,
 		delete_teams = function()
-			global.diplomacy.teams = nil
+			storage.diplomacy.teams = nil
 		end,
 		get_who_decides_diplomacy = function()
-			return global.diplomacy.who_decides_diplomacy
+			return storage.diplomacy.who_decides_diplomacy
 		end,
 		set_who_decides_diplomacy = function(target)
-			global.diplomacy.who_decides_diplomacy = target
+			storage.diplomacy.who_decides_diplomacy = target
 		end,
 		get_locked_teams = function()
-			return global.diplomacy.locked_teams
+			return storage.diplomacy.locked_teams
 		end,
 		set_locked_teams = function(bool)
-			global.diplomacy.locked_teams = bool
+			storage.diplomacy.locked_teams = bool
 			DIPLOMACY_FRAME.update()
 		end
 	})
 end
 
-mod.actions_after_init = function()
+M.actions_after_init = function()
 
 end
 
 -- For attaching events
-mod.events[defines.events.on_entity_died] = on_entity_died
-mod.events[defines.events.on_player_changed_force] = function(e) pcall(on_player_changed_force, e) end
-mod.events[defines.events.on_player_created] = on_player_created
-mod.events[defines.events.on_player_left_game] = on_player_left_game
-mod.events[defines.events.on_player_removed] = on_player_removed
-mod.events[defines.events.on_player_joined_game] = on_player_joined_game
-mod.events[defines.events.on_gui_click] = on_gui_click
-mod.events[defines.events.on_gui_checked_state_changed] = function(e) pcall(on_gui_checked_state_changed, e) end
-mod.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
-mod.events[defines.events.on_force_created] = on_force_created
+M.events[defines.events.on_entity_died] = on_entity_died
+M.events[defines.events.on_player_changed_force] = on_player_changed_force
+-- mod.events[defines.events.on_player_changed_force] = function(e) pcall(on_player_changed_force, e) end
+M.events[defines.events.on_player_created] = on_player_created
+M.events[defines.events.on_player_left_game] = on_player_left_game
+M.events[defines.events.on_player_removed] = on_player_removed
+M.events[defines.events.on_player_joined_game] = M.on_player_joined_game
+M.events[defines.events.on_gui_click] = on_gui_click
+M.events[defines.events.on_gui_checked_state_changed] = on_gui_checked_state_changed
+-- mod.events[defines.events.on_gui_checked_state_changed] = function(e) pcall(on_gui_checked_state_changed, e) end
+M.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
+M.events[defines.events.on_force_created] = on_force_created
 -- mod.events[defines.events.on_force_friends_changed] = DIPLOMACY_FRAME.update -- TODO: test it thoroughly
 -- mod.events[defines.events.on_force_cease_fire_changed] = DIPLOMACY_FRAME.update -- TODO: test it thoroughly
-mod.events[defines.events.on_gui_selection_state_changed] = function(e) pcall(on_gui_selection_state_changed, e) end
+M.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
+-- mod.events[defines.events.on_gui_selection_state_changed] = function(e) pcall(on_gui_selection_state_changed, e) end
 -- mod.events[defines.events.on_forces_merged] = on_forces_merged
 
 if settings.global["disable_diplomacy_on_entity_died"].value then
-	mod.events[defines.events.on_entity_died] = function() end
+	M.events[defines.events.on_entity_died] = function() end
 else
-	mod.events[defines.events.on_entity_died] = on_entity_died
+	M.events[defines.events.on_entity_died] = on_entity_died
 end
 
 if diplomacy_HP_forbidden_entity_on_mined == 0 then
-	mod.events[defines.events.on_player_mined_entity] = function() end
+	M.events[defines.events.on_player_mined_entity] = function() end
 else
 	if settings.global["diplomacy_allow_mine_entity"].value then
-		mod.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
+		M.events[defines.events.on_player_mined_entity] = forbidden_entity_mined
 	else
-		mod.events[defines.events.on_player_mined_entity] = function() end
+		M.events[defines.events.on_player_mined_entity] = function() end
 	end
 end
 if settings.global["diplomacy_allow_mine_entity"].value then
-	mod.events[defines.events.on_selected_entity_changed] = function() end
+	M.events[defines.events.on_selected_entity_changed] = function() end
 else
-	mod.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
+	M.events[defines.events.on_selected_entity_changed] = forbidden_entity_mine
 end
 
-return mod
+return M

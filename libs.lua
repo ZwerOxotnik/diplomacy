@@ -26,15 +26,15 @@ libs.diplomacy = require("diplomacy/control")
 libs.for_secondary_chat = {}
 libs.for_secondary_chat.events = {}
 libs.for_secondary_chat.check_events = function()
-	global.diplomacy.registredPvPs = {}
+	storage.diplomacy.registredPvPs = {}
 	local function_name = "get_event_name"
 	for interface_name, _ in pairs( remote.interfaces ) do
 		if remote.interfaces[interface_name][function_name] then
-			global.diplomacy.registredPvPs[interface_name] = true
+			storage.diplomacy.registredPvPs[interface_name] = true
 		end
 	end
 
-	global.diplomacy.registredChat = nil
+	storage.diplomacy.registredChat = nil
 	local function_name = "get_event_name"
 	local interface_name = "secondary-chat"
 	local remote_interface = remote.interfaces[interface_name]
@@ -42,17 +42,17 @@ libs.for_secondary_chat.check_events = function()
 		and remote_interface["get_interactions_table_gui"]
 		and remote_interface["update_chat_and_drop_down"]
 	then
-		global.diplomacy.registredChat = true
+		storage.diplomacy.registredChat = true
 	end
 
 	libs.for_secondary_chat.handle_events()
 end
 libs.for_secondary_chat.handle_events = function()
 	---- https://mods.factorio.com/mod/diplomacy/discussion/5dd0603d34bde6000c15d8ae
-    -- 	if global.diplomacy.registredPvPs then
+    -- 	if storage.diplomacy.registredPvPs then
     -- 		-- Handling events "on_round_start" and "on_round_end"
     -- 		for interface_name, _ in pairs( remote.interfaces ) do
-    -- 			if global.diplomacy.registredPvPs[interface_name] then
+    -- 			if storage.diplomacy.registredPvPs[interface_name] then
     -- 				local function_name = "get_event_name"
     -- 				local ID_1 = remote.call(interface_name, function_name, "on_round_start")
     -- 				local ID_2 = remote.call(interface_name, function_name, "on_round_end")
@@ -62,13 +62,13 @@ libs.for_secondary_chat.handle_events = function()
 
     -- 						-- Attach "on_round_start" event for creating gui
     -- 						libs.for_secondary_chat.events[ID_1] = function()
-    -- 							local diplomacy = global.diplomacy
+    -- 							local diplomacy = storage.diplomacy
     -- 							if remote.interfaces[interface_name] then
     -- 								if remote.interfaces[interface_name][interface_function] then
     -- 									diplomacy.teams = remote.call(interface_name, interface_function)
     -- 									for _, player in pairs(game.players) do
     -- 										libs.diplomacy.create_button(player)
-    -- 										global.diplomacy.locked_teams = false
+    -- 										storage.diplomacy.locked_teams = false
     -- 										return
     -- 									end
     -- 								end
@@ -77,13 +77,13 @@ libs.for_secondary_chat.handle_events = function()
 
     -- 						-- Attach "on_round_end" event for destroying gui
     -- 						libs.for_secondary_chat.events[ID_2] = function()
-    -- 							local diplomacy = global.diplomacy
+    -- 							local diplomacy = storage.diplomacy
     -- 							if remote.interfaces[interface_name] then
     -- 								if remote.interfaces[interface_name][interface_function] then
     -- 									diplomacy.teams = {}
     -- 									for _, player in pairs(game.players) do
     -- 										libs.diplomacy.destroy_gui(player)
-    -- 										global.diplomacy.locked_teams = true
+    -- 										storage.diplomacy.locked_teams = true
     -- 									end
     -- 								end
     -- 							end
@@ -98,7 +98,7 @@ libs.for_secondary_chat.handle_events = function()
 	local function_name = "get_event_name"
 	local interface_name = "secondary-chat"
 	local remote_interface = remote.interfaces[interface_name]
-	if remote_interface and remote_interface[function_name] and global.diplomacy.registredChat then
+	if remote_interface and remote_interface[function_name] and storage.diplomacy.registredChat then
 		local ID_1 = remote.call(interface_name, function_name, "on_update_chat_and_drop_down")
 		if type(ID_1) == "number" then
 			-- TODO: refactor this
@@ -130,7 +130,7 @@ libs.for_secondary_chat.handle_events = function()
 			-- Attach "on_update_chat_and_drop_down" event for inserting gui with selecting diplomacy
 			libs.for_secondary_chat.events[ID_1] = function(event)
 				local player = game.get_player(event.player_index)
-				local diplomacy = global.diplomacy
+				local diplomacy = storage.diplomacy
 				if diplomacy.locked_teams then return end
 				if diplomacy.who_decides_diplomacy == "team_leader" then
 					local team_leader = player.force.players[1]
