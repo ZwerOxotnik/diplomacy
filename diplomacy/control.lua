@@ -549,22 +549,22 @@ end
 
 -- For attaching events
 M.events[defines.events.on_entity_died] = on_entity_died
-M.events[defines.events.on_player_changed_force] = on_player_changed_force
--- mod.events[defines.events.on_player_changed_force] = function(e) pcall(on_player_changed_force, e) end
+-- M.events[defines.events.on_player_changed_force] = on_player_changed_force
+M.events[defines.events.on_player_changed_force] = function(e) pcall(on_player_changed_force, e) end
 M.events[defines.events.on_player_created] = on_player_created
 M.events[defines.events.on_player_left_game] = on_player_left_game
 M.events[defines.events.on_player_removed] = on_player_removed
 M.events[defines.events.on_player_joined_game] = M.on_player_joined_game
 M.events[defines.events.on_gui_click] = on_gui_click
-M.events[defines.events.on_gui_checked_state_changed] = on_gui_checked_state_changed
--- mod.events[defines.events.on_gui_checked_state_changed] = function(e) pcall(on_gui_checked_state_changed, e) end
+-- M.events[defines.events.on_gui_checked_state_changed] = on_gui_checked_state_changed
+M.events[defines.events.on_gui_checked_state_changed] = function(e) pcall(on_gui_checked_state_changed, e) end
 M.events[defines.events.on_runtime_mod_setting_changed] = on_runtime_mod_setting_changed
 M.events[defines.events.on_force_created] = on_force_created
--- mod.events[defines.events.on_force_friends_changed] = DIPLOMACY_FRAME.update -- TODO: test it thoroughly
--- mod.events[defines.events.on_force_cease_fire_changed] = DIPLOMACY_FRAME.update -- TODO: test it thoroughly
-M.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
--- mod.events[defines.events.on_gui_selection_state_changed] = function(e) pcall(on_gui_selection_state_changed, e) end
--- mod.events[defines.events.on_forces_merged] = on_forces_merged
+-- M.events[defines.events.on_force_friends_changed] = DIPLOMACY_FRAME.update -- TODO: test it thoroughly
+-- M.events[defines.events.on_force_cease_fire_changed] = DIPLOMACY_FRAME.update -- TODO: test it thoroughly
+-- M.events[defines.events.on_gui_selection_state_changed] = on_gui_selection_state_changed
+M.events[defines.events.on_gui_selection_state_changed] = function(e) pcall(on_gui_selection_state_changed, e) end
+-- M.events[defines.events.on_forces_merged] = on_forces_merged
 
 if settings.global["disable_diplomacy_on_entity_died"].value then
 	M.events[defines.events.on_entity_died] = function() end
