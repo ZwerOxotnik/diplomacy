@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.15.0
+Date: 2026-02-07
+  Changes:
+    - Updated for Factorio 2.1 (and yet I didn't run the game, no one contacted me about changes, so I've spend an ~hour to fix uploading, VS code is slow to work with, "can't for deserved concern about issues")
+---------------------------------------------------------------------------------------------------
 Version: 2.14.1
 Date: 2024-10-22
   Bugfixes:
